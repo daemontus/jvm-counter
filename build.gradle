@@ -1,0 +1,32 @@
+group 'com.github.daemontus'
+version '1.0-SNAPSHOT'
+
+buildscript {
+    ext.kotlin_version = '1.1.0'
+
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
+
+apply plugin: 'groovy'
+apply plugin: 'java'
+apply plugin: 'kotlin'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jre8:$kotlin_version"
+    compile 'org.codehaus.groovy:groovy-all:2.3.11'
+    compile 'com.jakewharton.android.repackaged:libcore-dex:7.1.0_r7'
+    compile 'com.jakewharton.android.repackaged:dalvik-dx:7.1.0_r7'
+    compile 'org.apache.commons:commons-compress:1.13'
+    testCompile group: 'junit', name: 'junit', version: '4.11'
+}
