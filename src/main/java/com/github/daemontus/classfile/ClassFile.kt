@@ -1,6 +1,7 @@
 package com.github.daemontus.classfile
 
 import com.github.daemontus.classfile.ConstantPool.Entry.ClassRef
+import com.github.daemontus.classfile.ConstantPool.Entry.Utf8
 
 data class ClassFile(
         val version: Version,
@@ -8,6 +9,7 @@ data class ClassFile(
         val thisClass: ConstantPool.Index<ClassRef>,
         val superClass: ConstantPool.Index<ClassRef>?,
         val interfaces: List<ConstantPool.Index<ClassRef>>,
+        val fields: List<FieldInfo>,
         val constantPool: ConstantPool
 ) {
     data class Version(val major: Int, val minor: Int) {
@@ -40,6 +42,41 @@ data class ClassFile(
             if (hasSuperFlag) modifiers.add("super")
 
             return modifiers.joinToString(prefix = "[", postfix = "]")
+        }
+    }
+
+    data class FieldInfo(
+        val access: FieldInfo.Access,
+        val name: ConstantPool.Index<Utf8>,
+        val descriptor: ConstantPool.Index<Utf8>,
+        val attributes: List<Attribute>
+    ) {
+        data class Access(private val value: Int) {
+
+            val isPublic: Boolean = value.and(0x0001) != 0
+            val isPrivate: Boolean = value.and(0x0002) != 0
+            val isProtected: Boolean = value.and(0x0004) != 0
+            val isStatic: Boolean = value.and(0x0008) != 0
+            val isFinal: Boolean = value.and(0x0010) != 0
+            val isVolatile: Boolean = value.and(0x0040) != 0
+            val isTransient: Boolean = value.and(0x0080) != 0
+            val isSynthetic: Boolean = value.and(0x1000) != 0
+            val isEnum: Boolean = value.and(0x4000) != 0
+
+            override fun toString(): String {
+                val modifiers = ArrayList<String>()
+                if (isPublic) modifiers.add("public")
+                if (isPrivate) modifiers.add("private")
+                if (isProtected) modifiers.add("protected")
+                if (isStatic) modifiers.add("static")
+                if (isFinal) modifiers.add("final")
+                if (isVolatile) modifiers.add("volatile")
+                if (isTransient) modifiers.add("transient")
+                if (isSynthetic) modifiers.add("synthetic")
+                if (isEnum) modifiers.add("enum")
+
+                return modifiers.joinToString(prefix = "[", postfix = "]")
+            }
         }
     }
 

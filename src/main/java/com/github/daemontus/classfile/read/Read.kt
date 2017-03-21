@@ -2,6 +2,7 @@ package com.github.daemontus.classfile.read
 
 import com.github.daemontus.classfile.ClassFile
 import com.github.daemontus.classfile.ConstantPool.Entry.ClassRef
+import com.github.daemontus.classfile.ConstantPool.Entry.Utf8
 import com.github.daemontus.classfile.InvalidClassFileException
 import com.github.daemontus.classfile.asConstantPoolIndex
 import java.io.DataInputStream
@@ -45,12 +46,19 @@ internal fun DataInputStream.readClassFile() : ClassFile {
 
     logReader(" - interfaces: $interfaces")
 
+
+    val fields = (1..readUnsignedShort()).map {
+        logReader(" - read field")
+        readFieldInfo()
+    }
+
     return ClassFile(
             version = version,
             access = access,
             thisClass = thisClass,
             superClass = superClass,
             interfaces = interfaces,
+            fields = fields,
             constantPool = constantPool
     )
 }
@@ -60,4 +68,25 @@ internal fun DataInputStream.readClassVersion(): ClassFile.Version {
     val major = readUnsignedShort()
     logReader(" - class file version: $major.$minor")
     return ClassFile.Version(major = major, minor = minor)
+}
+
+internal fun DataInputStream.readFieldInfo(): ClassFile.FieldInfo {
+    val accessFlags = ClassFile.FieldInfo.Access(readUnsignedShort())
+    val nameIndex = readUnsignedShort().asConstantPoolIndex<Utf8>()
+    val descriptorIndex = readUnsignedShort().asConstantPoolIndex<Utf8>()
+
+    logReader(" | - name index: $nameIndex")
+    logReader(" | - descriptor index: $descriptorIndex")
+    logReader(" | - field access: $accessFlags")
+
+    val attributes = (1..readUnsignedShort()).map {
+        logReader(" | - read attribute")
+        readAttribute()
+    }
+
+    return ClassFile.FieldInfo(
+            access = accessFlags,
+            name = nameIndex, descriptor = descriptorIndex,
+            attributes = attributes
+    )
 }

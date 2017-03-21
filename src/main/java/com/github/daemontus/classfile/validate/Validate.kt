@@ -1,9 +1,6 @@
 package com.github.daemontus.classfile.validate
 
-import com.github.daemontus.classfile.ClassFile
-import com.github.daemontus.classfile.InvalidClassFileException
-import com.github.daemontus.classfile.check
-import com.github.daemontus.classfile.get
+import com.github.daemontus.classfile.*
 
 private val java8 = 52
 private val java7 = 51
@@ -18,6 +15,8 @@ fun logValidate(string: String) {
 
 @Throws(InvalidClassFileException::class)
 fun ClassFile.validate() {
+
+    val classFile = this
 
     logValidate(" - start validating class file")
 
@@ -55,6 +54,17 @@ fun ClassFile.validate() {
         }
 
         logValidate(" - interfaces validation passed")
+
+        fields.forEach {
+
+            check(it.name)
+            check(it.descriptor)
+            it.access.validate(classFile)
+
+            it.attributes.forEach(Attribute::validate)
+
+            logValidate(" - field validation passed")
+        }
     }
 }
 
@@ -74,5 +84,38 @@ fun ClassFile.Access.validate() {
 
     if (isAnnotation && !isInterface)
         throw InvalidClassFileException("Only interfaces can be annotations. Current access: $this")
+
+}
+
+fun ClassFile.FieldInfo.Access.validate(classFile: ClassFile) {
+
+    if (isFinal && isVolatile)
+        throw InvalidClassFileException("Field can't be both volatile and final. Current access: $this")
+
+    if (isPublic && isPrivate)
+        throw InvalidClassFileException("Field can't be both public and private. Current access: $this")
+    if (isPrivate && isProtected)
+        throw InvalidClassFileException("Field can't be both private and protected. Current access: $this")
+    if (isProtected && isPublic)
+        throw InvalidClassFileException("Field can't be both public and protected. Current access: $this")
+
+    if (classFile.access.isInterface) {
+        if (!isPublic)
+            throw InvalidClassFileException("Interface fields must be public. Current access: $this")
+        if (!isFinal)
+            throw InvalidClassFileException("Interface fields must be final. Current access: $this")
+        if (!isStatic)
+            throw InvalidClassFileException("Interface fields must be static. Current access: $this")
+
+        if (isTransient)
+            throw InvalidClassFileException("Interface fields can't be transient. Current access: $this")
+    }
+
+    if (isEnum && !classFile.access.isEnum)
+        throw InvalidClassFileException("Enum fields are only allowed in enum classes. Current access: $this")
+
+}
+
+fun Attribute.validate() {
 
 }
