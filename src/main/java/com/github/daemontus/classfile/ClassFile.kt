@@ -127,10 +127,4 @@ data class ClassFile(
 
 }
 
-class BootstrapMethods {
-
-    data class Index(val value: Int)
-
-}
-
 fun Int.asBootstrapMethodIndex(): BootstrapMethods.Index = BootstrapMethods.Index(this)
