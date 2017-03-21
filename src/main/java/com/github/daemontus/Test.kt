@@ -1,17 +1,10 @@
 package com.github.daemontus
 
 import com.android.dex.Dex
-import com.android.dx.dex.DexOptions
-import com.android.dx.dex.file.DexFile
+import com.github.daemontus.classfile.readClassFile
 import com.sun.tools.classfile.ClassFile
-import org.apache.commons.compress.archivers.zip.ZipArchiveInputStream
-import org.apache.commons.compress.utils.SeekableInMemoryByteChannel
-import java.io.File
-import java.io.FileInputStream
-import java.util.jar.JarInputStream
-import java.util.zip.ZipEntry
+import java.io.DataInputStream
 import java.util.zip.ZipFile
-import java.util.zip.ZipInputStream
 
 data class ProjectStatistics(
         var classCount: Int = 0,
@@ -34,6 +27,7 @@ fun ZipFile.process(stats: ProjectStatistics) {
     for (entry in this.entries()) {
         when {
             entry.name.endsWith(".class") -> {
+                println(DataInputStream(getInputStream(entry)).readClassFile())
                 ClassFile.read(getInputStream(entry)).process(stats, entry.size)
             }
             entry.name.endsWith(".dex") -> {
@@ -46,8 +40,9 @@ fun ZipFile.process(stats: ProjectStatistics) {
     }
 }
 
-
 fun ClassFile.process(stats: ProjectStatistics, fileSize: Long) {
+    println(this.constant_pool.getClassInfo(this.this_class).name)
+    this.methods[0].attributes[0]
     stats.classCount += 1
     stats.methodCount += this.methods.size
     stats.fieldCount += this.fields.size
