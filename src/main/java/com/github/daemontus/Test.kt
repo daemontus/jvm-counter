@@ -1,9 +1,10 @@
 package com.github.daemontus
 
 import com.android.dex.Dex
-import com.github.daemontus.classfile.reader.readClassFile
+import com.github.daemontus.classfile.read.readClassFile
 import com.sun.tools.classfile.ClassFile
 import java.io.DataInputStream
+import java.io.File
 import java.util.zip.ZipFile
 
 data class ProjectStatistics(
@@ -15,12 +16,16 @@ data class ProjectStatistics(
 )
 
 fun main(args: Array<String>) {
-    val zip = ZipFile("/Users/daemontus/Downloads/rt.jar")
+    /*val zip = ZipFile("/Users/daemontus/Downloads/rt.jar")
     val stats = ProjectStatistics()
 
     zip.process(stats)
 
-    println("Stats: $stats")
+    println("Stats: $stats")*/
+
+    val testClass = DataInputStream(File("TestClass.class").inputStream())
+
+    println(testClass.readClassFile())
 }
 
 fun ZipFile.process(stats: ProjectStatistics) {

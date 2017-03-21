@@ -10,7 +10,12 @@ class ConstantPool internal constructor(
         private val items: List<Entry>
 ) {
 
-    data class Index<C: Entry>(val value: Int)
+    /**
+     * WARNING: Java class file indexes constant pool items from 1!
+     */
+    data class Index<C: Entry>(val value: Int) {
+        override fun toString(): String = "I($value)"
+    }
 
     sealed class Entry {
         data class ClassRef(val name: Index<Utf8>) : Entry()
@@ -48,11 +53,11 @@ class ConstantPool internal constructor(
 
 inline operator fun <reified C: ConstantPool.Entry> ConstantPool.get(index: ConstantPool.Index<C>): C {
     check(index)
-    return this[index.value] as C
+    return this[index.value - 1] as C
 }
 
 inline fun <reified C: ConstantPool.Entry> ConstantPool.check(index: ConstantPool.Index<C>) {
-    val value = this[index.value]
+    val value = this[index.value - 1]
     if (value !is C) {
         illegalConstant(index.value, C::class.java, value.javaClass)
     }
