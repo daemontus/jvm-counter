@@ -1,7 +1,7 @@
 package com.github.daemontus
 
 import com.android.dex.Dex
-import com.github.daemontus.classfile.readClassFile
+import com.github.daemontus.classfile.reader.readClassFile
 import com.sun.tools.classfile.ClassFile
 import java.io.DataInputStream
 import java.util.zip.ZipFile
