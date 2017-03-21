@@ -10,6 +10,7 @@ data class ClassFile(
         val superClass: ConstantPool.Index<ClassRef>?,
         val interfaces: List<ConstantPool.Index<ClassRef>>,
         val fields: List<FieldInfo>,
+        val methods: List<MethodInfo>,
         val constantPool: ConstantPool
 ) {
     data class Version(val major: Int, val minor: Int) {
@@ -78,6 +79,50 @@ data class ClassFile(
                 return modifiers.joinToString(prefix = "[", postfix = "]")
             }
         }
+    }
+
+    data class MethodInfo(
+        val access: MethodInfo.Access,
+        val name: ConstantPool.Index<Utf8>,
+        val descriptor: ConstantPool.Index<Utf8>,
+        val attributes: List<Attribute>
+    ) {
+
+        data class Access(private val value: Int) {
+
+            val isPublic: Boolean = value.and(0x0001) != 0
+            val isPrivate: Boolean = value.and(0x0002) != 0
+            val isProtected: Boolean = value.and(0x0004) != 0
+            val isStatic: Boolean = value.and(0x0008) != 0
+            val isFinal: Boolean = value.and(0x0010) != 0
+            val isSynchronized: Boolean = value.and(0x0020) != 0
+            val isBridge: Boolean = value.and(0x0040) != 0
+            val isVarargs: Boolean = value.and(0x0080) != 0
+            val isNative: Boolean = value.and(0x0100) != 0
+            val isAbstract: Boolean = value.and(0x0400) != 0
+            val isStrict: Boolean = value.and(0x0800) != 0
+            val isSynthetic: Boolean = value.and(0x1000) != 0
+
+            override fun toString(): String {
+                val modifiers = ArrayList<String>()
+
+                if (isPublic) modifiers.add("public")
+                if (isPrivate) modifiers.add("private")
+                if (isProtected) modifiers.add("protected")
+                if (isStatic) modifiers.add("static")
+                if (isFinal) modifiers.add("final")
+                if (isSynchronized) modifiers.add("synchronized")
+                if (isBridge) modifiers.add("bridge")
+                if (isVarargs) modifiers.add("varargs")
+                if (isNative) modifiers.add("native")
+                if (isAbstract) modifiers.add("abstract")
+                if (isStrict) modifiers.add("strict")
+                if (isSynthetic) modifiers.add("synthetic")
+
+                return modifiers.joinToString(prefix = "[", postfix = "]")
+            }
+        }
+
     }
 
 }

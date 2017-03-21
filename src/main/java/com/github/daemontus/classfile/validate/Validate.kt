@@ -2,13 +2,6 @@ package com.github.daemontus.classfile.validate
 
 import com.github.daemontus.classfile.*
 
-private val java8 = 52
-private val java7 = 51
-private val java6 = 50
-
-private val minSupported = java6
-private val maxSupported = java8
-
 fun logValidate(string: String) {
     println(string)
 }
@@ -42,8 +35,8 @@ fun ClassFile.validate() {
         superClass?.let {
             check(it)
         } ?: run {
-            if (this[this[thisClass].name].value != "java/lang/Object") {
-                throw InvalidClassFileException("Only java/lang/Object can have no super class.")
+            if (this[this[thisClass].name].value != JAVA_LANG_OBJECT) {
+                throw InvalidClassFileException("Only $JAVA_LANG_OBJECT can have no super class.")
             }
         }
 
@@ -64,6 +57,30 @@ fun ClassFile.validate() {
             it.attributes.forEach(Attribute::validate)
 
             logValidate(" - field validation passed")
+        }
+
+        methods.forEach {
+            check(it.name)
+            check(it.descriptor)
+            it.access.validate(classFile)
+
+            // instance initialization has special requirements
+            if (this[it.name].value == INSTANCE_INITIALIZER) {
+                if (it.access.isStatic)
+                    throw InvalidClassFileException("Instance initializer can't be static. Current access: ${it.access}")
+                if (it.access.isFinal)
+                    throw InvalidClassFileException("Instance initializer can't be final. Current access: ${it.access}")
+                if (it.access.isSynchronized)
+                    throw InvalidClassFileException("Instance initializer can't be synchronized. Current access: ${it.access}")
+                if (it.access.isBridge)
+                    throw InvalidClassFileException("Instance initializer can't be bridge. Current access: ${it.access}")
+                if (it.access.isNative)
+                    throw InvalidClassFileException("Instance initializer can't be native. Current access: ${it.access}")
+                if (it.access.isAbstract)
+                    throw InvalidClassFileException("Instance initializer can't be abstract. Current access: ${it.access}")
+            }
+
+            logValidate(" - method validation passed")
         }
     }
 }
@@ -113,6 +130,55 @@ fun ClassFile.FieldInfo.Access.validate(classFile: ClassFile) {
 
     if (isEnum && !classFile.access.isEnum)
         throw InvalidClassFileException("Enum fields are only allowed in enum classes. Current access: $this")
+
+}
+
+fun ClassFile.MethodInfo.Access.validate(classFile: ClassFile) {
+
+    if (isPublic && isPrivate)
+        throw InvalidClassFileException("Method can't be both public and private. Current access: $this")
+    if (isPrivate && isProtected)
+        throw InvalidClassFileException("Method can't be both private and protected. Current access: $this")
+    if (isProtected && isPublic)
+        throw InvalidClassFileException("Method can't be both public and protected. Current access: $this")
+
+    if (classFile.access.isInterface) {
+        if (isProtected)
+            throw InvalidClassFileException("Interface method can't be protected. Current access: $this")
+        if (isNative)
+            throw InvalidClassFileException("Interface method can't be native. Current access: $this")
+        if (isFinal)
+            throw InvalidClassFileException("Interface method can't be final. Current access: $this")
+        if (isSynchronized)
+            throw InvalidClassFileException("Interface method can't be synchronized. Current access: $this")
+
+        if (classFile.version.major < java8) {
+            if (!isPublic)
+                throw InvalidClassFileException("Prior to Java 8, all interface methods must be public. Current access: $this")
+            if (!isAbstract)
+                throw InvalidClassFileException("Prior to Java 8, all interface methods must be abstract. Current access: $this")
+        }
+
+        if (classFile.version.major >= java8) {
+            if (!isPublic && !isPrivate)
+                throw InvalidClassFileException("Only public and private methods are allowed in interfaces. Current access: $this")
+        }
+    }
+
+    if (isAbstract) {
+        if (isPrivate)
+            throw InvalidClassFileException("Abstract method can't be private. Current access: $this")
+        if (isStatic)
+            throw InvalidClassFileException("Abstract method can't be static. Current access: $this")
+        if (isFinal)
+            throw InvalidClassFileException("Abstract method can't be final. Current access: $this")
+        if (isSynchronized)
+            throw InvalidClassFileException("Abstract method can't be synchronized. Current access: $this")
+        if (isNative)
+            throw InvalidClassFileException("Abstract method can't be native. Current access: $this")
+        if (isStrict)
+            throw InvalidClassFileException("Abstract method can't be strict. Current access: $this")
+    }
 
 }
 

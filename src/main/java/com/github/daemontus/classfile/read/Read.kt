@@ -52,6 +52,11 @@ internal fun DataInputStream.readClassFile() : ClassFile {
         readFieldInfo()
     }
 
+    val methods = (1..readUnsignedShort()).map {
+        logReader(" - read method")
+        readMethodInfo()
+    }
+
     return ClassFile(
             version = version,
             access = access,
@@ -59,18 +64,19 @@ internal fun DataInputStream.readClassFile() : ClassFile {
             superClass = superClass,
             interfaces = interfaces,
             fields = fields,
+            methods = methods,
             constantPool = constantPool
     )
 }
 
-internal fun DataInputStream.readClassVersion(): ClassFile.Version {
+private fun DataInputStream.readClassVersion(): ClassFile.Version {
     val minor = readUnsignedShort()
     val major = readUnsignedShort()
     logReader(" - class file version: $major.$minor")
     return ClassFile.Version(major = major, minor = minor)
 }
 
-internal fun DataInputStream.readFieldInfo(): ClassFile.FieldInfo {
+private fun DataInputStream.readFieldInfo(): ClassFile.FieldInfo {
     val accessFlags = ClassFile.FieldInfo.Access(readUnsignedShort())
     val nameIndex = readUnsignedShort().asConstantPoolIndex<Utf8>()
     val descriptorIndex = readUnsignedShort().asConstantPoolIndex<Utf8>()
@@ -85,6 +91,27 @@ internal fun DataInputStream.readFieldInfo(): ClassFile.FieldInfo {
     }
 
     return ClassFile.FieldInfo(
+            access = accessFlags,
+            name = nameIndex, descriptor = descriptorIndex,
+            attributes = attributes
+    )
+}
+
+private fun DataInputStream.readMethodInfo(): ClassFile.MethodInfo {
+    val accessFlags = ClassFile.MethodInfo.Access(readUnsignedShort())
+    val nameIndex = readUnsignedShort().asConstantPoolIndex<Utf8>()
+    val descriptorIndex = readUnsignedShort().asConstantPoolIndex<Utf8>()
+
+    logReader(" | - name index: $nameIndex")
+    logReader(" | - descriptor index: $descriptorIndex")
+    logReader(" | - method access: $accessFlags")
+
+    val attributes = (1..readUnsignedShort()).map {
+        logReader(" | - read attribute")
+        readAttribute()
+    }
+
+    return ClassFile.MethodInfo(
             access = accessFlags,
             name = nameIndex, descriptor = descriptorIndex,
             attributes = attributes
