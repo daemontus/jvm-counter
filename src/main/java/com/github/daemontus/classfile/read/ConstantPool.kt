@@ -1,7 +1,7 @@
 package com.github.daemontus.classfile.read
 
 import com.github.daemontus.classfile.ConstantPool
-import com.github.daemontus.classfile.MalformedClassFileException
+import com.github.daemontus.classfile.InvalidClassFileException
 import com.github.daemontus.classfile.asBootstrapMethodIndex
 import com.github.daemontus.classfile.asConstantPoolIndex
 import java.io.DataInputStream
@@ -46,7 +46,7 @@ internal fun DataInputStream.readConstantPool(): ConstantPool {
             15 -> items.add(readMethodHandle())
             16 -> items.add(readMethodType())
             18 -> items.add(readInvokeDynamic())
-            else -> throw MalformedClassFileException("Unexpected constant pool entry tag: $tag")
+            else -> throw InvalidClassFileException("Unexpected constant pool entry tag: $tag")
         }
         toRead -= 1
     }
@@ -104,7 +104,7 @@ internal fun DataInputStream.readStringConst(): ConstantPool.Entry.StringConst {
     val stringIndex = readUnsignedShort().asConstantPoolIndex<ConstantPool.Entry.Utf8>()
     logReader(" | | - type: String")
     logReader(" | | - utf8 index: $stringIndex")
-    return ConstantPool.Entry.StringConst(id = stringIndex)
+    return ConstantPool.Entry.StringConst(value = stringIndex)
 }
 
 internal fun DataInputStream.readFieldRef(): ConstantPool.Entry.FieldRef {
@@ -159,8 +159,8 @@ internal fun DataInputStream.readMethodHandle(): ConstantPool.Entry.MethodHandle
         6 -> ConstantPool.Entry.MethodHandle.InvokeStaticRef(refIndex.asConstantPoolIndex())
         7 -> ConstantPool.Entry.MethodHandle.InvokeSpecialRef(refIndex.asConstantPoolIndex())
         8 -> ConstantPool.Entry.MethodHandle.NewInvokeSpecialRef(refIndex.asConstantPoolIndex())
-        9 -> ConstantPool.Entry.MethodHandle.InvokeInterface(refIndex.asConstantPoolIndex())
-        else -> throw MalformedClassFileException("Unknown Method Handle kind: $refKind")
+        9 -> ConstantPool.Entry.MethodHandle.InvokeInterfaceRef(refIndex.asConstantPoolIndex())
+        else -> throw InvalidClassFileException("Unknown Method Handle kind: $refKind")
     }
 }
 

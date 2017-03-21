@@ -1,3 +1,3 @@
 package com.github.daemontus.classfile
 
-class MalformedClassFileException(message: String?) : Exception(message)
+class InvalidClassFileException(message: String?) : Exception(message)

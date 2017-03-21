@@ -2,6 +2,7 @@ package com.github.daemontus
 
 import com.android.dex.Dex
 import com.github.daemontus.classfile.read.readClassFile
+import com.github.daemontus.classfile.validate.validate
 import com.sun.tools.classfile.ClassFile
 import java.io.DataInputStream
 import java.io.File
@@ -25,7 +26,8 @@ fun main(args: Array<String>) {
 
     val testClass = DataInputStream(File("TestClass.class").inputStream())
 
-    println(testClass.readClassFile())
+    val c = testClass.readClassFile().validate()
+    println(c)
 }
 
 fun ZipFile.process(stats: ProjectStatistics) {
