@@ -1,17 +1,22 @@
 package com.github.daemontus.classfile
 
 data class ClassFile(
-        val version: Version
+        val version: Version,
+        val constantPool: ConstantPool
 ) {
     data class Version(val major: Int, val minor: Int)
 
 }
 
-class ConstantPool {
-
-    private val items: List<Entry> = kotlin.run {
-        error("todo")
-    }
+/**
+ * Constant pool of a specific class.
+ *
+ * The constructor parameter is a direct list of constants read form a class file
+ * INCLUDING the invalid entries implied by Long/Double constant entries.
+ */
+class ConstantPool internal constructor(
+        private val items: List<Entry>
+) {
 
     data class Index<C: Entry>(val value: Int)
 
@@ -40,7 +45,31 @@ class ConstantPool {
         }
         data class MethodType(val descriptor: Index<Utf8>) : Entry()
         data class InvokeDynamic(val id: Index<NameAndType>, val bootstrapMethod: BootstrapMethods.Index) : Entry()
+        object InvalidConstant : Entry()
     }
+
+    operator fun get(index: Int): Entry {
+        return items[index]
+    }
+
+}
+
+inline operator fun <reified C: ConstantPool.Entry> ConstantPool.get(index: ConstantPool.Index<C>): C {
+    check(index)
+    return this[index.value] as C
+}
+
+inline fun <reified C: ConstantPool.Entry> ConstantPool.check(index: ConstantPool.Index<C>) {
+    val value = this[index.value]
+    if (value !is C) {
+        illegalConstant(index.value, C::class.java, value.javaClass)
+    }
+}
+
+fun <T: ConstantPool.Entry> Int.asConstantPoolIndex(): ConstantPool.Index<T> = ConstantPool.Index<T>(this)
+
+fun illegalConstant(index: Int, expected: Class<*>, actual: Class<*>) {
+    throw MalformedClassFileException("Invalid constant at index ${index}. Expected $expected but got $actual")
 }
 
 class BootstrapMethods {
