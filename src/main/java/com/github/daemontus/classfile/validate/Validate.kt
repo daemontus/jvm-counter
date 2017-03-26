@@ -80,8 +80,12 @@ fun ClassFile.validate() {
                     throw InvalidClassFileException("Instance initializer can't be abstract. Current access: ${it.access}")
             }
 
+            it.attributes.forEach(Attribute::validate)
+
             logValidate(" - method validation passed")
         }
+
+        attributes.forEach(Attribute::validate)
     }
 }
 

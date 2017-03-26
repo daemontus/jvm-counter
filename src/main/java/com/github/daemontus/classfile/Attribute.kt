@@ -25,6 +25,7 @@ object AttributeNames {
     val RuntimeInvisibleTypeAnnotations = "RuntimeInvisibleTypeAnnotations"
     val AnnotationDefault = "AnnotationDefault"
     val BootstrapMethods = "BootstrapMethods"
+    val MethodParameters = "MethodParameters"
 }
 
 interface Attribute {
@@ -347,6 +348,17 @@ data class BootstrapMethods(
 
 }
 
+data class MethodParameters(
+        override val name: ConstantPool.Index<Utf8>,
+        val parameters: List<Entry>
+) : Attribute {
+
+    data class Entry(
+            val name: ConstantPool.Index<Utf8>?,
+            val access: Int // TODO
+    )
+
+}
 
 class UnknownAttribute(
         override val name: ConstantPool.Index<Utf8>,

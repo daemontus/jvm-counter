@@ -44,6 +44,7 @@ fun DataInputStream.readAttribute(cp: ConstantPool): Attribute {
         AttributeNames.RuntimeInvisibleTypeAnnotations -> readRuntimeInvisibleTypeAnnotations(nameIndex)
         AttributeNames.AnnotationDefault -> readAnnotationDefault(nameIndex)
         AttributeNames.BootstrapMethods -> readBootstrapMethods(nameIndex)
+        AttributeNames.MethodParameters -> readMethodParameters(nameIndex)
         else -> UnknownAttribute(nameIndex, ByteArray(length).apply { read(this) })
     }
 
@@ -431,7 +432,7 @@ fun DataInputStream.readAnnotationDefault(nameIndex: ConstantPool.Index<Utf8>): 
 
 fun DataInputStream.readBootstrapMethods(nameIndex: ConstantPool.Index<Utf8>): BootstrapMethods {
     val count = readUnsignedShort()
-    logReader("method count $count")
+    logReader("method count: $count")
     return BootstrapMethods(name = nameIndex,
             bootstrapMethods = (1..count).map {
                 BootstrapMethods.Entry(
@@ -439,6 +440,18 @@ fun DataInputStream.readBootstrapMethods(nameIndex: ConstantPool.Index<Utf8>): B
                         arguments = (1..readUnsignedShort()).map {
                             readUnsignedShort().asConstantPoolIndex<ConstantPool.Entry>()
                         }
+                )
+            })
+}
+
+fun DataInputStream.readMethodParameters(nameIndex: ConstantPool.Index<Utf8>): MethodParameters {
+    val count = readUnsignedByte()
+    logReader("parameter count: $count")
+    return MethodParameters(name = nameIndex,
+            parameters = (1..count).map {
+                MethodParameters.Entry(
+                        name = readUnsignedShort().asConstantPoolIndex(),
+                        access = readUnsignedShort()
                 )
             })
 }
