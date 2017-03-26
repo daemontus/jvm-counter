@@ -11,6 +11,7 @@ data class ClassFile(
         val interfaces: List<ConstantPool.Index<ClassRef>>,
         val fields: List<FieldInfo>,
         val methods: List<MethodInfo>,
+        val attributes: List<Attribute>,
         val constantPool: ConstantPool
 ) {
     data class Version(val major: Int, val minor: Int) {

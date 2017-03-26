@@ -1,12 +1,27 @@
 package com.github.daemontus.classfile
 
 import com.github.daemontus.classfile.ConstantPool.Entry.*
+import java.util.*
+
+object AttributeNames {
+    val ConstantValue = "ConstantValue"
+    val Code = "Code"
+    val StackMapTable = "StackMapTable"
+    val Exceptions = "Exceptions"
+    val InnerClasses = "InnerClasses"
+    val EnclosingMethod = "EnclosingMethod"
+    val Synthetic = "Synthetic"
+    val Signature = "Signature"
+    val SourceFile = "SourceFile"
+    val LineNumberTable = "LineNumberTable"
+    val LocalVariableTable = "LocalVariableTable"
+    val LocalVariableTypeTable = "LocalVariableTypeTable"
+    val Deprecated = "Deprecated"
+}
 
 interface Attribute {
     val name: ConstantPool.Index<Utf8>
 }
-
-interface Instruction
 
 data class ConstantValue(
         override val name: ConstantPool.Index<Utf8>,
@@ -64,19 +79,19 @@ data class StackMapTable(
         data class ChopFrame(
                 val offsetDelta: Int,
                 val chop: Int
-        )
+        ) : StackMapFrame()
         // append locals added, empty stack
         data class AppendFrame(
                 val offsetDelta: Int,
                 val append: Int,
                 val locals: List<VerificationTypeInfo>
-        )
+        ) : StackMapFrame()
         // full locals and stack
         data class FullFrame(
                 val offsetDelta: Int,
                 val locals: List<VerificationTypeInfo>,
                 val stack: List<VerificationTypeInfo>
-        )
+        ) : StackMapFrame()
     }
 }
 
@@ -119,10 +134,13 @@ data class SourceFile(
         val value: ConstantPool.Index<Utf8>
 ) : Attribute
 
+/*
+We don't read the source debug extensions and classify them as unknown instead...
 data class SourceDebugExtension(
         override val name: ConstantPool.Index<Utf8>,
         val extension: ByteArray
 ) : Attribute
+*/
 
 data class LineNumberTable(
         override val name: ConstantPool.Index<Utf8>,
@@ -318,5 +336,35 @@ data class BootstrapMethods(
     )
 
     operator fun get(index: Index): Entry = bootstrapMethods[index.value]
+
+}
+
+
+class UnknownAttribute(
+        override val name: ConstantPool.Index<Utf8>,
+        val content: ByteArray
+) : Attribute {
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other?.javaClass != javaClass) return false
+
+        other as UnknownAttribute
+
+        if (name != other.name) return false
+        if (!Arrays.equals(content, other.content)) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = name.hashCode()
+        result = 31 * result + Arrays.hashCode(content)
+        return result
+    }
+
+    override fun toString(): String {
+        return "UnknownAttribute(name=$name, content=${Arrays.toString(content)})"
+    }
 
 }
