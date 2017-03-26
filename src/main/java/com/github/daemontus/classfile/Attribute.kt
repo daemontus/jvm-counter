@@ -17,6 +17,10 @@ object AttributeNames {
     val LocalVariableTable = "LocalVariableTable"
     val LocalVariableTypeTable = "LocalVariableTypeTable"
     val Deprecated = "Deprecated"
+    val RuntimeVisibleAnnotations = "RuntimeVisibleAnnotations"
+    val RuntimeInvisibleAnnotations = "RuntimeInvisibleAnnotations"
+    val RuntimeVisibleParameterAnnotations = "RuntimeVisibleParameterAnnotations"
+    val RuntimeInvisibleParameterAnnotations = "RuntimeInvisibleParameterAnnotations"
 }
 
 interface Attribute {

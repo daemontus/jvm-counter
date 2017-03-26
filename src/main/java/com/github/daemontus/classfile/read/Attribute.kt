@@ -1,6 +1,7 @@
 package com.github.daemontus.classfile.read
 
 import com.github.daemontus.classfile.*
+import com.github.daemontus.classfile.Annotation
 import com.github.daemontus.classfile.ConstantPool.Entry.Utf8
 import com.github.daemontus.classfile.Deprecated
 import com.github.daemontus.classfile.StackMapTable.StackMapFrame
@@ -34,6 +35,10 @@ fun DataInputStream.readAttribute(cp: ConstantPool): Attribute {
         AttributeNames.LocalVariableTable -> readLocalVariableTable(nameIndex)
         AttributeNames.LocalVariableTypeTable -> readLocalVariableTypeTable(nameIndex)
         AttributeNames.Deprecated -> Deprecated(nameIndex)
+        AttributeNames.RuntimeVisibleAnnotations -> readRuntimeVisibleAnnotations(nameIndex)
+        AttributeNames.RuntimeInvisibleAnnotations -> readRuntimeInvisibleAnnotations(nameIndex)
+        AttributeNames.RuntimeVisibleParameterAnnotations -> readRuntimeVisibleParameterAnnotations(nameIndex)
+        AttributeNames.RuntimeInvisibleParameterAnnotations -> readRuntimeInvisibleParameterAnnotations(nameIndex)
         else -> UnknownAttribute(nameIndex, ByteArray(length).apply { read(this) })
     }
 
@@ -234,4 +239,84 @@ fun DataInputStream.readLocalVariableTypeTable(nameIndex: ConstantPool.Index<Utf
                         index = readUnsignedShort()
                 )
             })
+}
+
+fun DataInputStream.readAnnotation(): Annotation {
+    val typeIndex = readUnsignedShort().asConstantPoolIndex<Utf8>()
+    val entries = readUnsignedShort()
+    logReader("type: $typeIndex")
+    logReader("value count: $entries")
+    return Annotation(type = typeIndex,
+            data = (1..entries).map {
+                val nameIndex = readUnsignedShort().asConstantPoolIndex<Utf8>()
+                val value = readAnnotationValue()
+                Annotation.KeyValuePair(nameIndex, value)
+            })
+}
+
+fun DataInputStream.readAnnotationValue(): Annotation.Value {
+    val tag = readByte().toChar()
+    return when (tag) {
+        'B' -> Annotation.Value.Byte(readUnsignedShort().asConstantPoolIndex())
+        'C' -> Annotation.Value.Char(readUnsignedShort().asConstantPoolIndex())
+        'D' -> Annotation.Value.Double(readUnsignedShort().asConstantPoolIndex())
+        'F' -> Annotation.Value.Float(readUnsignedShort().asConstantPoolIndex())
+        'I' -> Annotation.Value.Int(readUnsignedShort().asConstantPoolIndex())
+        'J' -> Annotation.Value.Long(readUnsignedShort().asConstantPoolIndex())
+        'S' -> Annotation.Value.Short(readUnsignedShort().asConstantPoolIndex())
+        'Z' -> Annotation.Value.Boolean(readUnsignedShort().asConstantPoolIndex())
+        's' -> Annotation.Value.String(readUnsignedShort().asConstantPoolIndex())
+        'e' -> Annotation.Value.Enum(
+                typeName = readUnsignedShort().asConstantPoolIndex(),
+                constName = readUnsignedShort().asConstantPoolIndex()
+        )
+        'c' -> Annotation.Value.ClassInfo(value = readUnsignedShort().asConstantPoolIndex())
+        '@' -> Annotation.Value.NestedAnnotation(logReaderNested {
+            readAnnotation()
+        })
+        '[' -> Annotation.Value.Array((1..readUnsignedShort()).map {
+            readAnnotationValue()
+        })
+        else -> throw InvalidClassFileException("Unknown annotation value tag: $tag")
+    }
+}
+
+fun DataInputStream.readRuntimeVisibleAnnotations(nameIndex: ConstantPool.Index<Utf8>): RuntimeVisibleAnnotations {
+    val count = readUnsignedShort()
+    logReader("annotation count: $count")
+    return RuntimeVisibleAnnotations(name = nameIndex,
+            annotations = (1..count).map { readAnnotation() })
+}
+
+fun DataInputStream.readRuntimeInvisibleAnnotations(nameIndex: ConstantPool.Index<Utf8>): RuntimeInvisibleAnnotations {
+    val count = readUnsignedShort()
+    logReader("annotation count: $count")
+    return RuntimeInvisibleAnnotations(name = nameIndex,
+            annotations = (1..count).map { readAnnotation() })
+}
+
+fun DataInputStream.readRuntimeVisibleParameterAnnotations(nameIndex: ConstantPool.Index<Utf8>): RuntimeVisibleParameterAnnotations {
+    val params = readUnsignedShort()
+    logReader("parameters: $params")
+    return RuntimeVisibleParameterAnnotations(name = nameIndex,
+            annotations = (1..params).map {
+                val count = readUnsignedShort()
+                logReader("annotation count: $count")
+                (1..count).map { readAnnotation() }
+            })
+}
+
+fun DataInputStream.readRuntimeInvisibleParameterAnnotations(nameIndex: ConstantPool.Index<Utf8>): RuntimeInvisibleParameterAnnotations {
+    val params = readUnsignedShort()
+    logReader("parameters: $params")
+    return RuntimeInvisibleParameterAnnotations(name = nameIndex,
+            annotations = (1..params).map {
+                val count = readUnsignedShort()
+                logReader("annotation count: $count")
+                (1..count).map { readAnnotation() }
+            })
+}
+
+fun DataInputStream.readTypeAnnotationTarget(): TypeAnnotation.Target {
+    val type = readByte().toInt()
 }
