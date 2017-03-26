@@ -21,6 +21,10 @@ object AttributeNames {
     val RuntimeInvisibleAnnotations = "RuntimeInvisibleAnnotations"
     val RuntimeVisibleParameterAnnotations = "RuntimeVisibleParameterAnnotations"
     val RuntimeInvisibleParameterAnnotations = "RuntimeInvisibleParameterAnnotations"
+    val RuntimeVisibleTypeAnnotations = "RuntimeVisibleTypeAnnotations"
+    val RuntimeInvisibleTypeAnnotations = "RuntimeInvisibleTypeAnnotations"
+    val AnnotationDefault = "AnnotationDefault"
+    val BootstrapMethods = "BootstrapMethods"
 }
 
 interface Attribute {
@@ -324,7 +328,7 @@ data class RuntimeInvisibleTypeAnnotations(
 
 data class AnnotationDefault(
         override val name: ConstantPool.Index<Utf8>,
-        val defaultValue: List<Annotation.Value>
+        val defaultValue: Annotation.Value
 ) : Attribute
 
 data class BootstrapMethods(

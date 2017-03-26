@@ -6,6 +6,7 @@ import com.github.daemontus.classfile.ConstantPool.Entry.Utf8
 import com.github.daemontus.classfile.Deprecated
 import com.github.daemontus.classfile.StackMapTable.StackMapFrame
 import com.github.daemontus.classfile.StackMapTable.VerificationTypeInfo
+import com.github.daemontus.classfile.TypeAnnotation.Target
 import java.io.DataInputStream
 
 fun DataInputStream.readAttribute(cp: ConstantPool): Attribute {
@@ -39,6 +40,10 @@ fun DataInputStream.readAttribute(cp: ConstantPool): Attribute {
         AttributeNames.RuntimeInvisibleAnnotations -> readRuntimeInvisibleAnnotations(nameIndex)
         AttributeNames.RuntimeVisibleParameterAnnotations -> readRuntimeVisibleParameterAnnotations(nameIndex)
         AttributeNames.RuntimeInvisibleParameterAnnotations -> readRuntimeInvisibleParameterAnnotations(nameIndex)
+        AttributeNames.RuntimeVisibleTypeAnnotations -> readRuntimeVisibleTypeAnnotations(nameIndex)
+        AttributeNames.RuntimeInvisibleTypeAnnotations -> readRuntimeInvisibleTypeAnnotations(nameIndex)
+        AttributeNames.AnnotationDefault -> readAnnotationDefault(nameIndex)
+        AttributeNames.BootstrapMethods -> readBootstrapMethods(nameIndex)
         else -> UnknownAttribute(nameIndex, ByteArray(length).apply { read(this) })
     }
 
@@ -317,6 +322,123 @@ fun DataInputStream.readRuntimeInvisibleParameterAnnotations(nameIndex: Constant
             })
 }
 
-fun DataInputStream.readTypeAnnotationTarget(): TypeAnnotation.Target {
+fun DataInputStream.readTypeAnnotationTarget(): Target {
     val type = readByte().toInt()
+    logReader("annotation target type: $type")
+    return when (type) {
+        0x00, 0x01 -> Target.TypeParameter(
+                type = type,
+                typeParameterIndex = readUnsignedByte(),
+                path = readTypeTargetPath()
+        )
+        0x10 -> Target.Supertype(
+                type = type,
+                supertypeIndex = readUnsignedShort(),
+                path = readTypeTargetPath()
+        )
+        0x11, 0x12 -> Target.TypeParameterBound(
+                type = type,
+                typeParameterIndex = readUnsignedByte(),
+                boundIndex = readUnsignedByte(),
+                path = readTypeTargetPath()
+        )
+        0x13, 0x14, 0x15 -> Target.Empty(
+                type = type, path = readTypeTargetPath()
+        )
+        0x16 -> Target.FormalParameter(
+                type = type,
+                formalParameterIndex = readUnsignedByte(),
+                path = readTypeTargetPath()
+        )
+        0x17 -> Target.Throws(
+                type = type,
+                throwsTypeIndex = readUnsignedShort(),
+                path = readTypeTargetPath()
+        )
+        0x40, 0x41 -> Target.LocalVar(
+                type = type,
+                table = (1..readUnsignedShort()).map {
+                    Target.LocalVar.Entry(
+                            startPC = readUnsignedShort(),
+                            length = readUnsignedShort(),
+                            index = readUnsignedShort()
+                    )
+                },
+                path = readTypeTargetPath()
+        )
+        0x42 -> Target.Catch(
+                type = type,
+                exceptionTableIndex = readUnsignedShort(),
+                path = readTypeTargetPath()
+        )
+        0x43, 0x44, 0x45, 0x46 -> Target.Offset(
+                type = type,
+                offset = readUnsignedShort(),
+                path = readTypeTargetPath()
+        )
+        0x47, 0x48, 0x49, 0x4A, 0x4B -> Target.TypeArgument(
+                type = type,
+                offset = readUnsignedShort(),
+                typeArgumentIndex = readUnsignedByte(),
+                path = readTypeTargetPath()
+        )
+        else -> throw InvalidClassFileException("Unknown type annotation target type: $type")
+    }
+}
+
+fun DataInputStream.readTypeTargetPath(): List<Target.PathItem>
+    = (1..readUnsignedByte()).map {
+    Target.PathItem(
+            pathKind = readUnsignedByte(),
+            argumentIndex = readUnsignedByte()
+    )
+}
+
+fun DataInputStream.readTypeAnnotation(): TypeAnnotation {
+    val target = readTypeAnnotationTarget()
+    val typeIndex = readUnsignedShort().asConstantPoolIndex<Utf8>()
+    val values = (1..readUnsignedShort()).map {
+        val key = readUnsignedShort().asConstantPoolIndex<Utf8>()
+        val value = readAnnotationValue()
+        Annotation.KeyValuePair(key = key, value = value)
+    }
+
+    return TypeAnnotation(target = target, type = typeIndex, data = values)
+}
+
+fun DataInputStream.readRuntimeVisibleTypeAnnotations(nameIndex: ConstantPool.Index<Utf8>): RuntimeVisibleTypeAnnotations {
+    val count = readUnsignedShort()
+    logReader("type annotation count: $count")
+    return RuntimeVisibleTypeAnnotations(name = nameIndex,
+            annotations = (1..readUnsignedShort()).map {
+                readTypeAnnotation()
+            })
+}
+
+fun DataInputStream.readRuntimeInvisibleTypeAnnotations(nameIndex: ConstantPool.Index<Utf8>): RuntimeInvisibleTypeAnnotations {
+    val count = readUnsignedShort()
+    logReader("type annotation count: $count")
+    return RuntimeInvisibleTypeAnnotations(name = nameIndex,
+            annotations = (1..readUnsignedShort()).map {
+                readTypeAnnotation()
+            })
+}
+
+fun DataInputStream.readAnnotationDefault(nameIndex: ConstantPool.Index<Utf8>): AnnotationDefault {
+    val value = readAnnotationValue()
+    return AnnotationDefault(name = nameIndex, defaultValue = value)
+}
+
+fun DataInputStream.readBootstrapMethods(nameIndex: ConstantPool.Index<Utf8>): BootstrapMethods {
+    val count = readUnsignedShort()
+    logReader("method count $count")
+    return BootstrapMethods(name = nameIndex,
+            bootstrapMethods = (1..count).map {
+                BootstrapMethods.Entry(
+                        methodRef = readUnsignedShort().asConstantPoolIndex(),
+                        arguments = (1..readUnsignedShort()).map {
+                            readUnsignedShort().asConstantPoolIndex<ConstantPool.Entry>()
+                        }
+                )
+            })
 }
