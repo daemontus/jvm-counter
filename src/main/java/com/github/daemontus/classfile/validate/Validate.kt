@@ -54,7 +54,8 @@ fun ClassFile.validate() {
             check(it.descriptor)
             it.access.validate(classFile)
 
-            it.attributes.forEach(Attribute::validate)
+            it.attributes.all { it.javaClass in FieldAttributes }
+            it.attributes.forEach { it.validate(classFile) }
 
             logValidate(" - field validation passed")
         }
@@ -80,12 +81,22 @@ fun ClassFile.validate() {
                     throw InvalidClassFileException("Instance initializer can't be abstract. Current access: ${it.access}")
             }
 
-            it.attributes.forEach(Attribute::validate)
+            it.attributes.all { it.javaClass in MethodAttributes }
+            val code = it.attributes.filterIsInstance<Code>()
+            if ((it.access.isNative || it.access.isAbstract)) {
+                if (code.isNotEmpty()) {
+                    throw InvalidClassFileException("Code attribute not allowed on method with access ${it.access}")
+                }
+            } else if (code.isEmpty()) {
+                throw InvalidClassFileException("Code attribute required on method with access ${it.access}")
+            }
+            it.attributes.forEach { it.validate(classFile) }
 
             logValidate(" - method validation passed")
         }
 
-        attributes.forEach(Attribute::validate)
+        attributes.all { it.javaClass in ClassFileAttributes }
+        attributes.forEach { it.validate(classFile) }
     }
 }
 
@@ -183,9 +194,5 @@ fun ClassFile.MethodInfo.Access.validate(classFile: ClassFile) {
         if (isStrict)
             throw InvalidClassFileException("Abstract method can't be strict. Current access: $this")
     }
-
-}
-
-fun Attribute.validate() {
 
 }

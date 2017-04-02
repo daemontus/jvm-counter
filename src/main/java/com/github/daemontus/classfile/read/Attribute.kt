@@ -97,7 +97,7 @@ fun DataInputStream.readCode(nameIndex: ConstantPool.Index<Utf8>, constantPool: 
     return Code(
             name = nameIndex,
             maxStack = maxStack, maxLocals = maxLocals,
-            code = listOf(UnknownInstructionBlock(codeBytes)),
+            code = codeBytes.toList(),
             exceptionTable = exceptionTable,
             attributes = attributes
     )
@@ -180,7 +180,7 @@ fun DataInputStream.readInnerClasses(nameIndex: ConstantPool.Index<Utf8>): Inner
                         innerClassInfo = readUnsignedShort().asConstantPoolIndex(),
                         outerClassInfo = readUnsignedShort().takeIf { it > 0 }?.asConstantPoolIndex(),
                         innerName = readUnsignedShort().takeIf { it > 0 }?.asConstantPoolIndex(),
-                        innerAccess = readUnsignedShort()
+                        innerAccess = InnerClasses.Access(readUnsignedShort())
                 )
             }
     )
@@ -451,7 +451,7 @@ fun DataInputStream.readMethodParameters(nameIndex: ConstantPool.Index<Utf8>): M
             parameters = (1..count).map {
                 MethodParameters.Entry(
                         name = readUnsignedShort().asConstantPoolIndex(),
-                        access = readUnsignedShort()
+                        access = MethodParameters.Access(readUnsignedShort())
                 )
             })
 }

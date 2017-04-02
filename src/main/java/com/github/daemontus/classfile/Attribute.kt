@@ -2,6 +2,7 @@ package com.github.daemontus.classfile
 
 import com.github.daemontus.classfile.ConstantPool.Entry.*
 import java.util.*
+import kotlin.collections.ArrayList
 
 object AttributeNames {
     val ConstantValue = "ConstantValue"
@@ -34,14 +35,14 @@ interface Attribute {
 
 data class ConstantValue(
         override val name: ConstantPool.Index<Utf8>,
-        val constant: ConstantPool.Index<*>
+        val constant: ConstantPool.Index<ConstantPool.Entry>
 ) : Attribute
 
 data class Code(
         override val name: ConstantPool.Index<Utf8>,
         val maxStack: Int,
         val maxLocals: Int,
-        val code: List<Instruction>,
+        val code: List<Byte>,
         val exceptionTable: List<ExceptionTableEntry>,
         val attributes: List<Attribute>
 ) : Attribute {
@@ -118,8 +119,39 @@ data class InnerClasses(
             val innerClassInfo: ConstantPool.Index<ClassRef>,
             val outerClassInfo: ConstantPool.Index<ClassRef>?,
             val innerName: ConstantPool.Index<ClassRef>?,
-            val innerAccess: Int    //TODO
+            val innerAccess: Access
     )
+
+    data class Access(
+            private val value: Int
+    ) {
+        val isPublic: Boolean = value.and(0x0001) != 0
+        val isPrivate: Boolean = value.and(0x0002) != 0
+        val isProtected: Boolean = value.and(0x0004) != 0
+        val isStatic: Boolean = value.and(0x0008) != 0
+        val isFinal: Boolean = value.and(0x0010) != 0
+        val isInterface: Boolean = value.and(0x0200) != 0
+        val isAbstract: Boolean = value.and(0x0400) != 0
+        val isSynthetic: Boolean = value.and(0x1000) != 0
+        val isAnnotation: Boolean = value.and(0x2000) != 0
+        val isEnum: Boolean = value.and(0x4000) != 0
+
+        override fun toString(): String {
+            val modifiers = ArrayList<String>()
+            if (isPublic) modifiers.add("public")
+            if (isPrivate) modifiers.add("private")
+            if (isProtected) modifiers.add("protected")
+            if (isStatic) modifiers.add("static")
+            if (isFinal) modifiers.add("final")
+            if (isInterface) modifiers.add("interface")
+            if (isAbstract) modifiers.add("abstract")
+            if (isSynthetic) modifiers.add("synthetic")
+            if (isAnnotation) modifiers.add("annotation")
+            if (isEnum) modifiers.add("enum")
+
+            return modifiers.joinToString(prefix = "[", postfix = "]")
+        }
+    }
 
 }
 
@@ -355,8 +387,24 @@ data class MethodParameters(
 
     data class Entry(
             val name: ConstantPool.Index<Utf8>?,
-            val access: Int // TODO
+            val access: Access
     )
+
+    data class Access(
+            private val value: Int
+    ) {
+        val isFinal: Boolean = value.and(0x0010) != 0
+        val isSynthetic: Boolean = value.and(0x1000) != 0
+        val isMandated: Boolean = value.and(0x8000) != 0
+
+        override fun toString(): String {
+            val modifiers = ArrayList<String>()
+            if (isFinal) modifiers.add("final")
+            if (isSynthetic) modifiers.add("synthetic")
+            if (isMandated) modifiers.add("mandated")
+            return modifiers.joinToString(prefix = "[", postfix = "]")
+        }
+    }
 
 }
 
