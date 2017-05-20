@@ -681,9 +681,9 @@
                <p class="norm"><a name="jvms-4.2.1-200"></a>For historical reasons, the
                   syntax of binary names that appear in <code class="literal">class</code> file structures differs
                   from the syntax of binary names documented in JLS §13.1. In this
-                  internal form, the ASCII periods (<code class="literal">.</code>) that normally separate the
-                  identifiers which make up the binary name are replaced by ASCII
-                  forward slashes (<code class="literal">/</code>). The identifiers themselves must be
+                  internal form, the <span class="blue">$12</span> <span class="blue-bg">ASCII periods (<code class="literal">.</code>)</span> that normally separate the
+                  identifiers which make up the binary name <span class="blue-bg">are replaced by ASCII
+                  forward slashes (<code class="literal">/</code>)</span>. The identifiers themselves must be
                   unqualified names (<a class="xref" href="https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-4.html#jvms-4.2.2" title="4.2.2. Unqualified Names">§4.2.2</a>).
                </p>
                <p class="note">For example, the normal binary name of class
@@ -705,15 +705,15 @@
                </div>
                <p class="norm"><a name="jvms-4.2.2-100"></a>Names of methods, fields, local
                   variables, and formal parameters are stored as <span class="emphasis"><em>unqualified
-                        names</em></span>. An unqualified name must contain at least one
+                        names</em></span>. <span class="blue">$13.1</span> <span class="blue-bg">An unqualified name must contain at least one
                   Unicode code point and must not contain any of the ASCII characters
-                  <code class="literal">.</code> <code class="literal">;</code> <code class="literal">[</code> <code class="literal">/</code> (that is, period or semicolon or left
+                  <code class="literal">.</code> <code class="literal">;</code> <code class="literal">[</code> <code class="literal">/</code> </span> (that is, period or semicolon or left
                   square bracket or forward slash).
                </p>
-               <p class="norm"><a name="jvms-4.2.2-200"></a>Method names are further
-                  constrained so that, with the exception of the special method names
-                  <code class="literal">&lt;init&gt;</code> and <code class="literal">&lt;clinit&gt;</code> (<a class="xref" href="https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-2.html#jvms-2.9" title="2.9. Special Methods">§2.9</a>), they must not
-                  contain the ASCII characters <code class="literal">&lt;</code> or <code class="literal">&gt;</code> (that is, left angle
+               <p class="norm"><a name="jvms-4.2.2-200"></a> <span class="blue">$13.2</span> <span class="blue-bg">Method names</span> are further
+                  constrained so that, <span class="blue-bg"> with the exception of </span> the special method names
+                  <span class="blue-bg"> <code class="literal">&lt;init&gt;</code> and <code class="literal">&lt;clinit&gt;</code></span> (<a class="xref" href="https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-2.html#jvms-2.9" title="2.9. Special Methods">§2.9</a>), they <span class="blue-bg"> must not
+                  contain the ASCII characters <code class="literal">&lt;</code> or <code class="literal">&gt;</code> </span> (that is, left angle
                   bracket or right angle bracket).
                </p>
                <p class="note">Note that a field name or interface method name may
@@ -777,14 +777,14 @@
                   </div>
                </div>
                <p class="norm"><a name="jvms-4.3.2-100"></a>A <span class="emphasis"><em>field
-                        descriptor</em></span> represents the type of a class, instance, or
-                  local variable.
+                        descriptor</em></span> represents the type of a <span class="blue">$14.1</span><span class="blue-bg">class, instance, or
+                  local variable</span>.
                </p>
                <div id="jvms-4.3.2-110" class="productionset"><a name="jvms-4.3.2-110"></a>
                     
                   <div class="production"><a name="jvms-FieldDescriptor"></a>
                          
-                     <div class="lhs">FieldDescriptor:</div>
+                     <div class="lhs"><span class="blue">$14.2</span> FieldDescriptor:</div>
                          
                      <div class="rhs"><a href="https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-4.html#jvms-FieldType" title="FieldType">FieldType</a></div>
                        
@@ -793,7 +793,7 @@
                     
                   <div class="production"><a name="jvms-FieldType"></a>
                          
-                     <div class="lhs">FieldType:</div>
+                     <div class="lhs"><span class="blue">$14.3</span> FieldType:</div>
                          
                      <div class="rhs">
                               <a href="https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-4.html#jvms-BaseType" title="BaseType">BaseType</a> <br>
@@ -807,7 +807,7 @@
                     
                   <div class="production"><a name="jvms-BaseType"></a>
                          
-                     <div class="lhs">BaseType:</div>
+                     <div class="lhs"><span class="blue">$14.4</span> BaseType:</div>
                          
                      <div class="rhs">
                               (one of) <br>
@@ -821,7 +821,7 @@
                     
                   <div class="production"><a name="jvms-ObjectType"></a>
                          
-                     <div class="lhs">ObjectType:</div>
+                     <div class="lhs"><span class="blue">$14.5</span> ObjectType:</div>
                          
                      <div class="rhs"><code class="literal">L</code> ClassName <code class="literal">;</code></div>
                        
@@ -830,7 +830,7 @@
                     
                   <div class="production"><a name="jvms-ArrayType"></a>
                          
-                     <div class="lhs">ArrayType:</div>
+                     <div class="lhs"><span class="blue">$14.6</span> ArrayType:</div>
                          
                      <div class="rhs"><code class="literal">[</code> <a href="https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-4.html#jvms-ComponentType" title="ComponentType">ComponentType</a></div>
                        
@@ -839,7 +839,7 @@
                     
                   <div class="production"><a name="jvms-ComponentType"></a>
                          
-                     <div class="lhs">ComponentType:</div>
+                     <div class="lhs"><span class="blue">$14.7</span> ComponentType:</div>
                          
                      <div class="rhs"><a href="https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-4.html#jvms-FieldType" title="FieldType">FieldType</a></div>
                        
@@ -859,8 +859,8 @@
                   descriptors as types is shown in <a class="xref" href="https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-4.html#jvms-4.3.2-200" title="Table 4.3-A. Interpretation of field descriptors">Table&nbsp;4.3-A</a>.
                </p>
                <p class="norm"><a name="jvms-4.3.2-150"></a>A field descriptor
-                  representing an array type is valid only if it represents a type with
-                  255 or fewer dimensions.
+                  representing an <span class="blue">$14.8</span> <span class="blue-bg">array type is valid only if it represents a type with
+                  255 or fewer dimensions</span>.
                </p>
                <div class="table"><a name="jvms-4.3.2-200"></a><p class="title"><b>Table&nbsp;4.3-A.&nbsp;Interpretation of field descriptors</b></p>
                   <div class="table-contents">
@@ -880,54 +880,54 @@
                         </thead>
                         <tbody>
                            <tr>
-                              <td><code class="literal">B</code></td>
+                              <td><code class="literal"><span class="blue">$14.9</span> B</code></td>
                               <td><code class="literal">byte</code></td>
                               <td>signed byte</td>
                            </tr>
                            <tr>
-                              <td><code class="literal">C</code></td>
+                              <td><code class="literal"><span class="blue">$14.10</span> C</code></td>
                               <td><code class="literal">char</code></td>
                               <td>Unicode character code point in the Basic Multilingual
                                  	Plane, encoded with UTF-16
                               </td>
                            </tr>
                            <tr>
-                              <td><code class="literal">D</code></td>
+                              <td><code class="literal"><span class="blue">$14.11</span> D</code></td>
                               <td><code class="literal">double</code></td>
                               <td>double-precision floating-point value</td>
                            </tr>
                            <tr>
-                              <td><code class="literal">F</code></td>
+                              <td><code class="literal"><span class="blue">$14.12</span> F</code></td>
                               <td><code class="literal">float</code></td>
                               <td>single-precision floating-point value</td>
                            </tr>
                            <tr>
-                              <td><code class="literal">I</code></td>
+                              <td><code class="literal"><span class="blue">$14.13</span> I</code></td>
                               <td><code class="literal">int</code></td>
                               <td>integer</td>
                            </tr>
                            <tr>
-                              <td><code class="literal">J</code></td>
+                              <td><code class="literal"><span class="blue">$14.14</span> J</code></td>
                               <td><code class="literal">long</code></td>
                               <td>long integer</td>
                            </tr>
                            <tr>
-                              <td><code class="literal">L</code> <span class="emphasis"><em>ClassName</em></span> <code class="literal">;</code></td>
+                              <td><code class="literal"><span class="blue">$14.15</span> L</code> <span class="emphasis"><em>ClassName</em></span> <code class="literal">;</code></td>
                               <td><code class="literal">reference</code></td>
                               <td>an instance of class <span class="emphasis"><em>ClassName</em></span></td>
                            </tr>
                            <tr>
-                              <td><code class="literal">S</code></td>
+                              <td><code class="literal"><span class="blue">$14.16</span> S</code></td>
                               <td><code class="literal">short</code></td>
                               <td>signed short</td>
                            </tr>
                            <tr>
-                              <td><code class="literal">Z</code></td>
+                              <td><code class="literal"><span class="blue">$14.17</span> Z</code></td>
                               <td><code class="literal">boolean</code></td>
                               <td><code class="literal">true</code> or <code class="literal">false</code></td>
                            </tr>
                            <tr>
-                              <td><code class="literal">[</code></td>
+                              <td><code class="literal"><span class="blue">$14.18</span> [</code></td>
                               <td><code class="literal">reference</code></td>
                               <td>one array dimension</td>
                            </tr>
@@ -958,9 +958,9 @@
                   </div>
                </div>
                <p class="norm"><a name="jvms-4.3.3-100"></a>A <span class="emphasis"><em>method
-                        descriptor</em></span> contains zero or more <span class="emphasis"><em>parameter
-                        descriptors</em></span>, representing the types of parameters that the
-                  method takes, and a <span class="emphasis"><em>return descriptor</em></span>,
+                        descriptor</em></span> contains <span class="blue">$15.1</span> <span class="blue-bg">zero or more <span class="emphasis"><em>parameter
+                        descriptors</em></span></span>, representing the types of parameters that the
+                  method takes, <span class="blue-bg"> and a <span class="emphasis"><em>return descriptor</em></span></span>,
                   representing the type of the value (if any) that the method
                   returns.
                </p>
@@ -968,7 +968,7 @@
                     
                   <div class="production"><a name="jvms-MethodDescriptor"></a>
                          
-                     <div class="lhs">MethodDescriptor:</div>
+                     <div class="lhs"><span class="blue">$15.2</span> MethodDescriptor:</div>
                          
                      <div class="rhs">
                               <code class="literal">(</code>
@@ -983,7 +983,7 @@
                     
                   <div class="production"><a name="jvms-ParameterDescriptor"></a>
                          
-                     <div class="lhs">ParameterDescriptor:</div>
+                     <div class="lhs"><span class="blue">$15.3</span> ParameterDescriptor:</div>
                          
                      <div class="rhs"><a href="https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-4.html#jvms-FieldType" title="FieldType">FieldType</a></div>
                        
@@ -992,7 +992,7 @@
                     
                   <div class="production"><a name="jvms-ReturnDescriptor"></a>
                          
-                     <div class="lhs">ReturnDescriptor:</div>
+                     <div class="lhs"><span class="blue">$15.4</span> ReturnDescriptor:</div>
                          
                      <div class="rhs">
                               <a href="https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-4.html#jvms-FieldType" title="FieldType">FieldType</a> <br>
@@ -1005,7 +1005,7 @@
                     
                   <div class="production"><a name="jvms-VoidDescriptor"></a>
                          
-                     <div class="lhs">VoidDescriptor:</div>
+                     <div class="lhs"><span class="blue">$15.5</span> VoidDescriptor:</div>
                          
                      <div class="rhs"><code class="literal">V</code></div>
                        
@@ -1013,8 +1013,8 @@
                   
                </div>
                <p class="norm"><a name="jvms-4.3.3-120"></a>The
-                  character <code class="literal">V</code> indicates that the method returns no
-                  value (its result is <code class="literal">void</code>).
+                  character <span class="blue">$15.6</span> <span class="blue-bg"> <code class="literal">V</code> indicates that the method returns no
+                  value</span> (its result is <code class="literal">void</code>).
                </p>
                <div class="informalexample">
                   <p class="note">The method descriptor for the method:</p><pre class="screen">Object m(int i, double d, Thread t) {...}
@@ -1025,11 +1025,11 @@
                </div>
                <p class="norm-static"><a name="jvms-4.3.3-200"></a>A method
                   descriptor is valid only if it represents method parameters with a
-                  total length of 255 or less, where that length includes the
-                  contribution for <code class="literal">this</code> in the case of instance or interface method
+                  total length of<span class="blue">$15.7</span> <span class="blue-bg">255 or less, where that length includes the
+                  contribution for <code class="literal">this</code></span> in the case of instance or interface method
                   invocations. The total length is calculated by summing the
                   contributions of the individual parameters, where a parameter of type
-                  <code class="literal">long</code> or <code class="literal">double</code> contributes two units to the length and a parameter
+                  <span class="blue">$15.8</span> <span class="blue-bg"><code class="literal">long</code> or <code class="literal">double</code> contributes two units</span> to the length and a parameter
                   of any other type contributes one unit.
                </p>
                <p class="norm-static"><a name="jvms-4.3.3-210"></a>A method
@@ -1064,7 +1064,7 @@
     u1 info[];
 }
 </pre><p class="norm"><a name="jvms-4.4-130"></a>Each item in the
-               <code class="literal">constant_pool</code> table must begin with a 1-byte tag indicating the kind
+               <code class="literal">constant_pool</code> table must <span class="blue">$16.1.1</span> <span class="blue-bg">begin with a 1-byte tag</span> indicating the kind
                of <code class="literal">cp_info</code> entry. The contents of
                the <code class="literal">info</code> array vary with the value
                of <code class="literal">tag</code>. The valid tags and their values are listed
@@ -1087,59 +1087,59 @@
                      </thead>
                      <tbody>
                         <tr>
-                           <td><code class="literal">CONSTANT_Class</code></td>
+                           <td><span class="blue">$16.1.2</span> <code class="literal">CONSTANT_Class</code></td>
                            <td>7</td>
                         </tr>
                         <tr>
-                           <td><code class="literal">CONSTANT_Fieldref</code></td>
+                           <td><span class="blue">$16.1.3</span> <code class="literal">CONSTANT_Fieldref</code></td>
                            <td>9</td>
                         </tr>
                         <tr>
-                           <td><code class="literal">CONSTANT_Methodref</code></td>
+                           <td><span class="blue">$16.1.4</span> <code class="literal">CONSTANT_Methodref</code></td>
                            <td>10</td>
                         </tr>
                         <tr>
-                           <td><code class="literal">CONSTANT_InterfaceMethodref</code></td>
+                           <td><span class="blue">$16.1.5</span> <code class="literal">CONSTANT_InterfaceMethodref</code></td>
                            <td>11</td>
                         </tr>
                         <tr>
-                           <td><code class="literal">CONSTANT_String</code></td>
+                           <td><span class="blue">$16.1.6</span> <code class="literal">CONSTANT_String</code></td>
                            <td>8</td>
                         </tr>
                         <tr>
-                           <td><code class="literal">CONSTANT_Integer</code></td>
+                           <td><span class="blue">$16.1.7</span> <code class="literal">CONSTANT_Integer</code></td>
                            <td>3</td>
                         </tr>
                         <tr>
-                           <td><code class="literal">CONSTANT_Float</code></td>
+                           <td><span class="blue">$16.1.8</span> <code class="literal">CONSTANT_Float</code></td>
                            <td>4</td>
                         </tr>
                         <tr>
-                           <td><code class="literal">CONSTANT_Long</code></td>
+                           <td><span class="blue">$16.1.9</span> <code class="literal">CONSTANT_Long</code></td>
                            <td>5</td>
                         </tr>
                         <tr>
-                           <td><code class="literal">CONSTANT_Double</code></td>
+                           <td><span class="blue">$16.1.10</span> <code class="literal">CONSTANT_Double</code></td>
                            <td>6</td>
                         </tr>
                         <tr>
-                           <td><code class="literal">CONSTANT_NameAndType</code></td>
+                           <td><span class="blue">$16.1.11</span> <code class="literal">CONSTANT_NameAndType</code></td>
                            <td>12</td>
                         </tr>
                         <tr>
-                           <td><code class="literal">CONSTANT_Utf8</code></td>
+                           <td><span class="blue">$16.1.12</span> <code class="literal">CONSTANT_Utf8</code></td>
                            <td>1</td>
                         </tr>
                         <tr>
-                           <td><code class="literal">CONSTANT_MethodHandle</code></td>
+                           <td><span class="blue">$16.1.13</span> <code class="literal">CONSTANT_MethodHandle</code></td>
                            <td>15</td>
                         </tr>
                         <tr>
-                           <td><code class="literal">CONSTANT_MethodType</code></td>
+                           <td><span class="blue">$16.1.14</span> <code class="literal">CONSTANT_MethodType</code></td>
                            <td>16</td>
                         </tr>
                         <tr>
-                           <td><code class="literal">CONSTANT_InvokeDynamic</code></td>
+                           <td><span class="blue">$16.1.15</span> <code class="literal">CONSTANT_InvokeDynamic</code></td>
                            <td>18</td>
                         </tr>
                      </tbody>
@@ -1171,14 +1171,14 @@
                                  the value <code class="literal">CONSTANT_Class</code> (7).
                         </p>
                      </dd>
-                     <dt><span class="term">name_index</span></dt>
+                     <dt><span class="blue">$16.2.1</span> <span class="term">name_index</span></dt>
                      <dd>
                         <p class="norm"><a name="jvms-4.4.1-200-B"></a>The value of the
-                                 <code class="literal">name_index</code> item must be a valid index into
-                                 the <code class="literal">constant_pool</code> table. The <code class="literal">constant_pool</code> entry at that
-                                 index must be a <code class="literal">CONSTANT_Utf8_info</code> structure
+                                 <code class="literal">name_index</code> item must be a <span class="blue">$16.2.2</span> <span class="blue-bg">valid index into
+                                 the <code class="literal">constant_pool</code> table</span>. The <code class="literal">constant_pool</code> entry at that
+                                 index must be a <span class="blue-bg"><code class="literal">CONSTANT_Utf8_info</code> structure
                                  (<a class="xref" href="https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-4.html#jvms-4.4.7" title="4.4.7. The CONSTANT_Utf8_info Structure">§4.4.7</a>) representing a valid binary class
-                                 or interface name encoded in internal form
+                                 or interface name encoded in internal form</span>
                                  (<a class="xref" href="https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-4.html#jvms-4.2.1" title="4.2.1. Binary Class and Interface Names">§4.2.1</a>).
                         </p>
                      </dd>
@@ -1251,55 +1251,55 @@ CONSTANT_InterfaceMethodref_info {
                                  <code class="literal">CONSTANT_InterfaceMethodref</code> (11).
                         </p>
                      </dd>
-                     <dt><span class="term">class_index</span></dt>
+                     <dt><span class="blue">$16.2.1</span> <span class="term">class_index</span></dt>
                      <dd>
                         <p class="norm"><a name="jvms-4.4.2-200-B"></a>
-                           	The value of the <code class="literal">class_index</code> item must be a
-                           	valid index into the <code class="literal">constant_pool</code> table. The
+                           	The value of the <code class="literal">class_index</code> item must be <span class="blue">$16.2.2</span> <span class="blue-bg">a
+                           	valid index into the <code class="literal">constant_pool</code> table</span>. The
                            	<code class="literal">constant_pool</code> entry at that index must be a
-                           	<code class="literal">CONSTANT_Class_info</code> structure (<a class="xref" href="https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-4.html#jvms-4.4.1" title="4.4.1. The CONSTANT_Class_info Structure">§4.4.1</a>)
+                           	<span class="blue-bg"><code class="literal">CONSTANT_Class_info</code></span> structure (<a class="xref" href="https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-4.html#jvms-4.4.1" title="4.4.1. The CONSTANT_Class_info Structure">§4.4.1</a>)
                            	representing a class or interface type that has the field or
                            	method as a member.
                         </p>
                         <p class="norm"><a name="jvms-4.4.2-200-B.1"></a>
                            	The <code class="literal">class_index</code> item of a
-                           	<code class="literal">CONSTANT_Methodref_info</code> structure must be a class type, not
-                           	an interface type.
+                           	<span class="blue">$16.2.3</span> <span class="blue-bg"><code class="literal">CONSTANT_Methodref_info</code> structure must be a class type, not
+                           	an interface type</span>.
                         </p>
                         <p class="norm"><a name="jvms-4.4.2-200-B.2"></a>
                            	The <code class="literal">class_index</code> item of a
-                           	<code class="literal">CONSTANT_InterfaceMethodref_info</code> structure must be an
-                           	interface type.
+                           	<span class="blue">$16.2.4</span> <span class="blue-bg"><code class="literal">CONSTANT_InterfaceMethodref_info</code> structure must be an
+                           	interface type</span>.
                         </p>
                         <p class="norm"><a name="jvms-4.4.2-200-B.3"></a>
                            	The <code class="literal">class_index</code> item of a
-                           	<code class="literal">CONSTANT_Fieldref_info</code> structure may be either a class type
-                           	or an interface type.
+                           	<span class="blue">$16.2.5</span> <span class="blue-bg"><code class="literal">CONSTANT_Fieldref_info</code> structure may be either a class type
+                           	or an interface type</span>.
                         </p>
                      </dd>
-                     <dt><span class="term">name_and_type_index</span></dt>
+                     <dt><span class="blue">$16.2.6</span> <span class="term">name_and_type_index</span></dt>
                      <dd>
                         <p class="norm"><a name="jvms-4.4.2-200-C"></a>
                            	The value of the <code class="literal">name_and_type_index</code> item
-                           	must be a valid index into the <code class="literal">constant_pool</code> table. The
+                           	must be <span class="blue">$16.2.7</span> <span class="blue-bg">a valid index into the <code class="literal">constant_pool</code> table</span>. The
                            	<code class="literal">constant_pool</code> entry at that index must be a
-                           	<code class="literal">CONSTANT_NameAndType_info</code> structure
+                           	<span class="blue-bg"><code class="literal">CONSTANT_NameAndType_info</code></span> structure
                            	(<a class="xref" href="https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-4.html#jvms-4.4.6" title="4.4.6. The CONSTANT_NameAndType_info Structure">§4.4.6</a>). This <code class="literal">constant_pool</code> entry
                            	indicates the name and descriptor of the field or
                            	method.
                         </p>
                         <p class="norm"><a name="jvms-4.4.2-200-C.1"></a>
-                           	In a <code class="literal">CONSTANT_Fieldref_info</code>, the indicated descriptor must
-                           	be a field descriptor
+                           	In a <span class="blue">$16.2.8</span> <span class="blue-bg"><code class="literal">CONSTANT_Fieldref_info</code>, the indicated descriptor must
+                           	be a field descriptor</span>
                            	(<a class="xref" href="https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-4.html#jvms-4.3.2" title="4.3.2. Field Descriptors">§4.3.2</a>). Otherwise, the indicated
-                           	descriptor must be a method descriptor
+                           	descriptor must be a <span class="blue-bg">method descriptor</span>
                            	(<a class="xref" href="https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-4.html#jvms-4.3.3" title="4.3.3. Method Descriptors">§4.3.3</a>).
                         </p>
                         <p class="norm"><a name="jvms-4.4.2-200-C.2"></a>
                            	If the name of the method of a <code class="literal">CONSTANT_Methodref_info</code>
-                           	structure begins with a '<code class="literal">&lt;</code>'
+                           	structure <span class="blue">$16.2.9</span> <span class="blue-bg">begins with a '<code class="literal">&lt;</code>'
                            	('<code class="literal">\u003c</code>'), then the name must be the
-                           	special name <code class="literal">&lt;init&gt;</code>, representing an instance initialization
+                           	special name <code class="literal">&lt;init&gt;</code></span>, representing an instance initialization
                            	method (<a class="xref" href="https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-2.html#jvms-2.9" title="2.9. Special Methods">§2.9</a>). The return type of such a
                            	method must be <code class="literal">void</code>.
                         </p>
@@ -1335,12 +1335,12 @@ CONSTANT_InterfaceMethodref_info {
                                  <code class="literal">CONSTANT_String</code> (8).
                         </p>
                      </dd>
-                     <dt><span class="term">string_index</span></dt>
+                     <dt><span class="blue">$16.3.1</span> <span class="term">string_index</span></dt>
                      <dd>
                         <p class="norm"><a name="jvms-4.4.3-200-B"></a>The value of
-                                 the <code class="literal">string_index</code> item must be a valid index
-                                 into the <code class="literal">constant_pool</code> table. The <code class="literal">constant_pool</code> entry at
-                                 that index must be a <code class="literal">CONSTANT_Utf8_info</code> structure
+                                 the <code class="literal">string_index</code> item must be <span class="blue">$16.3.2</span> <span class="blue-bg">a valid index
+                                 into the <code class="literal">constant_pool</code> table</span>. The <code class="literal">constant_pool</code> entry at
+                                 that index must be a <code class="literal blue-bg">CONSTANT_Utf8_info</code> structure
                                  (<a class="xref" href="https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-4.html#jvms-4.4.7" title="4.4.7. The CONSTANT_Utf8_info Structure">§4.4.7</a>) representing the sequence of
                                  Unicode code points to which the <code class="literal">String</code> object is to be
                                  initialized.
@@ -1386,16 +1386,16 @@ CONSTANT_Float_info {
                                  <code class="literal">CONSTANT_Float</code> (4).
                         </p>
                      </dd>
-                     <dt><span class="term">bytes</span></dt>
+                     <dt><span class="blue">$16.4.1</span> <span class="term">bytes</span></dt>
                      <dd>
                         <p class="norm"><a name="jvms-4.4.4-200-B"></a>The <code class="literal">bytes</code> item of
-                                 the <code class="literal">CONSTANT_Integer_info</code> structure represents the value of
-                                 the <code class="literal">int</code> constant. The bytes of the value are stored in
+                                 the <code class="literal">CONSTANT_Integer_info</code> structure represents the <span class="blue">$16.4.2</span> <span class="blue-bg">value of
+                                 the <code class="literal">int</code> constant</span>. The bytes of the value are stored in
                                  big-endian (high byte first) order.
                         </p>
                         <p class="norm"><a name="jvms-4.4.4-200-B.1"></a>The <code class="literal">bytes</code> item of
-                                 the <code class="literal">CONSTANT_Float_info</code> structure represents the value of the
-                                 <code class="literal">float</code> constant in IEEE 754 floating-point single format
+                                 the <code class="literal">CONSTANT_Float_info</code> structure represents the <span class="blue">$16.4.3</span> <span class="blue-bg">value of the
+                                 <code class="literal">float</code> constant in IEEE 754 floating-point single format</span>
                                  (<a class="xref" href="https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-2.html#jvms-2.3.2" title="2.3.2. Floating-Point Types, Value Sets, and Values">§2.3.2</a>). The bytes of the single format
                                  representation are stored in big-endian (high byte first)
                                  order.
