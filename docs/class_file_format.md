@@ -87,6 +87,8 @@ Return : FieldType<1.2.1> | V                   <1.2.7>
 #### [1.3] `cp_info` data format
 
 ```
+//cp_info is a union of the following structures:
+
 Class_info {        <1.3.0>
     u1 tag          <1.3.1>
     u2 name_index   <1.3.2>
@@ -207,3 +209,474 @@ InvokeDynamic_info {        <1.3.45>
  - [1.3.40] If `reference_kind <1.3.40>` is `8`, `constant_pool <1.1.5>` entry at index `reference_index <1.3.41>` must have a name `<init>`.
  - [1.3.41] `bootstrap_method_attr_index <1.3.47>` is a valid index into the `bootstrap_methods <TODO>`.
  
+#### [1.4] `field_info` data format
+
+```
+field_info {                                <1.4.0>
+    u2                  access_flags        <1.4.1>
+    u2                  name_index          <1.4.2>
+    u2                  descriptor_index    <1.4.3>
+    u2                  attributes_count    <1.4.4>
+    attribute_info[]    attributes          <1.4.5>
+}
+```
+
+ - [1.4.1] `access_flags <1.4.1>` is a bit mask of:
+    - `0x0001 <!PUBLIC>`
+    - `0x0002 <!PRIVATE>`
+    - `0x0004 <!PROTECTED>`
+    - `0x0008 <!STATIC>`
+    - `0x0010 <!FINAL>`
+    - `0x0040 <!VOLATILE>`
+    - `0x0080 <!TRANSIENT>`
+    - `0x1000 <!SYNTHETIC>`
+    - `0x4000 <!ENUM>`
+    
+ - [1.4.2] If `access_flags <1.4.1>` has `<!VOLATILE>` and `<!FINAL>` *cannot* be set at the same time.
+ - [1.4.3] In `access_flags <1.4.1>`, at most one of `<!PUBLIC>`, `<!PRIVATE>`, `<!PROTECTED>` can be set.
+ - [1.4.4] If `access_flags <1.1.6>` has `<!INTERFACE>` set, then in `access_flags <1.4.1>`, `<!PUBLIC>`, `<!STATIC>` and `<!FINAL>` *must* be set.
+ - [1.4.5] If `access_flags <1.1.6>` has `<!INTERFACE>` set, then in `access_flags <1.4.1>`, only `<!PUBLIC>`, `<!STATIC>`, `<!FINAL>` and `<!SYNTHETIC>` *can* be set.
+ - [1.4.6] `name_index <1.4.2>` is a valid index [1.0.4] into the `constant_pool <1.1.5>`.
+ - [1.4.7] `constant_pool <1.1.5>` entry at index `name_index <1.4.2>` must be of type `Utf8_info <1.3.34>`.
+ - [1.4.8] `constant_pool <1.1.5>` entry at index `name_index <1.4.2>` must represent a valid unqualified name [1.0.5].
+ - [1.4.9] `descriptor_index <1.4.3>` is a valid index [1.0.4] into the `constant_pool <1.1.5>`.
+- [1.4.7] `constant_pool <1.1.5>` entry at index `descriptor_index <1.4.3>` must be of type `Utf8_info <1.3.34>`.
+ - [1.4.8] `constant_pool <1.1.5>` entry at index `descriptor_index <1.4.3>` must represent a valid `FieldDescriptor <1.2.0>`.
+ - [1.4.9] `attributes <1.4.5>` has size `attributes_count <1.4.4>`.
+ 
+#### [1.5] `method_info` data format
+
+```
+method_info {                               <1.5.0>
+    u2                  access_flags        <1.5.1>
+    u2                  name_index          <1.5.2>
+    u2                  descriptor_index    <1.5.3>
+    u2                  attributes_count    <1.5.4>
+    attributes_info[]   attributes          <1.5.5>
+}
+```
+
+ - [1.5.1] `access_flags <1.5.1>` is a bit mask of:
+    - `0x0001 <!PUBLIC>`
+    - `0x0002 <!PRIVATE>`
+    - `0x0004 <!PROTECTED>`
+    - `0x0008 <!STATIC>`
+    - `0x0010 <!FINAL>`
+    - `0x0020 <!SYNCHRONIZED>`
+    - `0x0040 <!BRIDGE>`  
+    - `0x0080 <!VOLATILE>`
+    - `0x0100 <!NATIVE>`
+    - `0x0400 <!ABSTRACT>`
+    - `0x0800 <!STRICT>`
+    - `0x1000 <!SYNTHETIC>`
+
+ - [1.5.2] In `access_flags <1.5.1>`, at most one of `<!PUBLIC>`, `<!PRIVATE>`, `<!PROTECTED>` can be set.
+ - [1.5.3] If `access_flags <1.1.6>` has `<!INTERFACE>` set, then in `access_flags <1.5.1>`, `<!PROTECTED>`, `<!FINAL>`, `<!SYNCHRONIZED>`, `<!NATIVE>` must *not* be set.
+ - [1.5.4] If `access_flags <1.1.6>` has `<!INTERFACE>` set, then in `access_flags <1.5.1>`, `<!ABSTRACT>` must be set.
+ - [1.5.5] If `access_flags <1.1.6>` has `<!INTERFACE>` set and `major_version <1.1.3> < 52`, then in `access_flags <1.5.1>`, `<!PUBLIC>` and `<!ABSTRACT>` must be set. If `major_version <1.1.3> >= 52`, `<!PUBLIC>` or `<!PRIVATE>` must be set. 
+ - [1.5.6] If `access_flags <1.5.1>` has `<!ABSTRACT>` set, `<!PRIVATE>`, `<!STATIC>`, `<!FINAL>`, `<!SYNCHRONIZED>`, `<!NATIVE>` and `<!STRICT>` must *not* be set.
+ - [1.5.7] If `constant_pool <1.1.5>` entry at index `name_index <1.5.2>` represents the name `<init>`, only `<!PRIVATE>`, `<!PUBLIC>`, `<!PROTECTED>`, `<!VARARGS>`, `<!STRICT>` and `<!SYNTHETIC>` flags *can* be set.
+ - [1.5.8] `name_index <1.5.2>` is a valid index [1.0.4] into the `constant_pool <1.1.5>`.
+ - [1.5.9] `constant_pool <1.1.5>` entry at index `name_index <1.5.2>` must be of type `Utf8_info <1.3.34>`.
+ - [1.5.10] `constant_pool <1.1.5>` entry at index `name_index <1.5.2>` must represent a valid unqualified name [1.0.5].
+ - [1.5.11] `descriptor_index <1.5.3>` is a valid index [1.0.4] into the `constant_pool <1.1.5>`.
+ - [1.5.12] `constant_pool <1.1.5>` entry at index `descriptor_index <1.5.3>` must be of type `Utf8_info <1.3.34>`.
+ - [1.5.13] `constant_pool <1.1.5>` entry at index `descriptor_index <1.5.3>` must represent a valid `MethodDescriptor <1.2.5>`.
+ - [1.5.14] `attributes <1.5.5>` has size `attributes_count <1.5.4>`.
+  
+#### [1.6] General attribute
+
+Applies to all attributes, even unrecognized ones:
+
+```
+attribute_info {                    <1.6.0>
+    u2      attribute_name_index    <1.6.1>
+    u4      attribute_length        <1.6.2>
+    u1[]    info                    <1.6.3>
+}
+```
+
+ - [1.6.1] `attribute_name_index <1.6.1>` is a valid index [1.0.4] into the `constant_pool <1.1.5>`.
+ - [1.6.2] `constant_pool <1.1.5>` entry at index `attribute_name_index <1.6.1>` must be of type `Utf8_info <1.3.34>`.
+ - [1.6.3] `info <1.6.3>` has size `attribute_length <1.6.2>`. 
+ 
+#### [1.7] `ConstantValue` attribute
+
+```
+ConstantValue {                     <1.7.0>
+    u2      attribute_name_index    <1.6.1>
+    u4      attribute_length        <1.6.2>
+    u2      constantvalue_index     <1.7.1>
+}
+```
+
+ - [1.7.1] All rules from [1.6] apply.
+ - [1.7.2] Appears since `major_version.minor_version <1.1.3>.<1.1.2> >= 45.3`.
+ - [1.7.3] Appears in `attributes <1.4.5>`.
+ - [1.7.4] `constant_pool <1.1.5>` entry at index `attribute_name_index <1.7.1>` must be `ConstantValue <!CONSTANT_VALUE>`.
+ - [1.7.6] There may be at most one attribute of this type. 
+ - [1.7.6] `constantvalue_index <1.7.1>` is a valid index [1.0.4] into the `constant_pool <1.1.5>`.
+ - [1.7.7] `contant_pool <1.1.5>` entry at index `constantvalue_index <1.7.1>` has a type matching the `FieldDescriptor <1.2.0>` of this field (int, short, char, byte and boolean are all represented as integers).   
+
+#### [1.8] `Code` attribute
+```
+Code {                                                  <1.8.0>
+    u2                      attribute_name_index        <1.8.1>
+    u4                      attribute_length            <1.8.2>
+    u2                      max_stack                   <1.8.3>
+    u2                      max_locals                  <1.8.4>
+    u4                      code_length                 <1.8.5>
+    u1                      code                        <1.8.6>
+    u2                      exception_table_length      <1.8.7>
+    exception_table_entry[] exception_table             <1.8.8>
+    u2                      attributes_count            <1.8.9>
+    attribute_info[]        attributes                  <1.8.10>
+}
+
+exception_table_entry {                                 <1.8.11>
+    u2                      start_pc                    <1.8.12>
+    u2                      end_pc                      <1.8.13>
+    u2                      handler_pc                  <1.8.14>
+    u2                      catch_type                  <1.8.15>
+}
+```
+
+ - [1.8.1] All rules from [1.6] apply.
+ - [1.8.2] Appears since `major_version.minor_version <1.1.3>.<1.1.2> >= 45.3`.
+ - [1.8.2] Appears in `attributes <1.5.5>`.
+ - [1.8.3] `constant_pool <1.1.5>` entry at index `attribute_name_index <1.8.1>` must be `Code <!CODE>`.
+ - [1.8.4] If this methods `access_flags <1.5.1>` have `0x0100 <!NATIVE>` or `<!ABSTRACT>` set, no code attribute is allowed. Otherwise exactly one code attribute must be present.
+ - [1.8.5] `code_length <1.8.5>` is in `1..65535`.
+ - [1.8.6] `code <1.8.6>` has size `code_length <1.8.5>`.
+ - [1.8.7] `exception_table <1.8.8>` has size `exception_table_length <1.8.7>`.
+ - [1.8.8] `attributes <1.8.10>` have size `attributes_count <1.8.9>`.
+ - [1.8.9] `start_pc <1.8.12>` and `end_pc <1.8.13>` form a right-exclusive range in the `code <1.8.6>`, i.e. `start_pc <1.8.12> < end_pc <1.8.13>` and `start_pc <1.8.12> >= 0 && start_pc <1.8.12> < code_length <1.8.5>` and `end_pc <1.8.13> > 0 end_pc <1.8.13> <= code_length <1.8.5>`.
+ - [1.8.10] `handler_pc <1.8.14>` must be a valid index into the `code <1.8.6>`.
+ - [1.8.11] `catch_type <1.8.15>` is either `0` or a valid index [1.0.4] into the `constant_pool <1.1.5>`.
+ - [1.8.12] If not `0`, `constant_pool <1.1.5>` entry at index `catch_type <1.8.15>` must be of type `Class_info <TODO>`. 
+
+#### [1.9] `StackMapTable` attribute
+
+```
+StackMapTable {                                         <1.9.0>
+    u2                  attribute_name_index            <1.9.1>
+    u4                  attribute_length                <1.9.2>
+    u2                  number_of_entries               <1.9.3>
+    stack_map_frame[]   entries                         <1.9.4>
+}
+
+// stack_map_frame is a union of the following structures:
+
+same_frame {                                            <1.9.5>
+    u1                  frame_type                      <1.9.6>
+}
+
+same_locals_1_stack_item_frame {                        <1.9.7>
+    u1                  frame_type                      <1.9.8>
+    verification_type   stack                           <1.9.9>
+}
+
+same_locals_1_stack_item_frame_extended {               <1.9.10>
+    u1                  frame_type                      <1.9.11>
+    u2                  offset_delta                    <1.9.12>
+    verification_type   stack                           <1.9.13>
+}
+
+chop_frame {                                            <1.9.14>
+    u1                  frame_type                      <1.9.15>
+    u2                  offset_delta                    <1.9.16>
+}
+
+same_frame_extended {                                   <1.9.17>
+    u1                  frame_type                      <1.9.18>
+    u2                  offset_delta                    <1.9.19>
+}
+
+append_frame {                                          <1.9.20>
+    u1                  frame_type                      <1.9.21>
+    u2                  offset_delta                    <1.9.22>
+    verification_type[] locals                          <1.9.23>
+}
+
+full_frame {                                            <1.9.24>
+    u1                  frame_type                      <1.9.25>
+    u2                  offset_delta                    <1.9.26>
+    u2                  number_of_locals                <1.9.27>
+    verification_type[] locals                          <1.9.28>
+    u2                  number_of_stack_items           <1.9.29>
+    verification_type[] stack                           <1.9.30>
+}
+
+// verification_type is a union of the following structures:
+ 
+Top {                                                   <1.9.31>
+    u1                  tag                             <1.9.32>
+}
+
+Integer {                                               <1.9.33>
+    u1                  tag                             <1.9.34>
+}
+
+Float {                                                 <1.9.35>
+    u1                  tag                             <1.9.36>
+}
+
+Null {                                                  <1.9.37>
+    u1                  tag                             <1.9.38>
+}
+
+UninitializedThis {                                     <1.9.39>
+    u1                  tag                             <1.9.40>
+}
+
+Object {                                                <1.9.41>
+    u1                  tag                             <1.9.42>
+    u2                  cpool_index                     <1.9.43>
+}
+
+UnitializedVariable {                                   <1.9.44>
+    u1                  tag                             <1.9.45>
+    u2                  offset                          <1.9.46>
+}
+
+Long {                                                  <1.9.47>
+    u1                  tag                             <1.9.48>
+}
+
+Double {                                                <1.9.49>
+    u1                  tag                             <1.9.50>
+}
+
+
+```
+ - [1.9.1] All rules from [1.6] apply.
+ - [1.9.2] Appears since `major_version.minor_version <1.1.3>.<1.1.2> >= 50.0`.
+ - [1.9.3] Appears in `attributes <1.8.10>`.
+ - [1.9.4] `constant_pool <1.1.5>` entry at index `attribute_name_index <1.9.1>` must be `StackMapTable <!STACK_MAP_TABLE>`.
+ - [1.9.5] At most one stack map table can be present for each method.
+ - [1.9.6] `entries <1.9.4>` has size `number_of_entries <1.9.3>`.
+ - [1.9.7] `tag <1.9.32>` is `0x0 <!TOP>`.
+ - [1.9.8] `tag <1.9.34>` is `0x1 <!INTEGER>`.
+ - [1.9.9] `tag <1.9.36>` is `0x2 <!FLOAT>`.
+ - [1.9.10] `tag <1.9.50>` is `0x3 <!DOUBLE>`.
+ - [1.9.11] `tag <1.9.48>` is `0x4 <!LONG>`.
+ - [1.9.12] `tag <1.9.38>` is `0x5 <!NULL>`.
+ - [1.9.13] `tag <1.9.40>` is `0x6 <!U_THIS>`.
+ - [1.9.14] `tag <1.9.42>` is `0x7 <!OBJECT>`.
+ - [1.9.15] `tag <1.9.45>` is `0x8 <!U_VAR>`.
+ - [1.9.16] `cpool_index <1.9.43>` is a valid index [1.0.4] into the `constant_pool <1.1.5>`.
+ - [1.9.17] `constant_pool <1.1.5>` entry at index `cpool_index <1.9.43>` must be of type `Class_info <TODO>`.
+ - [1.9.18] `offset <1.9.46>` must be a valid index into the `code <1.8.6>` of parent code attribute.
+ - [1.9.19] `frame_type <1.9.6>` is in range `0..63`.
+ - [1.9.20] `frame_type <1.9.8>` is in range `64..127`.
+ - [1.9.21] `frame_type <1.9.11>` is `247`.
+ - [1.9.22] `frame_type <1.9.15>` is in range `248..250`.
+ - [1.9.23] `frame_type <1.9.18>` is `251`.
+ - [1.9.24] `frame_type <1.9.21>` is in range `252..254`.
+ - [1.9.25] `frame_type <1.9.25>` is `255`.
+ 
+
+#### [1.10] `Exceptions` attribute
+
+```
+Exceptions {                            <1.10.0>
+    u2      attribute_name_index        <1.10.1>
+    u4      attribute_length            <1.10.2>
+    u2      number_of_exceptions        <1.10.3>
+    u2[]    exception_index_table       <1.10.4>
+}
+```
+
+ - All rules from [1.6] apply.
+ - Appears since `major_version.minor_version <1.1.3>.<1.1.2> >= 45.3`.
+ - Appears in `attributes <1.5.5>`.
+ - [1.9.4] `constant_pool <1.1.5>` entry at index `attribute_name_index <1.10.1>` must be `Exceptions <!EXCEPTIONS>`.
+ - At most one exceptions attribute can be present for each method.
+ - Size of the `exception_index_table <1.10.4>` is `number_of_exceptions <1.10.3>`.
+
+#### [1.11] `InnerClasses` attribute
+
+```
+InnerClasses {                                  <1.11.0>
+    u2              attribute_name_index        <1.11.1>
+    u4              attribute_length            <1.11.2>
+    u2              number_of_classes           <1.11.3>
+    inner_class[]   classes                     <1.11.4>
+}
+
+inner_class {
+    u2              inner_class_info_index      <1.11.5>              
+    u2              outer_class_info_index      <1.11.6>
+    u2              inner_name_index            <1.11.7>
+    u2              inner_class_access_flags    <1.11.8>
+}
+```
+
+ - [1.11.1] All rules from [1.6] apply.
+ - [1.11.2] Appears since `major_version.minor_version <1.1.3>.<1.1.2> >= 45.3`.
+ - [1.11.3] Appears in `attributes <1.1.16>`.
+ - [1.11.4] `constant_pool <1.1.5>` entry at index `attribute_name_index <1.11.1>` must be `InnerClasses <!INNER_CLASSES>`.
+ - [1.11.5] At most one inner classes attribute can be present for each class.
+ - [1.11.6] Size of the `classes <1.11.4>` is `number_of_classes <1.11.3>`.
+ - [1.11.7] `inner_class_info_index <1.11.5>` is a valid index [1.0.4] into the `constant_pool <1.1.5>`.
+ - [1.11.8] `constant_pool <1.1.5>` entry at index `inner_class_info_index <1.11.5>` must be of type `Class_info <TODO>`.
+ - [1.11.9] `outer_class_info_index <1.11.6>` is either `0` or a valid index [1.0.4] into the `constant_pool <1.1.5>`.
+ - [1.11.10] If not zero, index `outer_class_info_index <1.11.6>` points to a `constant_pool <1.1.5>` entry of type `Class_info <TODO>`.
+ - [1.11.11] `inner_name_index <1.11.7>` is either `0` or a valid index [1.0.4] into the `constant_pool <1.1.5>`.
+ - [1.11.12] If not zero, index `inner_name_index <1.11.7>` points to a `constant_pool <1.1.5>` entry of type `Utf8_info <TODO>`.
+ - [1.11.13] `inner_class_access_flags <1.11.8>` is bit mask of:
+    - `0x0001 <!PUBLIC>`
+    - `0x0002 <!PRIVATE>`
+    - `0x0004 <!PROTECTED>`
+    - `0x0008 <!STATIC>`
+    - `0x0010 <!FINAL>`
+    - `0x0200 <!INTERFACE>`
+    - `0x0400 <!ABSTRACT>`
+    - `0x1000 <!SYNTHETIC>`
+    - `0x2000 <!ANNOTATION>`
+    - `0x4000 <!ENUM>`
+ - [1.11.14] If `major_version.minor_version <1.1.3>.<1.1.2> >= 51.0` and `inner_name_index <1.11.7>` is `0`, `outer_class_info_index <1.11.6>` must be `0` too.
+ 
+#### [1.12] `EnclosingMethod` attribute
+
+```
+EnclosingMethod {               <1.12.0>
+    u2  attribute_name_index    <1.12.1>
+    u4  attribute_length        <1.12.2>
+    u2  class_index             <1.12.3>
+    u2  method_index            <1.12.4>
+}
+```
+
+ - All rules from [1.6] apply.
+ - appears since `major_version.minor_version <1.1.3>.<1.1.2> >= 49.0`.
+ - appears in `attributes <1.1.16>`.
+ - [1.9.4] `constant_pool <1.1.5>` entry at index `attribute_name_index <1.12.1>` must be `EnclosingMethod <!ENCLOSING_METHOD>`.
+ - At most one enclosing method attribute is present for each class.
+ - [1.11.7] `class_index <1.12.3>` is a valid index [1.0.4] into the `constant_pool <1.1.5>`.
+ - [1.11.8] `constant_pool <1.1.5>` entry at index `class_index <1.12.3>` must be of type `Class_info <TODO>`.
+ - [1.11.7] `method_index <1.12.4>` is a valid index [1.0.4] into the `constant_pool <1.1.5>`.
+ - [1.11.8] `constant_pool <1.1.5>` entry at index `method_index <1.12.4>` must be of type `NameAndType_info <TODO>`.
+  
+#### [1.13] `Synthetic` attribute
+
+```
+Synthetic {                     <1.13.0>
+    u2  attribute_name_index    <1.13.1>
+    u4  attribute_length        <1.13.2>
+}
+```
+
+ - [1.13.1] All rules from [1.6] apply.
+ - [1.13.2] appears since `major_version.minor_version <1.1.3>.<1.1.2> >= 45.3`.
+ - [1.13.3] appears in `attributes <1.1.16><1.4.5><1.5.5><1.8.10>`.
+ - [1.13.4] `constant_pool <1.1.5>` entry at index `attribute_name_index <1.13.1>` must be `Synthetic <!SYNTHETIC>`.
+
+#### [1.14] `Signature` attribute
+
+```
+Signature {                     <1.14.0>
+    u2  attribute_name_index    <1.14.1>
+    u4  attribute_length        <1.14.2>
+    u2  signature_index         <1.14.3>
+}  
+```
+
+ - [1.14.1] All rules from [1.6] apply.
+ - [1.14.2] appears since `major_version.minor_version <1.1.3>.<1.1.2> >= 49.0`.
+ - [1.14.3] appears in `attributes <1.1.16><1.4.5><1.5.5>`.
+ - [1.14.4] `constant_pool <1.1.5>` entry at index `attribute_name_index <1.14.1>` must be `Signature <!Signature>`.
+ - [1.14.5] `signature_index <1.14.3>` is a valid index [1.0.4] into the `constant_pool <1.1.5>`.
+ - `constant_pool <1.1.5>` entry at index `signature_index <1.14.3>` must be of type `Utf8_info <TODO>`.
+ - `constant_pool <1.1.5>` entry at index `signature_index <1.14.3>` must represent a `ClassTypeSignature <TODO>`, `MethodTypeSignature <TODO>` or `FieldTypeSignature <TODO>` in accordance with the location of this attribute.
+
+#### [1.15] `SourceFile` attribute
+ - All rules from [1.6] apply.
+ - appears since `major_version.minor_version <1.1.3>.<1.1.2> >= 45.3`.
+ - appears in `attributes <1.1.16>`.
+ - [1.9.4] `constant_pool <1.1.5>` entry at index `attribute_name_index <1.15.1>` must be `SourceFile <!SOURCE_FILE>`.
+
+#### [1.16] `SourceDebugExtensions` attribute
+ - All rules from [1.6] apply.
+ - appears since `major_version.minor_version <1.1.3>.<1.1.2> >= 49.0`.
+ - appears in `attributes <1.1.16>`.
+ - [1.9.4] `constant_pool <1.1.5>` entry at index `attribute_name_index <1.16.1>` must be `SourceDebugExtensions <!SOURCE_DEBUG_EXTENSIONS>`.
+
+#### [1.17] `LineNumberTable` attribute
+ - All rules from [1.6] apply.
+ - appears since `major_version.minor_version <1.1.3>.<1.1.2> >= 45.3`.
+ - appears in `attributes <1.8.10>`.
+ - [1.9.4] `constant_pool <1.1.5>` entry at index `attribute_name_index <1.17.1>` must be `LineNumberTable <!LINE_NUMBER_TABLE>`.
+
+#### [1.18] `LocalVariableTable` attribute
+ - All rules from [1.6] apply.
+ - appears since `major_version.minor_version <1.1.3>.<1.1.2> >= 45.3`.
+ - appears in `attributes <1.8.10>`.
+ - [1.9.4] `constant_pool <1.1.5>` entry at index `attribute_name_index <1.18.1>` must be `LocalVariableTable <!LOCAL_VARIABLE_TABLE>`.
+
+#### [1.19] `LocalVariableTypeTable` attribute
+ - All rules from [1.6] apply.
+ - appears since `major_version.minor_version <1.1.3>.<1.1.2> >= 49.0`.
+ - appears in `attributes <1.8.10>`.
+- [1.9.4] `constant_pool <1.1.5>` entry at index `attribute_name_index <1.19.1>` must be `LocalVariableTypeTable <!LOCA_VARIABLE_TYPE_TABLE>`.
+
+#### [1.20] `Deprecated` attribute
+ - All rules from [1.6] apply.
+ - appears since `major_version.minor_version <1.1.3>.<1.1.2> >= 45.3`.
+ - appears in `attributes <1.1.16><1.4.5><1.5.5>`.
+ - [1.9.4] `constant_pool <1.1.5>` entry at index `attribute_name_index <1.20.1>` must be `Deprecated <!DEPRECATED>`.
+
+#### [1.21] `RuntimeVisibleAnnotations` attribute
+ - All rules from [1.6] apply.
+ - appears since `major_version.minor_version <1.1.3>.<1.1.2> >= 49.0`.
+ - appears in `attributes <1.1.16><1.4.5><1.5.5>`.
+ - [1.9.4] `constant_pool <1.1.5>` entry at index `attribute_name_index <1.21.1>` must be `RuntimeVisibleAnnotations <!RUNTIME_VISIBLE_ANNOTATIONS>`.
+
+#### [1.22] `RuntimeInvisibleAnnotations` attribute
+ - All rules from [1.6] apply.
+ - appears since `major_version.minor_version <1.1.3>.<1.1.2> >= 49.0`.
+ - appears in `attributes <1.1.16><1.4.5><1.5.5>`.
+ - [1.9.4] `constant_pool <1.1.5>` entry at index `attribute_name_index <1.22.1>` must be `RuntimeInvisibleAnnotations <!RUNTIME_INVISIBLE_ANNOTATIONS>`.
+
+#### [1.23] `RuntimeVisibleParameterAnnotations` attribute
+ - All rules from [1.6] apply.
+ - appears since `major_version.minor_version <1.1.3>.<1.1.2> >= 49.0`.
+ - appears in `attributes <1.5.5>`.
+ - [1.9.4] `constant_pool <1.1.5>` entry at index `attribute_name_index <1.23.1>` must be `RuntimeVisibleParameterAnnotations <!RUNTIME_VISIBLE_PARAMETER_ANNOTATIONS>`.
+
+#### [1.24] `RuntimeInvisibleParameterAnnotations` attribute
+ - All rules from [1.6] apply.
+ - appears since `major_version.minor_version <1.1.3>.<1.1.2> >= 49.0`.
+ - appears in `attributes <1.5.5>`.
+ - [1.9.4] `constant_pool <1.1.5>` entry at index `attribute_name_index <1.24.1>` must be `RuntimeInvisibleParameterAnnotations <!RUNTIME_INVISIBLE_PARAMETER_ANNOTATIONS>`.
+
+#### [1.25] `RuntimeVisibleTypeAnnotations` attribute
+ - All rules from [1.6] apply.
+ - appears since `major_version.minor_version <1.1.3>.<1.1.2> >= 52.0`.
+ - appears in `attributes <1.1.16><1.4.5><1.5.5><1.8.10>`.
+ - [1.9.4] `constant_pool <1.1.5>` entry at index `attribute_name_index <1.25.1>` must be `RuntimeVisibleTypeAnnotations <!RUNTIME_VISIBLE_TYPE_ANNOTATIONS>`.
+
+#### [1.26] `RuntimeInvisibleTypeAnnotations` attribute
+ - All rules from [1.6] apply.
+ - appears since `major_version.minor_version <1.1.3>.<1.1.2> >= 52.0`.
+ - appears in `attributes <1.1.16><1.4.5><1.5.5><1.8.10>`.
+ - [1.9.4] `constant_pool <1.1.5>` entry at index `attribute_name_index <1.26.1>` must be `RuntimeInvisibleTypeAnnotations <!RUNTIME_INVISIBLE_TYPE_ANNOTATIONS>`.
+
+#### [1.27] `AnnotationDefault` attribute
+ - All rules from [1.6] apply.
+ - appears since `major_version.minor_version <1.1.3>.<1.1.2> >= 49.0`.
+ - appears in `attributes <1.5.5>`.
+ - [1.9.4] `constant_pool <1.1.5>` entry at index `attribute_name_index <1.27.1>` must be `AnnotationDefault <!ANNOTATION_DEFAULT>`.
+
+#### [1.28] `BootstrapMethods` attribute
+ - All rules from [1.6] apply.
+ - appears since `major_version.minor_version <1.1.3>.<1.1.2> >= 51.0`.
+ - appears in `attributes <1.1.16>`.
+ - [1.9.4] `constant_pool <1.1.5>` entry at index `attribute_name_index <1.28.1>` must be `BootstrapMethods <!BOOTSTRAP_METHODS>`.
+
+#### [1.29] `MethodParameters` attribute
+ - All rules from [1.6] apply.
+ - appears since `major_version.minor_version <1.1.3>.<1.1.2> >= 52.0`.
+ - appears in `attributes <1.5.5>`.
+ - [1.9.4] `constant_pool <1.1.5>` entry at index `attribute_name_index <1.29.1>` must be `MethodParameters <!METHOD_PARAMETERS>`.
+  
