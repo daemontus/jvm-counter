@@ -10,7 +10,8 @@
  - [1.0.4] `x` is a valid index into the `constant_pool <1.1.5>` iff `x > 0 && x < constant_pool_count <1.1.4>` and if `x-1 > 0`, the type of `constant_pool <1.1.5>` entry at index `x-1` is not `Double_info <TODO>` or `Long_info <TODO>`.
  - [1.0.5] `x` is an unqualified name iff `size(x) > 0` and `('.'|';'|'['|'/') !in x`
  - [1.0.6] `x` is a method name iff it is an unqualified name [1.0.5] and (`('<'|'>') !in x` or `x in ("<init>", "<clinit>")`)
- - [1.0.7] `x` is a binary (fully qualified) name iff `size(x.split('/')) > 0` and `x.split('/').all { it is unqualified name [1.0.5] }` 
+ - [1.0.7] `x` is a binary (fully qualified) name iff `size(x.split('/')) > 0` and `x.split('/').all { it is unqualified name [1.0.5] }`
+ - [1.0.8] `x` is an identifier iff `('.'|';'|'['|'/'|'<'|'>'|':') !in x` and `size(x) > 0`.
  
 #### [1.1] `class` data object
 
@@ -70,15 +71,40 @@ ClassFile {                                 <1.1.0>
 #### [1.2] `FieldDescriptor` and `MethodDescriptor` grammar
 
 ```
-FieldDescriptor : FieldType                     <1.2.0>
-FieldType : BaseType | ObjectType | ArrayType   <1.2.1>
-BaseType : B | C | D | F | I | J | S | Z        <1.2.2>
-ObjectType : L binary_name[1.0.7] ;             <1.2.3>
-ArrayType : [ FieldType                         <1.2.4>
+FieldDescriptor : FieldType<1.2.1>                                      <1.2.0>
+FieldType : BaseType<1.2.2> | ObjectType<1.2.3> | ArrayType<1.2.4>      <1.2.1>
+BaseType : B | C | D | F | I | J | S | Z                                <1.2.2>
+ObjectType : L binary_name[1.0.7] ;                                     <1.2.3>
+ArrayType : [ FieldType<1.2.1>                                          <1.2.4>
 
-MethodDescriptor : ( Parameter* ) Return        <1.2.5>
-Parameter : FieldType<1.2.1>                    <1.2.6>
-Return : FieldType<1.2.1> | V                   <1.2.7>
+MethodDescriptor : ( Parameter<1.2.6>* ) Return<1.2.1>                  <1.2.5>
+Parameter : FieldType<1.2.1>                                            <1.2.6>
+Return : FieldType<1.2.1> | V                                           <1.2.7>
+
+JavaType : ReferenceType<1.2.9> | BaseType<1.2.2>                               <1.2.8>
+ReferenceType : ClassType<1.2.10> | TypeVariable<1.2.20> | ArrayType<1.2.16>   <1.2.9>
+
+ClassType : L PackageSpecifier<1.2.11>? 
+            SimpleClassType<1.2.12> ClassTypeSuffix<1.2.15>*            <1.2.10>
+PackageSpecifier : identifier[1.0.8] / PackageSpecifier<1.2.11>*        <1.2.11>
+SimpleClassType : identifier[1.0.8] TypeArguments<1.2.13>?              <1.2.12>
+TypeArguments : < TypeArgument<1.2.14> TypeArgument<1.2.14>+ >          <1.2.13>
+TypeArgument : (+|-)? ReferenceType<1.2.9> | *                          <1.2.14>
+ClassTypeSuffix : . SimpleClassType<1.2.12>                             <1.2.15>
+ArrayType : [ JavaType<1.2.8>                                           <1.2.16>
+
+ClassSignature : TypeParameters<1.2.18>? ClassType<1.2.10> ClassType<1.2.10>*   <1.2.17>
+TypeParameters : < TypeParameter<1.2.19> TypeParameter<1.2.19>* >               <1.2.18>
+TypeParameter : identifier[1.0.8] : ReferenceType<1.2.9>? (: ReferenceType<1.2.9>)* <1.2.19>
+
+TypeVariable : T identifier[1.0.8] ;                                            <1.2.20>
+MethodSignature :   TypeParameters<1.2.18>? ( JavaType<1.2.8>* ) 
+                    Result<1.2.22> Throws<1.2.23>                               <1.2.21>
+Result : (JavaType<1.2.8> | V)                                                  <1.2.22>
+Throws : ^ (ClassType<1.2.10> | TypeVariable<1.2.20>)                           <1.2.23>
+
+FieldSignature : ReferenceType<1.2.9>           <1.2.24>
+  
 ```
 
  - `ArrayType <1.2.4>` must have fewer than `256` dimensions (number of `[`).
@@ -548,15 +574,16 @@ EnclosingMethod {               <1.12.0>
 }
 ```
 
- - All rules from [1.6] apply.
- - appears since `major_version.minor_version <1.1.3>.<1.1.2> >= 49.0`.
- - appears in `attributes <1.1.16>`.
- - [1.9.4] `constant_pool <1.1.5>` entry at index `attribute_name_index <1.12.1>` must be `EnclosingMethod <!ENCLOSING_METHOD>`.
+ - [1.12.1] All rules from [1.6] apply.
+ - [1.12.2] Appears since `major_version.minor_version <1.1.3>.<1.1.2> >= 49.0`.
+ - [1.12.3] Appears in `attributes <1.1.16>`.
+ - [1.12.4] At most one enclosing method attribute can be present for each class.
+ - [1.12.5] `constant_pool <1.1.5>` entry at index `attribute_name_index <1.12.1>` must be `EnclosingMethod <!ENCLOSING_METHOD>`.
  - At most one enclosing method attribute is present for each class.
- - [1.11.7] `class_index <1.12.3>` is a valid index [1.0.4] into the `constant_pool <1.1.5>`.
- - [1.11.8] `constant_pool <1.1.5>` entry at index `class_index <1.12.3>` must be of type `Class_info <TODO>`.
- - [1.11.7] `method_index <1.12.4>` is a valid index [1.0.4] into the `constant_pool <1.1.5>`.
- - [1.11.8] `constant_pool <1.1.5>` entry at index `method_index <1.12.4>` must be of type `NameAndType_info <TODO>`.
+ - [1.12.6] `class_index <1.12.3>` is a valid index [1.0.4] into the `constant_pool <1.1.5>`.
+ - [1.12.7] `constant_pool <1.1.5>` entry at index `class_index <1.12.3>` must be of type `Class_info <TODO>`.
+ - [1.12.8] `method_index <1.12.4>` is a valid index [1.0.4] into the `constant_pool <1.1.5>`.
+ - [1.12.9] `constant_pool <1.1.5>` entry at index `method_index <1.12.4>` must be of type `NameAndType_info <TODO>`.
   
 #### [1.13] `Synthetic` attribute
 
@@ -568,9 +595,11 @@ Synthetic {                     <1.13.0>
 ```
 
  - [1.13.1] All rules from [1.6] apply.
- - [1.13.2] appears since `major_version.minor_version <1.1.3>.<1.1.2> >= 45.3`.
- - [1.13.3] appears in `attributes <1.1.16><1.4.5><1.5.5><1.8.10>`.
+ - [1.13.2] Appears since `major_version.minor_version <1.1.3>.<1.1.2> >= 45.3`.
+ - [1.13.3] Appears in `attributes <1.1.16><1.4.5><1.5.5><1.8.10>`.
  - [1.13.4] `constant_pool <1.1.5>` entry at index `attribute_name_index <1.13.1>` must be `Synthetic <!SYNTHETIC>`.
+ - [1.13.5] `attribute_length <1.13.2>` must be `0`.
+ - TODO: Check if synthetic is allowed multiple times in practice
 
 #### [1.14] `Signature` attribute
 
@@ -583,48 +612,147 @@ Signature {                     <1.14.0>
 ```
 
  - [1.14.1] All rules from [1.6] apply.
- - [1.14.2] appears since `major_version.minor_version <1.1.3>.<1.1.2> >= 49.0`.
- - [1.14.3] appears in `attributes <1.1.16><1.4.5><1.5.5>`.
+ - [1.14.2] Appears since `major_version.minor_version <1.1.3>.<1.1.2> >= 49.0`.
+ - [1.14.3] Appears in `attributes <1.1.16><1.4.5><1.5.5>`.
  - [1.14.4] `constant_pool <1.1.5>` entry at index `attribute_name_index <1.14.1>` must be `Signature <!Signature>`.
  - [1.14.5] `signature_index <1.14.3>` is a valid index [1.0.4] into the `constant_pool <1.1.5>`.
- - `constant_pool <1.1.5>` entry at index `signature_index <1.14.3>` must be of type `Utf8_info <TODO>`.
- - `constant_pool <1.1.5>` entry at index `signature_index <1.14.3>` must represent a `ClassTypeSignature <TODO>`, `MethodTypeSignature <TODO>` or `FieldTypeSignature <TODO>` in accordance with the location of this attribute.
+ - [1.14.6] `constant_pool <1.1.5>` entry at index `signature_index <1.14.3>` must be of type `Utf8_info <TODO>`.
+ - [1.14.7] `constant_pool <1.1.5>` entry at index `signature_index <1.14.3>` must represent a `ClassSignature <1.1.17>`, `MethodSignature <1.1.21>` or `FieldSignature <1.1.24>` in accordance with the location of this attribute.
+ - TODO: Probably should appear only once - but it's not part of the spec. 
 
 #### [1.15] `SourceFile` attribute
- - All rules from [1.6] apply.
- - appears since `major_version.minor_version <1.1.3>.<1.1.2> >= 45.3`.
- - appears in `attributes <1.1.16>`.
- - [1.9.4] `constant_pool <1.1.5>` entry at index `attribute_name_index <1.15.1>` must be `SourceFile <!SOURCE_FILE>`.
+```
+SourceFile {                    <1.15.0>
+    u2  attribute_name_index    <1.15.1>
+    u4  attribute_length        <1.15.2>
+    u2  sourcefile_index        <1.15.3>
+}
+```
+ - [1.15.1] All rules from [1.6] apply.
+ - [1.15.2] Appears since `major_version.minor_version <1.1.3>.<1.1.2> >= 45.3`.
+ - [1.15.3] Appears in `attributes <1.1.16>`.
+ - [1.15.4] `constant_pool <1.1.5>` entry at index `attribute_name_index <1.15.1>` must be `SourceFile <!SOURCE_FILE>`.
+ - [1.15.5] `sourcefile_index <1.15.3>` is a valid index [1.0.4] into the `constant_pool <1.1.5>`.
+ - [1.15.6] `constant_pool <1.1.5>` entry at index `sourcefile_index <1.15.3>` must be of type `Utf8_info <TODO>`.
+ - [1.15.7] At most one source file attribute can be present for each class. 
 
 #### [1.16] `SourceDebugExtensions` attribute
- - All rules from [1.6] apply.
- - appears since `major_version.minor_version <1.1.3>.<1.1.2> >= 49.0`.
- - appears in `attributes <1.1.16>`.
- - [1.9.4] `constant_pool <1.1.5>` entry at index `attribute_name_index <1.16.1>` must be `SourceDebugExtensions <!SOURCE_DEBUG_EXTENSIONS>`.
+```
+SourceDebugExtensions {             <1.16.0>
+    u2      attribute_name_index    <1.16.1>
+    u4      attribute_length        <1.16.2>
+    u1[]    debug_extension         <1.16.3>
+}
+```
+ - [1.16.1] All rules from [1.6] apply.
+ - [1.16.2] Appears since `major_version.minor_version <1.1.3>.<1.1.2> >= 49.0`.
+ - [1.16.3] Appears in `attributes <1.1.16>`.
+ - [1.16.4] `constant_pool <1.1.5>` entry at index `attribute_name_index <1.16.1>` must be `SourceDebugExtensions <!SOURCE_DEBUG_EXTENSIONS>`.
+ - [1.16.5] Size of the `debug_extension <1.16.3>` is `attribute_length <1.16.2>`.
+ - [1.16.6] At most one source debug extension attribute can be present for each class. 
 
 #### [1.17] `LineNumberTable` attribute
- - All rules from [1.6] apply.
- - appears since `major_version.minor_version <1.1.3>.<1.1.2> >= 45.3`.
- - appears in `attributes <1.8.10>`.
- - [1.9.4] `constant_pool <1.1.5>` entry at index `attribute_name_index <1.17.1>` must be `LineNumberTable <!LINE_NUMBER_TABLE>`.
+```
+LineNumberTable {                       <1.17.0>
+    u2      attribute_name_index        <1.17.1>
+    u4      attribute_length            <1.17.2>
+    u2      line_number_table_length    <1.17.3>
+    entry[] line_number_table           <1.17.4>
+}
+
+entry {                                 <1.17.5>
+    u2  start_pc                        <1.17.6>
+    u2  line_number                     <1.17.7>
+}
+```
+
+ - [1.17.1] All rules from [1.6] apply.
+ - [1.17.2] Appears since `major_version.minor_version <1.1.3>.<1.1.2> >= 45.3`.
+ - [1.17.3] Appears in `attributes <1.8.10>`.
+ - [1.17.4] `constant_pool <1.1.5>` entry at index `attribute_name_index <1.17.1>` must be `LineNumberTable <!LINE_NUMBER_TABLE>`.
+ - [1.17.5] Size of the `line_number_table <1.17.4>` is `line_number_table_length <1.17.3>`.
+ - [1.17.6] `start_pc <1.17.6>` is a valid instruction index in the corresponding `code <1.8.6>`
 
 #### [1.18] `LocalVariableTable` attribute
- - All rules from [1.6] apply.
- - appears since `major_version.minor_version <1.1.3>.<1.1.2> >= 45.3`.
- - appears in `attributes <1.8.10>`.
- - [1.9.4] `constant_pool <1.1.5>` entry at index `attribute_name_index <1.18.1>` must be `LocalVariableTable <!LOCAL_VARIABLE_TABLE>`.
+```
+LocalVariableTable {                        <1.18.0>
+    u2      attribute_name_index            <1.18.1>
+    u4      attribute_length                <1.18.2>
+    u2      local_variable_table_length     <1.18.3>
+    entry[] local_variable_table            <1.18.4>
+}
+
+entry {                                     <1.18.5>
+    u2  start_pc                            <1.18.6>
+    u2  length                              <1.18.7>
+    u2  name_index                          <1.18.8>
+    u2  descriptor_index                    <1.18.9>
+    u2  index                               <1.18.10>
+}
+```
+ - [1.18.1] All rules from [1.6] apply.
+ - [1.18.2] Appears since `major_version.minor_version <1.1.3>.<1.1.2> >= 45.3`.
+ - [1.18.3] Appears in `attributes <1.8.10>`.
+ - [1.18.4] `constant_pool <1.1.5>` entry at index `attribute_name_index <1.18.1>` must be `LocalVariableTable <!LOCAL_VARIABLE_TABLE>`.
+ - [1.18.5] There can be at most one local variable table *per local variable* (whatever that means).
+ - [1.18.6] Size of the `local_variable_table <1.18.4>` is `local_variable_table_length <1.18.3>`.
+ - [1.18.7] `start_pc <1.18.6>` is a valid instruction index in the corresponding `code <1.8.6>`.
+ - [1.18.8] `start_pc <1.18.6> + length <1.18.7>` is either a valid instruction index in the corresponding `code <1.8.6>`, or equal to `code_length <1.8.5>`.
+ - [1.18.9] `name_index <1.18.8>` is a valid index [1.0.4] into the `constant_pool <1.1.5>`.
+ - [1.18.10] `constant_pool <1.1.5>` entry at index `name_index <1.18.8>` is of type `Utf8_info <TODO>`.
+ - [1.18.11] `constant_pool <1.1.5>` entry at index `name_index <1.18.8>` is a valid unqualified name [1.0.5].
+ - [1.18.12] `descriptor_index <1.18.9>` is a valid index [1.0.4] into the `constant_pool <1.1.5>`.
+ - [1.18.13] `constant_pool <1.1.5>` entry at index `descriptor_index <1.18.9>` is of type `Utf8_info <TODO>`.
+ - [1.18.14] `constant_pool <1.1.5>` entry at index `descriptor_index <1.18.9>` is a valid `FieldDescriptor<1.2.0>`.
+ - [1.18.15] `index <1.18.10>` is a valid index into the local variable array, i.e. `index <1.18.10> + 1 < max_locals <1.8.4>` if the descriptor is of type long/double and without the `+1` otherwise.
 
 #### [1.19] `LocalVariableTypeTable` attribute
- - All rules from [1.6] apply.
- - appears since `major_version.minor_version <1.1.3>.<1.1.2> >= 49.0`.
- - appears in `attributes <1.8.10>`.
-- [1.9.4] `constant_pool <1.1.5>` entry at index `attribute_name_index <1.19.1>` must be `LocalVariableTypeTable <!LOCA_VARIABLE_TYPE_TABLE>`.
+```
+LocalVariableTypeTable {                        <1.19.0>
+    u2      attribute_name_index                <1.19.1>
+    u4      attribute_length                    <1.19.2>
+    u2      local_variable_type_table_length    <1.19.3>
+    entry[] local_variable_type_table           <1.19.4>
+}
+
+entry {                                     <1.19.5>
+    u2  start_pc                            <1.19.6>
+    u2  length                              <1.19.7>
+    u2  name_index                          <1.19.8>
+    u2  signature_index                     <1.19.9>
+    u2  index                               <1.19.10>
+}
+```
+ - [1.19.1] All rules from [1.6] apply.
+ - [1.19.2] Appears since `major_version.minor_version <1.1.3>.<1.1.2> >= 49.0`.
+ - [1.19.3] Appears in `attributes <1.8.10>`.
+ - [1.19.4] `constant_pool <1.1.5>` entry at index `attribute_name_index <1.19.1>` must be `LocalVariableTypeTable <!LOCAL_VARIABLE_TYPE_TABLE>`.
+ - [1.19.5] There can be at most one local variable table *per local variable* (whatever that means).
+ - [1.19.6] Size of the `local_variable_type_table <1.19.4>` is `local_variable_type_table_length <1.19.3>`.
+ - [1.19.7] `start_pc <1.19.6>` is a valid instruction index in the corresponding `code <1.8.6>`.
+ - [1.19.8] `start_pc <1.19.6> + length <1.19.7>` is either a valid instruction index in the corresponding `code <1.8.6>`, or equal to `code_length <1.8.5>`.
+ - [1.19.9] `name_index <1.19.8>` is a valid index [1.0.4] into the `constant_pool <1.1.5>`.
+ - [1.19.10] `constant_pool <1.1.5>` entry at index `name_index <1.19.8>` is of type `Utf8_info <TODO>`.
+ - [1.19.11] `constant_pool <1.1.5>` entry at index `name_index <1.19.8>` is a valid unqualified name [1.0.5].
+ - [1.19.12] `siganture_index <1.19.9>` is a valid index [1.0.4] into the `constant_pool <1.1.5>`.
+ - [1.19.13] `constant_pool <1.1.5>` entry at index `signature_index <1.19.9>` is of type `Utf8_info <TODO>`.
+ - [1.19.14] `constant_pool <1.1.5>` entry at index `signature_index <1.19.9>` is a valid `FieldDescriptor<1.2.0>`.
+ - [1.19.15] `index <1.19.10>` is a valid index into the local variable array, i.e. `index <1.19.10> + 1 < max_locals <1.8.4>` if the descriptor is of type long/double and without the `+1` otherwise.
+
 
 #### [1.20] `Deprecated` attribute
+```
+Deprecated {                        <1.20.0>
+    u2  attribute_name_index        <1.20.1>
+    u4  attribute_length            <1.20.2>
+}
+```
  - All rules from [1.6] apply.
  - appears since `major_version.minor_version <1.1.3>.<1.1.2> >= 45.3`.
  - appears in `attributes <1.1.16><1.4.5><1.5.5>`.
  - [1.9.4] `constant_pool <1.1.5>` entry at index `attribute_name_index <1.20.1>` must be `Deprecated <!DEPRECATED>`.
+ - [1.13.5] `attribute_length <1.20.2>` must be `0`.
+ - TODO: Check if the attribute can be present more than once in practice.
 
 #### [1.21] `RuntimeVisibleAnnotations` attribute
  - All rules from [1.6] apply.
@@ -675,8 +803,32 @@ Signature {                     <1.14.0>
  - [1.9.4] `constant_pool <1.1.5>` entry at index `attribute_name_index <1.28.1>` must be `BootstrapMethods <!BOOTSTRAP_METHODS>`.
 
 #### [1.29] `MethodParameters` attribute
+
+```
+MethodParameters {                  <1.29.0>
+    u2      attribute_name_index    <1.29.1>
+    u4      attribute_length        <1.29.2>
+    u1      parameters_count        <1.29.3>
+    param[] parameters              <1.29.4>
+}
+
+param {                             <1.29.5>
+    u2  name_index                  <1.29.6>
+    u2  access_flags                <1.29.7>
+}
+```
+
  - All rules from [1.6] apply.
- - appears since `major_version.minor_version <1.1.3>.<1.1.2> >= 52.0`.
- - appears in `attributes <1.5.5>`.
+ - Appears since `major_version.minor_version <1.1.3>.<1.1.2> >= 52.0`.
+ - Appears in `attributes <1.5.5>`.
  - [1.9.4] `constant_pool <1.1.5>` entry at index `attribute_name_index <1.29.1>` must be `MethodParameters <!METHOD_PARAMETERS>`.
-  
+ - There can be at most one method parameters attribute for each method.
+ - OPTIONAL: `parameters_count <1.29.3>` must correspond to the corresponding `MethodDescriptor <1.2.5>`.
+ - Size of the `parameters <1.29.4>` is `parameters_count <1.29.3>`.
+ - `name_index <1.29.6>` is either `0` or a valid index [1.0.4] into the `constant_pool <1.1.5>`.
+ - `contant_pool <1.1.5>` entry at index `name_index <1.29.6>` if not `0` must be of type `Uft8_info <TODO>`.
+ - `contant_pool <1.1.5>` entry at index `name_index <1.29.6>` if not `0` must be a valid unqualified name [1.0.5].
+ - `access_flags <1.29.7>` is a bit mask of:
+    - `0x0010 <!FINAL>`
+    - `0x1000 <!SYNTHETIC>`
+    - `0x8000 <!MANDATED>`
