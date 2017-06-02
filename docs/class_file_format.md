@@ -16,23 +16,23 @@
 #### [1.1] `class` data object
 
 ```
-ClassFile {                                 <1.1.0>
-    u4                  magic               <1.1.1>
-    u2                  minor_version       <1.1.2>
-    u2                  major_version       <1.1.3>
-    u2                  constant_pool_count <1.1.4>
-    cp_info[]           constant_pool       <1.1.5>
-    u2                  access_flags        <1.1.6>
-    u2                  this_class          <1.1.7>
-    u2                  super_class         <1.1.8>
-    u2                  interfaces_count    <1.1.9>
-    u2[]                interfaces          <1.1.10>
-    u2                  fields_count        <1.1.11>
-    field_info[]        fields              <1.1.12>
-    u2                  methods_count       <1.1.13>
-    method_info[]       methods             <1.1.14>
-    u2                  attributes_count    <1.1.15>
-    attribute_info[]    attributes          <1.1.16>
+ClassFile {                                         <1.1.0>
+    u4                          magic               <1.1.1>
+    u2                          minor_version       <1.1.2>
+    u2                          major_version       <1.1.3>
+    u2                          constant_pool_count <1.1.4>
+    cp_info<1.3.39>[]           constant_pool       <1.1.5>
+    u2                          access_flags        <1.1.6>
+    u2                          this_class          <1.1.7>
+    u2                          super_class         <1.1.8>
+    u2                          interfaces_count    <1.1.9>
+    u2[]                        interfaces          <1.1.10>
+    u2                          fields_count        <1.1.11>
+    field_info<1.4.0>[]         fields              <1.1.12>
+    u2                          methods_count       <1.1.13>
+    method_info<1.5.0>[]        methods             <1.1.14>
+    u2                          attributes_count    <1.1.15>
+    attribute_info<1.6.0>[]     attributes          <1.1.16>
 }
 ```
 
@@ -114,6 +114,7 @@ FieldSignature : ReferenceType<1.2.9>           <1.2.24>
 
 ```
 //cp_info is a union of the following structures:
+cp_info:            <1.3.49>
 
 Class_info {        <1.3.0>
     u1 tag          <1.3.1>
@@ -238,12 +239,12 @@ InvokeDynamic_info {        <1.3.45>
 #### [1.4] `field_info` data format
 
 ```
-field_info {                                <1.4.0>
-    u2                  access_flags        <1.4.1>
-    u2                  name_index          <1.4.2>
-    u2                  descriptor_index    <1.4.3>
-    u2                  attributes_count    <1.4.4>
-    attribute_info[]    attributes          <1.4.5>
+field_info {                                        <1.4.0>
+    u2                          access_flags        <1.4.1>
+    u2                          name_index          <1.4.2>
+    u2                          descriptor_index    <1.4.3>
+    u2                          attributes_count    <1.4.4>
+    attribute_info<1.6.0>[]     attributes          <1.4.5>
 }
 ```
 
@@ -273,12 +274,12 @@ field_info {                                <1.4.0>
 #### [1.5] `method_info` data format
 
 ```
-method_info {                               <1.5.0>
-    u2                  access_flags        <1.5.1>
-    u2                  name_index          <1.5.2>
-    u2                  descriptor_index    <1.5.3>
-    u2                  attributes_count    <1.5.4>
-    attributes_info[]   attributes          <1.5.5>
+method_info {                                       <1.5.0>
+    u2                          access_flags        <1.5.1>
+    u2                          name_index          <1.5.2>
+    u2                          descriptor_index    <1.5.3>
+    u2                          attributes_count    <1.5.4>
+    attributes_info<1.6.0>[]    attributes          <1.5.5>
 }
 ```
 
@@ -346,17 +347,17 @@ ConstantValue {                     <1.7.0>
 
 #### [1.8] `Code` attribute
 ```
-Code {                                                  <1.8.0>
-    u2                      attribute_name_index        <1.8.1>
-    u4                      attribute_length            <1.8.2>
-    u2                      max_stack                   <1.8.3>
-    u2                      max_locals                  <1.8.4>
-    u4                      code_length                 <1.8.5>
-    u1                      code                        <1.8.6>
-    u2                      exception_table_length      <1.8.7>
-    exception_table_entry[] exception_table             <1.8.8>
-    u2                      attributes_count            <1.8.9>
-    attribute_info[]        attributes                  <1.8.10>
+Code {                                                          <1.8.0>
+    u2                              attribute_name_index        <1.8.1>
+    u4                              attribute_length            <1.8.2>
+    u2                              max_stack                   <1.8.3>
+    u2                              max_locals                  <1.8.4>
+    u4                              code_length                 <1.8.5>
+    u1                              code                        <1.8.6>
+    u2                              exception_table_length      <1.8.7>
+    exception_table_entry<1.8.11>[] exception_table             <1.8.8>
+    u2                              attributes_count            <1.8.9>
+    attribute_info<1.6.0>[]         attributes                  <1.8.10>
 }
 
 exception_table_entry {                                 <1.8.11>
@@ -385,27 +386,28 @@ exception_table_entry {                                 <1.8.11>
 
 ```
 StackMapTable {                                         <1.9.0>
-    u2                  attribute_name_index            <1.9.1>
-    u4                  attribute_length                <1.9.2>
-    u2                  number_of_entries               <1.9.3>
-    stack_map_frame[]   entries                         <1.9.4>
+    u2                          attribute_name_index    <1.9.1>
+    u4                          attribute_length        <1.9.2>
+    u2                          number_of_entries       <1.9.3>
+    stack_map_frame<1.9.52>[]   entries                 <1.9.4>
 }
 
 // stack_map_frame is a union of the following structures:
+stack_map_frame:                                        <1.9.52>
 
 same_frame {                                            <1.9.5>
     u1                  frame_type                      <1.9.6>
 }
 
 same_locals_1_stack_item_frame {                        <1.9.7>
-    u1                  frame_type                      <1.9.8>
-    verification_type   stack                           <1.9.9>
+    u1                          frame_type              <1.9.8>
+    verification_type<1.9.51>   stack                   <1.9.9>
 }
 
 same_locals_1_stack_item_frame_extended {               <1.9.10>
-    u1                  frame_type                      <1.9.11>
-    u2                  offset_delta                    <1.9.12>
-    verification_type   stack                           <1.9.13>
+    u1                          frame_type              <1.9.11>
+    u2                          offset_delta            <1.9.12>
+    verification_type<1.9.51>   stack                   <1.9.13>
 }
 
 chop_frame {                                            <1.9.14>
@@ -419,21 +421,22 @@ same_frame_extended {                                   <1.9.17>
 }
 
 append_frame {                                          <1.9.20>
-    u1                  frame_type                      <1.9.21>
-    u2                  offset_delta                    <1.9.22>
-    verification_type[] locals                          <1.9.23>
+    u1                          frame_type              <1.9.21>
+    u2                          offset_delta            <1.9.22>
+    verification_type<1.9.51>[] locals                  <1.9.23>
 }
 
 full_frame {                                            <1.9.24>
-    u1                  frame_type                      <1.9.25>
-    u2                  offset_delta                    <1.9.26>
-    u2                  number_of_locals                <1.9.27>
-    verification_type[] locals                          <1.9.28>
-    u2                  number_of_stack_items           <1.9.29>
-    verification_type[] stack                           <1.9.30>
+    u1                          frame_type              <1.9.25>
+    u2                          offset_delta            <1.9.26>
+    u2                          number_of_locals        <1.9.27>
+    verification_type<1.9.51>[] locals                  <1.9.28>
+    u2                          number_of_stack_items   <1.9.29>
+    verification_type<1.9.51>[] stack                   <1.9.30>
 }
 
 // verification_type is a union of the following structures:
+verification_type:                                      <1.9.51>    
  
 Top {                                                   <1.9.31>
     u1                  tag                             <1.9.32>
@@ -523,11 +526,11 @@ Exceptions {                            <1.10.0>
 #### [1.11] `InnerClasses` attribute
 
 ```
-InnerClasses {                                  <1.11.0>
-    u2              attribute_name_index        <1.11.1>
-    u4              attribute_length            <1.11.2>
-    u2              number_of_classes           <1.11.3>
-    inner_class[]   classes                     <1.11.4>
+InnerClasses {                                          <1.11.0>
+    u2                      attribute_name_index        <1.11.1>
+    u4                      attribute_length            <1.11.2>
+    u2                      number_of_classes           <1.11.3>
+    inner_class<1.11.5>[]   classes                     <1.11.4>
 }
 
 inner_class {
@@ -653,11 +656,11 @@ SourceDebugExtensions {             <1.16.0>
 
 #### [1.17] `LineNumberTable` attribute
 ```
-LineNumberTable {                       <1.17.0>
-    u2      attribute_name_index        <1.17.1>
-    u4      attribute_length            <1.17.2>
-    u2      line_number_table_length    <1.17.3>
-    entry[] line_number_table           <1.17.4>
+LineNumberTable {                               <1.17.0>
+    u2              attribute_name_index        <1.17.1>
+    u4              attribute_length            <1.17.2>
+    u2              line_number_table_length    <1.17.3>
+    entry<1.17.5>[] line_number_table           <1.17.4>
 }
 
 entry {                                 <1.17.5>
@@ -675,11 +678,11 @@ entry {                                 <1.17.5>
 
 #### [1.18] `LocalVariableTable` attribute
 ```
-LocalVariableTable {                        <1.18.0>
-    u2      attribute_name_index            <1.18.1>
-    u4      attribute_length                <1.18.2>
-    u2      local_variable_table_length     <1.18.3>
-    entry[] local_variable_table            <1.18.4>
+LocalVariableTable {                                <1.18.0>
+    u2              attribute_name_index            <1.18.1>
+    u4              attribute_length                <1.18.2>
+    u2              local_variable_table_length     <1.18.3>
+    entry<1.18.5>[] local_variable_table            <1.18.4>
 }
 
 entry {                                     <1.18.5>
@@ -708,11 +711,11 @@ entry {                                     <1.18.5>
 
 #### [1.19] `LocalVariableTypeTable` attribute
 ```
-LocalVariableTypeTable {                        <1.19.0>
-    u2      attribute_name_index                <1.19.1>
-    u4      attribute_length                    <1.19.2>
-    u2      local_variable_type_table_length    <1.19.3>
-    entry[] local_variable_type_table           <1.19.4>
+LocalVariableTypeTable {                                <1.19.0>
+    u2              attribute_name_index                <1.19.1>
+    u4              attribute_length                    <1.19.2>
+    u2              local_variable_type_table_length    <1.19.3>
+    entry<1.19.5>[] local_variable_type_table           <1.19.4>
 }
 
 entry {                                     <1.19.5>
@@ -791,25 +794,59 @@ Deprecated {                        <1.20.0>
  - [1.9.4] `constant_pool <1.1.5>` entry at index `attribute_name_index <1.26.1>` must be `RuntimeInvisibleTypeAnnotations <!RUNTIME_INVISIBLE_TYPE_ANNOTATIONS>`.
 
 #### [1.27] `AnnotationDefault` attribute
+```
+AnnotationDefault {                             <1.27.0>
+    u2                  attribute_name_index    <1.27.1>
+    u4                  attribute_length        <1.27.2>
+    element_value<TODO> default_value           <1.28.3>
+}
+```
  - All rules from [1.6] apply.
  - appears since `major_version.minor_version <1.1.3>.<1.1.2> >= 49.0`.
  - appears in `attributes <1.5.5>`.
  - [1.9.4] `constant_pool <1.1.5>` entry at index `attribute_name_index <1.27.1>` must be `AnnotationDefault <!ANNOTATION_DEFAULT>`.
+ - There can be at most one annotation default attribute for a corresponding method.
+ - OPTIONAL: Corresponding mmethod must be a part of an annotation type.
+ - 
 
 #### [1.28] `BootstrapMethods` attribute
- - All rules from [1.6] apply.
- - appears since `major_version.minor_version <1.1.3>.<1.1.2> >= 51.0`.
- - appears in `attributes <1.1.16>`.
- - [1.9.4] `constant_pool <1.1.5>` entry at index `attribute_name_index <1.28.1>` must be `BootstrapMethods <!BOOTSTRAP_METHODS>`.
+
+```
+BootstrapMethods {                          <1.28.0>
+    u2              attribute_name_index    <1.28.1>
+    u4              attribute_length        <1.28.2>
+    u2              num_bootstrap_methods   <1.28.3>
+    entry<1.28.5>[] bootstrap_methods       <1.28.4>
+}
+
+entry {                                 <1.28.5>
+    u2      bootstrap_method_ref        <1.28.6>
+    u2      num_bootstrap_arguments     <1.28.7>
+    u2[]    bootstrap_arguments         <1.28.8>
+}
+```
+
+ - [1.28.1] All rules from [1.6] apply.
+ - [1.28.2] Appears since `major_version.minor_version <1.1.3>.<1.1.2> >= 51.0`.
+ - [1.28.3] Appears in `attributes <1.1.16>`.
+ - [1.28.4] `constant_pool <1.1.5>` entry at index `attribute_name_index <1.28.1>` must be `BootstrapMethods <!BOOTSTRAP_METHODS>`.
+ - [1.28.5] If `constant_pool <1.1.5>` contains at least one `InvokeDynamic_info <TODO>` constant, then exactly one bootstrap methods attribute must be present for such class.
+ - [1.28.6] There can be at most one bootstrap methods attribute for each class.
+ - [1.28.7] Size of the `bootstrap_methods <1.28.4>` is `num_bootstrap_methods <1.28.3>`.
+ - [1.28.8] `bootstrap_method_ref <1.28.6>` is a valid index [1.0.4] into the `constant_pool <1.1.5>`.
+ - [1.28.9] `constant_pool <1.1.5>` entry at index `bootstrap_method_ref <1.28.6>` must be of type `MethodHandle_info <TODO>`.
+ - [1.28.10] Size of `bootstrap_arguments <1.28.8>` is `num_bootstrap_arguments <1.28.7>`.
+ - [1.28.11] Each `bootstrap_arguments<1.28.8>` is a valid index [1.0.4] into the `constant_pool <1.1.5>`.
+ - [1.28.12] `constant_pool <1.1.5>` entry at each `bootstrap_arguments <1.28.8>` must one of `String_info <TODO>`, `Class_info <TODO>`, `Integer_info <TODO>`, `Long_info <TODO>`, `Float_info <TODO>`, `Double_info <TODO>`, `MethodHandle_info <TODO>`, `MethodType_info <TODO>`. 
 
 #### [1.29] `MethodParameters` attribute
 
 ```
-MethodParameters {                  <1.29.0>
-    u2      attribute_name_index    <1.29.1>
-    u4      attribute_length        <1.29.2>
-    u1      parameters_count        <1.29.3>
-    param[] parameters              <1.29.4>
+MethodParameters {                          <1.29.0>
+    u2              attribute_name_index    <1.29.1>
+    u4              attribute_length        <1.29.2>
+    u1              parameters_count        <1.29.3>
+    param<1.29.5>[] parameters              <1.29.4>
 }
 
 param {                             <1.29.5>
@@ -818,17 +855,17 @@ param {                             <1.29.5>
 }
 ```
 
- - All rules from [1.6] apply.
- - Appears since `major_version.minor_version <1.1.3>.<1.1.2> >= 52.0`.
- - Appears in `attributes <1.5.5>`.
- - [1.9.4] `constant_pool <1.1.5>` entry at index `attribute_name_index <1.29.1>` must be `MethodParameters <!METHOD_PARAMETERS>`.
- - There can be at most one method parameters attribute for each method.
- - OPTIONAL: `parameters_count <1.29.3>` must correspond to the corresponding `MethodDescriptor <1.2.5>`.
- - Size of the `parameters <1.29.4>` is `parameters_count <1.29.3>`.
- - `name_index <1.29.6>` is either `0` or a valid index [1.0.4] into the `constant_pool <1.1.5>`.
- - `contant_pool <1.1.5>` entry at index `name_index <1.29.6>` if not `0` must be of type `Uft8_info <TODO>`.
- - `contant_pool <1.1.5>` entry at index `name_index <1.29.6>` if not `0` must be a valid unqualified name [1.0.5].
- - `access_flags <1.29.7>` is a bit mask of:
+ - [1.29.1] All rules from [1.6] apply.
+ - [1.29.2] Appears since `major_version.minor_version <1.1.3>.<1.1.2> >= 52.0`.
+ - [1.29.3] Appears in `attributes <1.5.5>`.
+ - [1.29.4] `constant_pool <1.1.5>` entry at index `attribute_name_index <1.29.1>` must be `MethodParameters <!METHOD_PARAMETERS>`.
+ - [1.29.5] There can be at most one method parameters attribute for each method.
+ - [1.29.6] OPTIONAL: `parameters_count <1.29.3>` must correspond to the corresponding `MethodDescriptor <1.2.5>`.
+ - [1.29.7] Size of the `parameters <1.29.4>` is `parameters_count <1.29.3>`.
+ - [1.29.8] `name_index <1.29.6>` is either `0` or a valid index [1.0.4] into the `constant_pool <1.1.5>`.
+ - [1.29.9] `contant_pool <1.1.5>` entry at index `name_index <1.29.6>` if not `0` must be of type `Uft8_info <TODO>`.
+ - [1.29.10] `contant_pool <1.1.5>` entry at index `name_index <1.29.6>` if not `0` must be a valid unqualified name [1.0.5].
+ - [1.29.11] `access_flags <1.29.7>` is a bit mask of:
     - `0x0010 <!FINAL>`
     - `0x1000 <!SYNTHETIC>`
     - `0x8000 <!MANDATED>`
