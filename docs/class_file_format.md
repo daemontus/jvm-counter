@@ -758,16 +758,107 @@ Deprecated {                        <1.20.0>
  - TODO: Check if the attribute can be present more than once in practice.
 
 #### [1.21] `RuntimeVisibleAnnotations` attribute
- - All rules from [1.6] apply.
- - appears since `major_version.minor_version <1.1.3>.<1.1.2> >= 49.0`.
- - appears in `attributes <1.1.16><1.4.5><1.5.5>`.
- - [1.9.4] `constant_pool <1.1.5>` entry at index `attribute_name_index <1.21.1>` must be `RuntimeVisibleAnnotations <!RUNTIME_VISIBLE_ANNOTATIONS>`.
+```
+RuntimeVisibleAnnotations {                         <1.21.0>
+    u2                      attribute_name_index    <1.21.1>
+    u4                      attribute_length        <1.21.2>
+    u2                      num_annotations         <1.21.3>
+    annotation<1.21.5>[]    annotations             <1.21.4>
+}
+
+annotation {                                        <1.21.5>
+    u2                  type_index                  <1.21.6>
+    u2                  num_element_value_pairs     <1.21.7>
+    pair<1.21.9>[]      element_value_pairs         <1.21.8>
+}
+
+pair {                                              <1.21.9>
+    u2                  element_name_index          <1.21.10>
+    element_value       value                       <1.21.11>
+}
+
+# Element value is a union of the following types
+element_value:                                      <1.21.12>
+const_value {                                       <1.21.13>
+    u1                          tag                 <1.21.14>
+    u2                          const_value_index   <1.21.15>
+}
+
+enum_value {                                        <1.21.16>
+    u1                          tag                 <1.21.17>
+    u2                          type_name_index     <1.21.18>
+    u2                          const_name_index    <1.21.19>
+}
+
+class_value {                                       <1.21.20>
+    u1                          tag                 <1.21.21>
+    u2                          class_info_index    <1.21.22>
+}
+
+annotation_value {                                  <1.21.23>
+    u1                          tag                 <1.21.24>
+    annotation                  value               <1.21.25>
+}
+
+array_value {                                       <1.21.26>
+    u1                          tag                 <1.21.27>
+    u2                          num_values          <1.21.28>
+    element_value<1.21.12>[]    values              <1.21.29>
+}
+```
+
+ - [1.21.1] All rules from [1.6] apply.
+ - [1.21.2] appears since `major_version.minor_version <1.1.3>.<1.1.2> >= 49.0`.
+ - [1.21.3] appears in `attributes <1.1.16><1.4.5><1.5.5>`.
+ - [1.21.4] `constant_pool <1.1.5>` entry at index `attribute_name_index <1.21.1>` must be `RuntimeVisibleAnnotations <!RUNTIME_VISIBLE_ANNOTATIONS>`.
+ - [1.21.5] There can be at most one runtime visible annotations attribute in each attributes table.
+ - [1.21.6] Size of the `annotations <1.21.4>` is `num_annotations <1.21.3>`.
+ - [1.21.7] Size of the `element_value_pairs <1.21.8>` is `num_element_value_pairs <1.21.7>`.
+ - [1.21.8] Size if the `values <1.21.29>` is `num_values <1.21.28>`.
+ - [1.21.9] `type_index <1.21.6>` is a valid index [1.0.4] into the `constant_pool <1.1.5>`.
+ - [1.21.10] `constant_pool <1.1.5>` entry at index `type_index <1.21.6>` must be of type `Utf8_info <TODO>`.
+ - [1.21.11] `constant_pool <1.1.5>` entry at index `type_index <1.21.6>` must be a valid `FieldDescriptor <1.2.0>`.
+ - [1.21.12] `element_name_index <1.21.10>` is a valid index [1.0.4] into the `constant_pool <1.1.5>`.
+ - [1.21.13] `constant_pool <1.1.5>` entry at index `element_name_index <1.21.10>` must be of type `Utf8_info <TODO>`.
+ - [1.21.14] `tag <1.21.14>` is one of `B`, `C`, `D`, `F`, `I`, `J`, `S`, `Z` or `s`.
+ - [1.21.15] `tag <1.21.17>` is `e`.
+ - [1.21.16] `tag <1.21.21>` is `c`.
+ - [1.21.17] `tag <1.21.24>` is `@`.
+ - [1.21.18] `tag <1.21.27>` is `[`.
+ - [1.21.19] `const_value_index <1.21.15>` is a valid index [1.0.4] into the `constant_pool <1.1.5>`.
+ - [1.21.20] If `tag <1.21.14>` is `B`, `C`, `I`, `S` or `Z`, the `constant_pool <1.1.5>` entry at index `cont_value_index <1.21.15>` must be of type `Integer_info <TODO>`.
+ - [1.21.21] If `tag <1.21.14>` is `D`, the `constant_pool <1.1.5>` entry at index `cont_value_index <1.21.15>` must be of type `Double_info <TODO>`.
+ - [1.21.22] If `tag <1.21.14>` is `F`, the `constant_pool <1.1.5>` entry at index `cont_value_index <1.21.15>` must be of type `Float_info <TODO>`.
+ - [1.21.23] If `tag <1.21.14>` is `J`, the `constant_pool <1.1.5>` entry at index `cont_value_index <1.21.15>` must be of type `Long_info <TODO>`.
+ - [1.21.24] If `tag <1.21.14>` is `s`, the `constant_pool <1.1.5>` entry at index `cont_value_index <1.21.15>` must be of type `Utf8_info <TODO>`. 
+ - [1.21.25] `type_name_index <1.21.18>` is a valid index [1.0.4] into the `constant_pool <1.1.5>`.
+ - [1.21.26] `constant_pool <1.1.5>` entry at index `type_name_index <1.21.18>` must be of type `Utf8_info <TODO>`.
+ - [1.21.27] `constant_pool <1.1.5>` entry at index `type_name_index <1.21.18>` must represent a valid `FieldDescriptor <1.2.0>`.
+ - [1.21.28] `const_name_index <1.21.19>` is a valid index [1.0.4] into the `constant_pool <1.1.5>`.
+ - [1.21.29] `constant_pool <1.1.5>` entry at index `const_name_index <1.21.19>` must be of type `Utf8_info <TODO>`.
+ - [1.21.30] `constant_pool <1.1.5>` entry at index `const_name_index <1.21.19>` must be a simple name (probably an unqualified name [1.0.5]).
+ - [1.21.31] `class_info_index <1.21.22>` is a valid index [1.0.4] into the `constant_pool <1.1.5>`.
+ - [1.21.32] `constant_pool <1.1.5>` entry at index `class_info_index <1.21.22>` must be of type `Utf8_info <TODO>`.
+ - [1.21.33] `constant_pool <1.1.5>` entry at index `class_info_index <1.21.19>` is a valid `Return <1.2.7>` descriptor.
+
 
 #### [1.22] `RuntimeInvisibleAnnotations` attribute
- - All rules from [1.6] apply.
- - appears since `major_version.minor_version <1.1.3>.<1.1.2> >= 49.0`.
- - appears in `attributes <1.1.16><1.4.5><1.5.5>`.
- - [1.9.4] `constant_pool <1.1.5>` entry at index `attribute_name_index <1.22.1>` must be `RuntimeInvisibleAnnotations <!RUNTIME_INVISIBLE_ANNOTATIONS>`.
+
+```
+RuntimeInvisibleAnnotations {                       <1.22.0>
+    u2                      attribute_name_index    <1.22.1>
+    u4                      attribute_length        <1.22.2>
+    u2                      num_annotations         <1.22.3>
+    annotation<1.21.5>[]    annotations             <1.22.4>
+}
+```
+
+ - [1.22.1] All rules from [1.6] apply.
+ - [1.22.2] Appears since `major_version.minor_version <1.1.3>.<1.1.2> >= 49.0`.
+ - [1.22.3] Appears in `attributes <1.1.16><1.4.5><1.5.5>`.
+ - [1.22.4] `constant_pool <1.1.5>` entry at index `attribute_name_index <1.22.1>` must be `RuntimeInvisibleAnnotations <!RUNTIME_INVISIBLE_ANNOTATIONS>`.
+ - [1.22.5] There is at most one runtime invisible annotations attribute in each attributes table.
+ - [1.22.6] Size of the `annotations <1.22.4>` is `num_annotations <1.22.3>`.
 
 #### [1.23] `RuntimeVisibleParameterAnnotations` attribute
  - All rules from [1.6] apply.
