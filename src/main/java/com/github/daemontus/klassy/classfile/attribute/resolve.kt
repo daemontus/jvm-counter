@@ -29,6 +29,13 @@ fun Attribute.resolve(pool: Array<CpInfo>): AttributeInfo {
                 DEPRECATED -> Deprecated(attributeNameIndex, attributeLength)
                 METHOD_PARAMETERS -> MethodParameters.read(stream, this)
                 BOOTSTRAP_METHODS -> BootstrapMethods.read(stream, this)
+                RUNTIME_VISIBLE_ANNOTATIONS -> RuntimeVisibleAnnotations.read(stream, this)
+                RUNTIME_INVISIBLE_ANNOTATIONS -> RuntimeInvisibleAnnotations.read(stream, this)
+                RUNTIME_VISIBLE_PARAMETER_ANNOTATIONS -> RuntimeVisibleParameterAnnotations.read(stream, this)
+                RUNTIME_INVISIBLE_PARAMETER_ANNOTATIONS -> RuntimeInvisibleParameterAnnotations.read(stream, this)
+                RUNTIME_VISIBLE_TYPE_ANNOTATIONS -> RuntimeVisibleTypeAnnotations.read(stream, this)
+                RUNTIME_INVISIBLE_TYPE_ANNOTATIONS -> RuntimeInvisibleTypeAnnotations.read(stream, this)
+                ANNOTATION_DEFAULT -> AnnotationDefault.read(stream, this)
                 else -> this
             }
         }

@@ -926,7 +926,7 @@ type_annotation {                                       <1.25.4>
     type_path       target_path                         <1.25.6>
     u2              type_index                          <1.25.7>
     u2              num_element_value_pairs             <1.25.8>
-    pair<1.21.9>[]  element_value_pairs                 <1.25.8>
+    pair<1.21.9>[]  element_value_pairs                 <1.25.51>
 }
 
 type_path {                                             <1.25.9>
@@ -940,7 +940,7 @@ entry {                                                 <1.25.12>
 }
 
 # target is a union of the following types
-target:
+target:                                                 <1.25.52>
 
 type_parameter_target {                                 <1.25.15>
     u1  target_type                                     <1.25.16>
