@@ -331,9 +331,9 @@ attribute_info {                    <1.6.0>
 
 ```
 ConstantValue {                     <1.7.0>
-    u2      attribute_name_index    <1.6.1>
-    u4      attribute_length        <1.6.2>
-    u2      constantvalue_index     <1.7.1>
+    u2      attribute_name_index    <1.7.1>
+    u4      attribute_length        <1.7.2>
+    u2      constantvalue_index     <1.7.3>
 }
 ```
 
@@ -342,8 +342,8 @@ ConstantValue {                     <1.7.0>
  - [1.7.3] Appears in `attributes <1.4.5>`.
  - [1.7.4] `constant_pool <1.1.5>` entry at index `attribute_name_index <1.7.1>` must be `ConstantValue <!CONSTANT_VALUE>`.
  - [1.7.6] There may be at most one attribute of this type. 
- - [1.7.6] `constantvalue_index <1.7.1>` is a valid index [1.0.4] into the `constant_pool <1.1.5>`.
- - [1.7.7] `contant_pool <1.1.5>` entry at index `constantvalue_index <1.7.1>` has a type matching the `FieldDescriptor <1.2.0>` of this field (int, short, char, byte and boolean are all represented as integers).   
+ - [1.7.6] `constantvalue_index <1.7.3>` is a valid index [1.0.4] into the `constant_pool <1.1.5>`.
+ - [1.7.7] `contant_pool <1.1.5>` entry at index `constantvalue_index <1.7.3>` has a type matching the `FieldDescriptor <1.2.0>` of this field (int, short, char, byte and boolean are all represented as integers).   
 
 #### [1.8] `Code` attribute
 ```
@@ -353,7 +353,7 @@ Code {                                                          <1.8.0>
     u2                              max_stack                   <1.8.3>
     u2                              max_locals                  <1.8.4>
     u4                              code_length                 <1.8.5>
-    u1                              code                        <1.8.6>
+    u1[]                            code                        <1.8.6>
     u2                              exception_table_length      <1.8.7>
     exception_table_entry<1.8.11>[] exception_table             <1.8.8>
     u2                              attributes_count            <1.8.9>
@@ -503,6 +503,9 @@ Double {                                                <1.9.49>
  - [1.9.23] `frame_type <1.9.18>` is `251`.
  - [1.9.24] `frame_type <1.9.21>` is in range `252..254`.
  - [1.9.25] `frame_type <1.9.25>` is `255`.
+ - [1.9.26] The size of `locals <1.9.23>` is `frame_type <1.9.21> - 251`.
+ - [1.9.27] The size of `locals <1.9.28>` is `number_of_locals <1.9.27>`.
+ - [1.9.28] The size of `stack <1.9.30>` is `numer_of_stack_items <1.9.29>`.
  
 
 #### [1.10] `Exceptions` attribute
