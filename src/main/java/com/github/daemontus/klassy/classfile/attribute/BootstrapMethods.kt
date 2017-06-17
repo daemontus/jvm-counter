@@ -2,20 +2,21 @@ package com.github.daemontus.klassy.classfile.attribute
 
 import com.github.daemontus.klassy.classfile.Attribute
 import com.github.daemontus.klassy.classfile.AttributeInfo
+import com.github.daemontus.klassy.classfile.u2
 import java.io.DataInputStream
 import java.io.DataOutputStream
 
-class BootstrapMethods(
-        val attributeNameIndex: Int,
-        val attributeLength: Int,
-        val numBootstrapMethods: Int,
-        val bootstrapMethods: Array<Entry>
+class BootstrapMethods(                             //<1.28.0>
+        @u2 val attributeNameIndex: Int,            //<1.28.1>
+        val attributeLength: Int,                   //<1.28.2>
+        @u2 val numBootstrapMethods: Int,           //<1.28.3>
+        val bootstrapMethods: Array<Entry>          //<1.28.4>
 ) : AttributeInfo {
 
-    class Entry(
-            val bootstrapMethodRef: Int,
-            val numBootstrapArguments: Int,
-            val bootstrapArguments: IntArray
+    class Entry(                                    //<1.28.5>
+            @u2 val bootstrapMethodRef: Int,        //<1.28.6>
+            @u2 val numBootstrapArguments: Int,     //<1.28.7>
+            @u2 val bootstrapArguments: IntArray    //<1.28.8>
     )
 
     companion object {

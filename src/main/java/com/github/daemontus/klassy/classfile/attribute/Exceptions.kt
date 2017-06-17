@@ -2,19 +2,20 @@ package com.github.daemontus.klassy.classfile.attribute
 
 import com.github.daemontus.klassy.classfile.Attribute
 import com.github.daemontus.klassy.classfile.AttributeInfo
+import com.github.daemontus.klassy.classfile.u2
 import java.io.DataInputStream
 import java.io.DataOutputStream
 
 class Exceptions(                           //<1.10.0>
-        val attributeNameIndex: Int,        //<1.10.1>
+        @u2 val attributeNameIndex: Int,    //<1.10.1>
         val attributeLength: Int,           //<1.10.2>
-        val numberOfExceptions: Int,        //<1.10.3>
-        val exceptionsIndexTable: IntArray  //<1.10.4>
+        @u2 val numberOfExceptions: Int,    //<1.10.3>
+        @u2 val exceptionsIndexTable: IntArray  //<1.10.4>
 ) : AttributeInfo {
 
     companion object {
         fun read(stream: DataInputStream, attribute: Attribute): Exceptions = stream.run {
-            val numberOfExceptions = 1
+            val numberOfExceptions = readUnsignedShort()
             val exceptionsIndexTable = IntArray(numberOfExceptions) { readUnsignedShort() }
             Exceptions(attribute.attributeNameIndex, attribute.attributeLength,
                     numberOfExceptions = numberOfExceptions,

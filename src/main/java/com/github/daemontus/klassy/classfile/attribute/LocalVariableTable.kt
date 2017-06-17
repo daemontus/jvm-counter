@@ -2,22 +2,23 @@ package com.github.daemontus.klassy.classfile.attribute
 
 import com.github.daemontus.klassy.classfile.Attribute
 import com.github.daemontus.klassy.classfile.AttributeInfo
+import com.github.daemontus.klassy.classfile.u2
 import java.io.DataInputStream
 import java.io.DataOutputStream
 
-class LocalVariableTable(                       //<1.18.0>
-        val attributeNameIndex: Int,            //<1.18.1>
-        val attributeLength: Int,               //<1.18.2>
-        val localVariableTableLength: Int,      //<1.18.3>
-        val localVariableTable: Array<Entry>    //<1.18.4>
+class LocalVariableTable(                           //<1.18.0>
+        @u2 val attributeNameIndex: Int,            //<1.18.1>
+        val attributeLength: Int,                   //<1.18.2>
+        @u2 val localVariableTableLength: Int,      //<1.18.3>
+        val localVariableTable: Array<Entry>        //<1.18.4>
 ) : AttributeInfo {
 
-    class Entry(                                //<1.18.5>
-            val startPC: Int,                   //<1.18.6>
-            val length: Int,                    //<1.18.7>
-            val nameIndex: Int,                 //<1.18.8>
-            val descriptorIndex: Int,           //<1.18.9>
-            val index: Int                      //<1.18.10>
+    class Entry(                                    //<1.18.5>
+            @u2 val startPC: Int,                   //<1.18.6>
+            @u2 val length: Int,                    //<1.18.7>
+            @u2 val nameIndex: Int,                 //<1.18.8>
+            @u2 val descriptorIndex: Int,           //<1.18.9>
+            @u2 val index: Int                      //<1.18.10>
     )
 
     companion object {

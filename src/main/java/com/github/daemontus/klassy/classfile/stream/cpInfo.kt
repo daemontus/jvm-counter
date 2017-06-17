@@ -6,8 +6,8 @@ import java.io.DataInputStream
 import java.io.DataOutputStream
 
 fun DataInputStream.readCpInfo(): CpInfo {
-    val tag = readByte()
-    return when (tag.toInt()) {
+    val tag = readUnsignedByte()
+    return when (tag) {
         CONST_Utf8 -> readUnsignedShort().let { length ->
             val bytes = ByteArray(length)
             val read = read(bytes)
@@ -52,7 +52,7 @@ fun DataInputStream.readCpInfo(): CpInfo {
 }
 
 fun DataOutputStream.writeCpInfo(cp: CpInfo) {
-    writeByte(cp.tag.toInt())
+    writeByte(cp.tag)
     when(cp) {
         is Utf8Info -> {
             writeShort(cp.length)

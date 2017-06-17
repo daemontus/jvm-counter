@@ -1,8 +1,6 @@
 package com.github.daemontus.klassy.classfile.attribute
 
-import com.github.daemontus.klassy.classfile.Attribute
-import com.github.daemontus.klassy.classfile.AttributeInfo
-import com.github.daemontus.klassy.classfile.CpInfo
+import com.github.daemontus.klassy.classfile.*
 import com.github.daemontus.klassy.classfile.stream.ERR_UnexpectedEndOfStream
 import com.github.daemontus.klassy.classfile.stream.parserError
 import com.github.daemontus.klassy.classfile.stream.readAttributeInfo
@@ -11,23 +9,23 @@ import java.io.DataInputStream
 import java.io.DataOutputStream
 
 class Code(                                             //<1.8.0>
-        val attributeNameIndex: Int,                    //<1.8.1>
+        @u2 val attributeNameIndex: Int,                //<1.8.1>
         val attributeLength: Int,                       //<1.8.2>
-        val maxStack: Int,                              //<1.8.3>
-        val maxLocals: Int,                             //<1.8.4>
-        val codeLength: Int,                            //<1.8.5>
-        val code: ByteArray,                            //<1.8.6>
-        val exceptionTableLength: Int,                  //<1.8.7>
+        @u2 val maxStack: Int,                          //<1.8.3>
+        @u2 val maxLocals: Int,                         //<1.8.4>
+        @u2 val codeLength: Int,                        //<1.8.5>
+        @u1 val code: ByteArray,                        //<1.8.6>
+        @u2 val exceptionTableLength: Int,              //<1.8.7>
         val exceptionTable: Array<ExceptionTableEntry>, //<1.8.8>
-        val attributesCount: Int,                       //<1.8.9>
+        @u2 val attributesCount: Int,                   //<1.8.9>
         val attributes: Array<AttributeInfo>            //<1.8.10>
 ) : AttributeInfo {
 
     class ExceptionTableEntry(                          //<1.8.11>
-            val startPC: Int,                           //<1.8.12>
-            val endPC: Int,                             //<1.8.13>
-            val handlerPC: Int,                         //<1.8.14>
-            val catchType: Int                          //<1.8.15>
+            @u2 val startPC: Int,                       //<1.8.12>
+            @u2 val endPC: Int,                         //<1.8.13>
+            @u2 val handlerPC: Int,                     //<1.8.14>
+            @u2 val catchType: Int                      //<1.8.15>
     )
 
     companion object {

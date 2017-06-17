@@ -11,7 +11,7 @@ fun DataInputStream.readFieldInfo(): FieldInfo {
     val nameIndex = readUnsignedShort()
     val descriptorIndex = readUnsignedShort()
     val attributesCount = readUnsignedShort()
-    val attributes = Array(attributesCount) { readAttributeInfo() }
+    val attributes = Array<AttributeInfo>(attributesCount) { readAttributeInfo() }
     return FieldInfo(
             accessFlags = accessFlags,
             nameIndex = nameIndex,

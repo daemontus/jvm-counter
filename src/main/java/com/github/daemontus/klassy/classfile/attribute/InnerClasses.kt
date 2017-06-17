@@ -2,14 +2,15 @@ package com.github.daemontus.klassy.classfile.attribute
 
 import com.github.daemontus.klassy.classfile.Attribute
 import com.github.daemontus.klassy.classfile.AttributeInfo
+import com.github.daemontus.klassy.classfile.u2
 import java.io.DataInputStream
 import java.io.DataOutputStream
 
-class InnerClasses(                     //<1.11.0>
-        val attributeNameIndex: Int,    //<1.11.1>
-        val attributeLength: Int,       //<1.11.2>
-        val numberOfClasses: Int,       //<1.11.3>
-        val classes: Array<Entry>       //<1.11.4>
+class InnerClasses(                         //<1.11.0>
+        @u2 val attributeNameIndex: Int,    //<1.11.1>
+        val attributeLength: Int,           //<1.11.2>
+        @u2 val numberOfClasses: Int,       //<1.11.3>
+        val classes: Array<Entry>           //<1.11.4>
 ) : AttributeInfo {
 
     companion object {
@@ -41,11 +42,11 @@ class InnerClasses(                     //<1.11.0>
         }
     }
 
-    class Entry(                            //<1.11.9>
-            val innerClassInfoIndex: Int,   //<1.11.5>
-            val outerClassInfoIndex: Int,   //<1.11.6>
-            val innerNameIndex: Int,        //<1.11.7>
-            val innerClassAccessFlags: Int  //<1.11.8>
+    class Entry(                                //<1.11.9>
+            @u2 val innerClassInfoIndex: Int,   //<1.11.5>
+            @u2 val outerClassInfoIndex: Int,   //<1.11.6>
+            @u2 val innerNameIndex: Int,        //<1.11.7>
+            @u2 val innerClassAccessFlags: Int  //<1.11.8>
     )
 
 }

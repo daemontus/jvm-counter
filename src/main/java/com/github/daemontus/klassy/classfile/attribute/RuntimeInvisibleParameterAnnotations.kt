@@ -2,18 +2,20 @@ package com.github.daemontus.klassy.classfile.attribute
 
 import com.github.daemontus.klassy.classfile.Attribute
 import com.github.daemontus.klassy.classfile.AttributeInfo
+import com.github.daemontus.klassy.classfile.u1
+import com.github.daemontus.klassy.classfile.u2
 import java.io.DataInputStream
 import java.io.DataOutputStream
 
-class RuntimeInvisibleParameterAnnotations(         //<1.24.0>
-        val attributeNameIndex: Int,                //<1.24.1>
-        val attributeLength: Int,                   //<1.24.2>
-        val numParameterAnnotations: Int,           //<1.24.3>
-        val parameterAnnotations: Array<Entry>      //<1.24.4>
+class RuntimeInvisibleParameterAnnotations(             //<1.24.0>
+        @u2 val attributeNameIndex: Int,                //<1.24.1>
+        val attributeLength: Int,                       //<1.24.2>
+        @u1 val numParameterAnnotations: Int,           //<1.24.3>
+        val parameterAnnotations: Array<Entry>          //<1.24.4>
 ) : AttributeInfo {
 
-    class Entry(                                    //<1.24.5>
-            val numAnnotations: Int,                //<1.24.6>
+    class Entry(                                        //<1.24.5>
+            @u2 val numAnnotations: Int,                //<1.24.6>
             val annotations: Array<Annotation>      //<1.24.7>
     )
 

@@ -7,9 +7,9 @@ interface AttributeInfo {
 }
 
 class Attribute(                            //<1.6.0>
-        val attributeNameIndex: Int,        //<1.6.1>
+        @u2 val attributeNameIndex: Int,    //<1.6.1>
         val attributeLength: Int,           //<1.6.2>
-        val info: ByteArray                 //<1.6.3>
+        @u1 val info: ByteArray             //<1.6.3>
 ) : AttributeInfo {
 
     override fun write(stream: DataOutputStream) {
