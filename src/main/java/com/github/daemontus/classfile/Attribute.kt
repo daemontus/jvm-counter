@@ -177,7 +177,7 @@ data class SourceFile(
 
 /*
 We don't read the source debug extensions and classify them as unknown instead...
-data class SourceDebugExtension(
+data class SourceDebugExtensions(
         override val name: ConstantPool.Index<Utf8>,
         val extension: ByteArray
 ) : Attribute

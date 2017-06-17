@@ -533,10 +533,10 @@ InnerClasses {                                          <1.11.0>
     u2                      attribute_name_index        <1.11.1>
     u4                      attribute_length            <1.11.2>
     u2                      number_of_classes           <1.11.3>
-    inner_class<1.11.5>[]   classes                     <1.11.4>
+    inner_class<1.11.9>[]   classes                     <1.11.4>
 }
 
-inner_class {
+inner_class {                                   <1.11.9>
     u2              inner_class_info_index      <1.11.5>              
     u2              outer_class_info_index      <1.11.6>
     u2              inner_name_index            <1.11.7>
