@@ -18,8 +18,8 @@ class Code(                                             //<1.8.0>
         @u2 val exceptionTableLength: Int,              //<1.8.7>
         val exceptionTable: Array<ExceptionTableEntry>, //<1.8.8>
         @u2 val attributesCount: Int,                   //<1.8.9>
-        val attributes: Array<AttributeInfo>            //<1.8.10>
-) : AttributeInfo {
+        val attributes: Array<Attribute>            //<1.8.10>
+) : Attribute {
 
     class ExceptionTableEntry(                          //<1.8.11>
             @u2 val startPC: Int,                       //<1.8.12>
@@ -29,7 +29,7 @@ class Code(                                             //<1.8.0>
     )
 
     companion object {
-        fun read(stream: DataInputStream, attribute: Attribute, pool: Array<CpInfo>): Code = stream.run {
+        fun read(stream: DataInputStream, attribute: AttributeInfo, pool: Array<CpInfo>): Code = stream.run {
             val maxStack = readUnsignedShort()
             val maxLocals = readUnsignedShort()
             val codeLength = readInt()

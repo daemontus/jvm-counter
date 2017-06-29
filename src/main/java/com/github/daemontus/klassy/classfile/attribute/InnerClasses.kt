@@ -1,7 +1,7 @@
 package com.github.daemontus.klassy.classfile.attribute
 
-import com.github.daemontus.klassy.classfile.Attribute
 import com.github.daemontus.klassy.classfile.AttributeInfo
+import com.github.daemontus.klassy.classfile.Attribute
 import com.github.daemontus.klassy.classfile.u2
 import java.io.DataInputStream
 import java.io.DataOutputStream
@@ -11,10 +11,10 @@ class InnerClasses(                         //<1.11.0>
         val attributeLength: Int,           //<1.11.2>
         @u2 val numberOfClasses: Int,       //<1.11.3>
         val classes: Array<Entry>           //<1.11.4>
-) : AttributeInfo {
+) : Attribute {
 
     companion object {
-        fun read(stream: DataInputStream, attribute: Attribute): InnerClasses = stream.run {
+        fun read(stream: DataInputStream, attribute: AttributeInfo): InnerClasses = stream.run {
             val numberOfClasses = readUnsignedShort()
             val classes = Array(numberOfClasses) {
                 Entry(

@@ -1,7 +1,7 @@
 package com.github.daemontus.klassy.classfile.attribute
 
-import com.github.daemontus.klassy.classfile.Attribute
 import com.github.daemontus.klassy.classfile.AttributeInfo
+import com.github.daemontus.klassy.classfile.Attribute
 import com.github.daemontus.klassy.classfile.u2
 import java.io.DataInputStream
 import java.io.DataOutputStream
@@ -11,7 +11,7 @@ class BootstrapMethods(                             //<1.28.0>
         val attributeLength: Int,                   //<1.28.2>
         @u2 val numBootstrapMethods: Int,           //<1.28.3>
         val bootstrapMethods: Array<Entry>          //<1.28.4>
-) : AttributeInfo {
+) : Attribute {
 
     class Entry(                                    //<1.28.5>
             @u2 val bootstrapMethodRef: Int,        //<1.28.6>
@@ -20,7 +20,7 @@ class BootstrapMethods(                             //<1.28.0>
     )
 
     companion object {
-        fun read(stream: DataInputStream, attribute: Attribute): BootstrapMethods = stream.run {
+        fun read(stream: DataInputStream, attribute: AttributeInfo): BootstrapMethods = stream.run {
             val numBootstrapMethods = readUnsignedShort()
             val bootstrapMethods = Array(numBootstrapMethods) {
                 val bootstrapMethodRef = readUnsignedShort()

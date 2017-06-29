@@ -1,7 +1,7 @@
 package com.github.daemontus.klassy.classfile.attribute
 
-import com.github.daemontus.klassy.classfile.Attribute
 import com.github.daemontus.klassy.classfile.AttributeInfo
+import com.github.daemontus.klassy.classfile.Attribute
 import com.github.daemontus.klassy.classfile.u2
 import java.io.DataInputStream
 import java.io.DataOutputStream
@@ -11,7 +11,7 @@ class LocalVariableTypeTable(                           //<1.19.0>
         val attributeLength: Int,                       //<1.19.2>
         @u2 val localVariableTypeTableLength: Int,      //<1.19.3>
         val localVariableTypeTable: Array<Entry>        //<1.19.4>
-) : AttributeInfo {
+) : Attribute {
 
     class Entry(                                        //<1.19.5>
             @u2 val startPC: Int,                       //<1.19.6>
@@ -22,7 +22,7 @@ class LocalVariableTypeTable(                           //<1.19.0>
     )
 
     companion object {
-        fun read(stream: DataInputStream, attribute: Attribute): LocalVariableTypeTable = stream.run {
+        fun read(stream: DataInputStream, attribute: AttributeInfo): LocalVariableTypeTable = stream.run {
             val localVariableTypeTableLength = readUnsignedShort()
             val localVariableTypeTable = Array(localVariableTypeTableLength) {
                 Entry(

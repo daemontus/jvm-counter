@@ -14,7 +14,7 @@ fun DataInputStream.readAttribute(cp: ConstantPool): Attribute {
     val length = readInt()
 
     if (length < 0) {
-        throw InvalidClassFileException("Attribute with name index $nameIndex too long for this implementation.")
+        throw InvalidClassFileException("AttributeInfo with name index $nameIndex too long for this implementation.")
     }
 
     val name = cp[nameIndex].value

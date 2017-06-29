@@ -1,7 +1,7 @@
 package com.github.daemontus.klassy.classfile.attribute
 
-import com.github.daemontus.klassy.classfile.Attribute
 import com.github.daemontus.klassy.classfile.AttributeInfo
+import com.github.daemontus.klassy.classfile.Attribute
 import com.github.daemontus.klassy.classfile.u1
 import com.github.daemontus.klassy.classfile.u2
 import java.io.DataInputStream
@@ -12,7 +12,7 @@ class RuntimeInvisibleParameterAnnotations(             //<1.24.0>
         val attributeLength: Int,                       //<1.24.2>
         @u1 val numParameterAnnotations: Int,           //<1.24.3>
         val parameterAnnotations: Array<Entry>          //<1.24.4>
-) : AttributeInfo {
+) : Attribute {
 
     class Entry(                                        //<1.24.5>
             @u2 val numAnnotations: Int,                //<1.24.6>
@@ -20,7 +20,7 @@ class RuntimeInvisibleParameterAnnotations(             //<1.24.0>
     )
 
     companion object {
-        fun read(stream: DataInputStream, attribute: Attribute): RuntimeInvisibleParameterAnnotations = stream.run {
+        fun read(stream: DataInputStream, attribute: AttributeInfo): RuntimeInvisibleParameterAnnotations = stream.run {
             val numParameterAnnotations = readUnsignedByte()
             val parameterAnnotations = Array(numParameterAnnotations) {
                 val numAnnotations = readUnsignedShort()

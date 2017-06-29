@@ -6,7 +6,7 @@ import com.github.daemontus.klassy.classfile.stream.parserError
 import java.io.ByteArrayInputStream
 import java.io.DataInputStream
 
-fun Attribute.resolve(pool: Array<CpInfo>): AttributeInfo {
+fun AttributeInfo.resolve(pool: Array<CpInfo>): Attribute {
 
     val name = pool[attributeNameIndex - 1] //[1.0.4]
     if (name !is CpInfo.Utf8Info) {
@@ -26,6 +26,7 @@ fun Attribute.resolve(pool: Array<CpInfo>): AttributeInfo {
                 SOURCE_DEBUG_EXTENSIONS -> SourceDebugExtensions(attributeNameIndex, attributeLength, info)
                 LINE_NUMBER_TABLE -> LineNumberTable.read(stream, this)
                 LOCAL_VARIABLE_TABLE -> LocalVariableTable.read(stream, this)
+                LOCAL_VARIABLE_TYPE_TABLE -> LocalVariableTypeTable.read(stream, this)
                 DEPRECATED -> Deprecated(attributeNameIndex, attributeLength)
                 METHOD_PARAMETERS -> MethodParameters.read(stream, this)
                 BOOTSTRAP_METHODS -> BootstrapMethods.read(stream, this)

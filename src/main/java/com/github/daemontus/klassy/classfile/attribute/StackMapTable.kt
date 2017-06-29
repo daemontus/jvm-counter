@@ -12,10 +12,10 @@ class StackMapTable(                    //<1.9.0>
         val attributeLength: Int,       //<1.9.2>
         @u2 val numberOfEntries: Int,       //<1.9.3>
         val entries: Array<Frame>       //<1.9.4>
-) : AttributeInfo {
+) : Attribute {
 
     companion object {
-        fun read(stream: DataInputStream, attribute: Attribute): StackMapTable = stream.run {
+        fun read(stream: DataInputStream, attribute: AttributeInfo): StackMapTable = stream.run {
             val numberOfEntries = readUnsignedShort()
             val entries = Array(numberOfEntries) {
                 val frameType = readUnsignedByte()

@@ -1,7 +1,7 @@
 package com.github.daemontus.klassy.classfile.attribute
 
-import com.github.daemontus.klassy.classfile.Attribute
 import com.github.daemontus.klassy.classfile.AttributeInfo
+import com.github.daemontus.klassy.classfile.Attribute
 import com.github.daemontus.klassy.classfile.u2
 import java.io.DataInputStream
 import java.io.DataOutputStream
@@ -11,7 +11,7 @@ class LineNumberTable(                          //<1.17.0>
         val attributeLength: Int,               //<1.17.2>
         @u2 val lineNumberTableLength: Int,     //<1.17.3>
         val lineNumberTable: Array<Entry>       //<1.17.4>
-) : AttributeInfo {
+) : Attribute {
 
     class Entry(                                //<1.17.5>
         @u2 val startPC: Int,                   //<1.17.6>
@@ -19,7 +19,7 @@ class LineNumberTable(                          //<1.17.0>
     )
 
     companion object {
-        fun read(stream: DataInputStream, attribute: Attribute): LineNumberTable = stream.run {
+        fun read(stream: DataInputStream, attribute: AttributeInfo): LineNumberTable = stream.run {
 
             val lineNumberTableLength = readUnsignedShort()
             val lineNumberTable = Array(lineNumberTableLength) {

@@ -1,5 +1,6 @@
 package com.github.daemontus.klassy.classfile
 
+// CpInfo tag values
 val CONST_Utf8 = 1
 val CONST_Integer = 3
 val CONST_Float = 4
@@ -15,6 +16,7 @@ val CONST_MethodHandle = 15
 val CONST_MethodType = 16
 val CONST_InvokeDynamic = 18
 
+// Attribute names
 val CONSTANT_VALUE = "ConstantValue"
 val CODE = "Code"
 val STACK_MAP_TABLE = "StackMapTable"
@@ -39,6 +41,7 @@ val ANNOTATION_DEFAULT = "AnnotationDefault"
 val BOOTSTRAP_METHODS = "BootstrapMethods"
 val METHOD_PARAMETERS = "MethodParameters"
 
+// VerificationType tags
 val TOP = 0x0
 val INTEGER = 0x1
 val FLOAT = 0x2

@@ -20,7 +20,7 @@ fun DataInputStream.readClassFile(): ClassFile {
     val methodsCount = readUnsignedShort()
     val methods = Array(methodsCount) { readMethodInfo() }
     val attributesCount = readUnsignedShort()
-    val attributes = Array<AttributeInfo>(attributesCount) { readAttributeInfo() }
+    val attributes = Array<Attribute>(attributesCount) { readAttributeInfo() }
     return ClassFile(
             magic = magic,
             minorVersion = minorVersion,

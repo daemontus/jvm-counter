@@ -1,6 +1,6 @@
 package com.github.daemontus.klassy.classfile.stream
 
-import com.github.daemontus.klassy.classfile.AttributeInfo
+import com.github.daemontus.klassy.classfile.Attribute
 import com.github.daemontus.klassy.classfile.FieldInfo
 import java.io.DataInputStream
 import java.io.DataOutputStream
@@ -11,7 +11,7 @@ fun DataInputStream.readFieldInfo(): FieldInfo {
     val nameIndex = readUnsignedShort()
     val descriptorIndex = readUnsignedShort()
     val attributesCount = readUnsignedShort()
-    val attributes = Array<AttributeInfo>(attributesCount) { readAttributeInfo() }
+    val attributes = Array<Attribute>(attributesCount) { readAttributeInfo() }
     return FieldInfo(
             accessFlags = accessFlags,
             nameIndex = nameIndex,

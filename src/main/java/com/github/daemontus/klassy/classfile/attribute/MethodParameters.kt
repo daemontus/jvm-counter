@@ -1,7 +1,7 @@
 package com.github.daemontus.klassy.classfile.attribute
 
-import com.github.daemontus.klassy.classfile.Attribute
 import com.github.daemontus.klassy.classfile.AttributeInfo
+import com.github.daemontus.klassy.classfile.Attribute
 import com.github.daemontus.klassy.classfile.u1
 import com.github.daemontus.klassy.classfile.u2
 import java.io.DataInputStream
@@ -12,7 +12,7 @@ class MethodParameters(                         //<1.29.0>
         val attributeLength: Int,               //<1.29.2>
         @u1 val parametersCount: Int,           //<1.29.3>
         val parameters: Array<Param>            //<1.29.4>
-) : AttributeInfo {
+) : Attribute {
 
     class Param(                                //<1.29.5>
             @u2 val nameIndex: Int,             //<1.29.6>
@@ -20,7 +20,7 @@ class MethodParameters(                         //<1.29.0>
     )
 
     companion object {
-        fun read(stream: DataInputStream, attribute: Attribute): MethodParameters = stream.run {
+        fun read(stream: DataInputStream, attribute: AttributeInfo): MethodParameters = stream.run {
             val parametersCount = readUnsignedByte()
             val parameters = Array(parametersCount) {
                 Param(
