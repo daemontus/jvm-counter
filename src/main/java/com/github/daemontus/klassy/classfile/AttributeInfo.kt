@@ -9,7 +9,7 @@ import java.util.*
  * or because there is really no known attribute type with this name.
  *
  */
-data class AttributeInfo(                               //<1.6.0>
+data class AttributeInfo(                           //<1.6.0>
         @u2 override val attributeNameIndex: Int,   //<1.6.1>
         override val attributeLength: Int,          //<1.6.2>
         @u1 val info: ByteArray                     //<1.6.3>

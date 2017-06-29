@@ -21,5 +21,5 @@ class ClassFile(                                //<1.1.0>
         @u2 val methodsCount: Int,              //<1.1.13>
         val methods: Array<MethodInfo>,         //<1.1.14>
         @u2 val attributesCount: Int,           //<1.1.15>
-        val attributes: Array<Attribute>    //<1.1.16>
+        val attributes: Array<Attribute>        //<1.1.16>
 )

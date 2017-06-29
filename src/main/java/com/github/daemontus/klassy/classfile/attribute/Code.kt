@@ -1,8 +1,8 @@
 package com.github.daemontus.klassy.classfile.attribute
 
 import com.github.daemontus.klassy.classfile.*
-import com.github.daemontus.klassy.classfile.stream.ERR_UnexpectedEndOfStream
-import com.github.daemontus.klassy.classfile.stream.parserError
+import com.github.daemontus.klassy.classfile.io.ERR_UnexpectedEndOfStream
+import com.github.daemontus.klassy.classfile.io.parserError
 import com.github.daemontus.klassy.classfile.stream.readAttributeInfo
 import com.github.daemontus.klassy.classfile.stream.writeAttributeInfo
 import java.io.DataInputStream

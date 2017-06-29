@@ -1,9 +1,9 @@
 package com.github.daemontus.klassy.classfile.attribute
 
 import com.github.daemontus.klassy.classfile.*
-import com.github.daemontus.klassy.classfile.stream.ERR_UnknownFrameType
-import com.github.daemontus.klassy.classfile.stream.ERR_UnknownVerificationTypeTag
-import com.github.daemontus.klassy.classfile.stream.parserError
+import com.github.daemontus.klassy.classfile.io.ERR_UnknownFrameType
+import com.github.daemontus.klassy.classfile.io.ERR_UnknownVerificationTypeTag
+import com.github.daemontus.klassy.classfile.io.parserError
 import java.io.DataInputStream
 import java.io.DataOutputStream
 

@@ -1,7 +1,7 @@
 package com.github.daemontus.klassy.classfile.attribute
 
-import com.github.daemontus.klassy.classfile.stream.ERR_UnknownElementValueTag
-import com.github.daemontus.klassy.classfile.stream.parserError
+import com.github.daemontus.klassy.classfile.io.ERR_UnknownElementValueTag
+import com.github.daemontus.klassy.classfile.io.parserError
 import com.github.daemontus.klassy.classfile.u1
 import com.github.daemontus.klassy.classfile.u2
 import java.io.DataInputStream
