@@ -1,84 +1,107 @@
 package com.github.daemontus.klassy.classfile
 
-sealed class CpInfo(                                        //<1.3.49>
-        @u1 val tag: Int
-) {
+import java.util.*
 
-    class ClassInfo(                                        //<1.3.0>
-            tag: Int,                                       //<1.3.1>
+sealed class CpInfo {                                       //<1.3.49>
+
+    @u1 abstract val tag: Int
+
+    data class ClassInfo(                                   //<1.3.0>
+            override val tag: Int,                          //<1.3.1>
             @u2 val nameIndex: Int                          //<1.3.2>
-    ) : CpInfo(tag)
+    ) : CpInfo()
 
-    class FieldRefInfo(                                     //<1.3.3>
-            tag: Int,                                       //<1.3.4>
+    data class FieldRefInfo(                                //<1.3.3>
+            override val tag: Int,                          //<1.3.4>
             @u2 val classIndex: Int,                        //<1.3.5>
             @u2 val nameAndTypeIndex: Int                   //<1.3.6>
-    ) : CpInfo(tag)
+    ) : CpInfo()
 
-    class MethodRefInfo(                                    //<1.3.7>
-            tag: Int,                                       //<1.3.8>
+    data class MethodRefInfo(                               //<1.3.7>
+            override val tag: Int,                          //<1.3.8>
             @u2 val classIndex: Int,                        //<1.3.9>
             @u2 val nameAndTypeIndex: Int                   //<1.3.10>
-    ) : CpInfo(tag)
+    ) : CpInfo()
 
-    class InterfaceMethodRefInfo(                           //<1.3.11>
-            tag: Int,                                       //<1.3.12>
+    data class InterfaceMethodRefInfo(                      //<1.3.11>
+            override val tag: Int,                          //<1.3.12>
             @u2 val classIndex: Int,                        //<1.3.13>
             @u2 val nameAndTypeIndex: Int                   //<1.3.14>
-    ) : CpInfo(tag)
+    ) : CpInfo()
 
-    class StringInfo(                                       //<1.3.15>
-            tag: Int,                                       //<1.3.16>
+    data class StringInfo(                                  //<1.3.15>
+            override val tag: Int,                          //<1.3.16>
             @u2 val stringIndex: Int                        //<1.3.17>
-    ) : CpInfo(tag)
+    ) : CpInfo()
 
-    class IntegerInfo(                                      //<1.3.18>
-            tag: Int,                                       //<1.3.19>
+    data class IntegerInfo(                                 //<1.3.18>
+            override val tag: Int,                          //<1.3.19>
             val bytes: Int                                  //<1.3.20>
-    ) : CpInfo(tag)
+    ) : CpInfo()
 
-    class FloatInfo(                                        //<1.3.21>
-            tag: Int,                                       //<1.3.22>
+    data class FloatInfo(                                   //<1.3.21>
+            override val tag: Int,                          //<1.3.22>
             val bytes: Float                                //<1.3.23>
-    ) : CpInfo(tag)
+    ) : CpInfo()
 
-    class LongInfo(                                         //<1.3.24>
-            tag: Int,                                       //<1.3.25>
+    data class LongInfo(                                    //<1.3.24>
+            override val tag: Int,                          //<1.3.25>
             val bytes: Long                                 //<1.3.26>
-    ) : CpInfo(tag)
+    ) : CpInfo()
 
-    class DoubleInfo(                                       //<1.3.27>
-            tag: Int,                                       //<1.3.28>
+    data class DoubleInfo(                                  //<1.3.27>
+            override val tag: Int,                          //<1.3.28>
             val bytes: Double                               //<1.3.29>
-    ) : CpInfo(tag)
+    ) : CpInfo()
 
-    class NameAndTypeInfo(                                  //<1.3.30>
-            tag: Int,                                       //<1.3.31>
+    data class NameAndTypeInfo(                             //<1.3.30>
+            override val tag: Int,                          //<1.3.31>
             @u2 val nameIndex: Int,                         //<1.3.32>
             @u2 val descriptorIndex: Int                    //<1.3.33>
-    ) : CpInfo(tag)
+    ) : CpInfo()
 
-    class Utf8Info(                                         //<1.3.34>
-            tag: Int,                                       //<1.3.35>
+    data class Utf8Info(                                    //<1.3.34>
+            override val tag: Int,                          //<1.3.35>
             @u2 val length: Int,                            //<1.3.36>
             val bytes: ByteArray                            //<1.3.37>
-    ) : CpInfo(tag)
+    ) : CpInfo() {
 
-    class MethodHandleInfo(                                 //<1.3.38>
-            tag: Int,                                       //<1.3.39>
+        override fun equals(other: Any?): Boolean {
+            if (this === other) return true
+            if (other?.javaClass != javaClass) return false
+
+            other as Utf8Info
+
+            if (tag != other.tag) return false
+            if (length != other.length) return false
+            if (!Arrays.equals(bytes, other.bytes)) return false
+
+            return true
+        }
+
+        override fun hashCode(): Int {
+            var result = tag
+            result = 31 * result + length
+            result = 31 * result + Arrays.hashCode(bytes)
+            return result
+        }
+    }
+
+    data class MethodHandleInfo(                            //<1.3.38>
+            override val tag: Int,                          //<1.3.39>
             @u2 val referenceKind: Int,                     //<1.3.40>
             @u2 val referenceIndex: Int                     //<1.3.41>
-    ) : CpInfo(tag)
+    ) : CpInfo()
 
-    class MethodTypeInfo(                                   //<1.3.42>
-            tag: Int,                                       //<1.3.43>
+    data class MethodTypeInfo(                              //<1.3.42>
+            override val tag: Int,                          //<1.3.43>
             @u2 val descriptorIndex: Int                    //<1.3.44>
-    ) : CpInfo(tag)
+    ) : CpInfo()
 
-    class InvokeDynamicInfo(                                //<1.3.45>
-            tag: Int,                                       //<1.3.46>
+    data class InvokeDynamicInfo(                           //<1.3.45>
+            override val tag: Int,                          //<1.3.46>
             @u2 val bootstrapMethodAttrIndex: Int,          //<1.3.47>
             @u2 val nameAndTypeIndex: Int                   //<1.3.48>
-    ) : CpInfo(tag)
+    ) : CpInfo()
 
 }

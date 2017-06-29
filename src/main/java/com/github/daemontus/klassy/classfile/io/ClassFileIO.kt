@@ -42,7 +42,6 @@ internal fun DataInputStream.readClassFile(): ClassFile {
     )
 }
 
-
 internal fun DataOutputStream.writeClassFile(file: ClassFile) = file.run {
     writeInt(magic)
     writeShort(minorVersion)

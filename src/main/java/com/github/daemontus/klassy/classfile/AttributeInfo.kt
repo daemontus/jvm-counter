@@ -35,7 +35,4 @@ data class AttributeInfo(                           //<1.6.0>
         return result
     }
 
-    override fun toString(): String
-            = "AttributeInfo[nameIndex: $attributeNameIndex, length: $attributeLength, data: ${Arrays.toString(info)}]"
-
 }
