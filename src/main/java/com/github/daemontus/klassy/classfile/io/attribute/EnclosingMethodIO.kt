@@ -4,19 +4,15 @@ import com.github.daemontus.klassy.classfile.AttributeInfo
 import com.github.daemontus.klassy.classfile.attribute.EnclosingMethod
 import java.io.DataOutputStream
 
-interface EnclosingMethodIO {
+internal fun AttributeInfo.toEnclosingMethod(): EnclosingMethod = usingStream {
+    EnclosingMethod(attributeNameIndex, attributeLength,
+            classIndex = readUnsignedShort(), methodIndex = readUnsignedShort()
+    )
+}
 
-    fun AttributeInfo.toEnclosingMethod(): EnclosingMethod = usingStream {
-        EnclosingMethod(attributeNameIndex, attributeLength,
-                classIndex = readUnsignedShort(), methodIndex = readUnsignedShort()
-        )
-    }
-
-    fun DataOutputStream.writeEnclosingMethod(method: EnclosingMethod) = method.run {
-        writeShort(attributeNameIndex)
-        writeInt(attributeLength)
-        writeShort(classIndex)
-        writeShort(methodIndex)
-    }
-
+internal fun DataOutputStream.writeEnclosingMethod(method: EnclosingMethod) = method.run {
+    writeShort(attributeNameIndex)
+    writeInt(attributeLength)
+    writeShort(classIndex)
+    writeShort(methodIndex)
 }
