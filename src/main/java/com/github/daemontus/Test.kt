@@ -1,8 +1,7 @@
 package com.github.daemontus
 
 import com.android.dex.Dex
-import com.github.daemontus.classfile.read.readClassFile
-import com.github.daemontus.classfile.validate.validate
+import com.github.daemontus.klassy.classfile.io.readClassFile
 import com.sun.tools.classfile.ClassFile
 import java.io.DataInputStream
 import java.io.File
@@ -24,9 +23,9 @@ fun main(args: Array<String>) {
 
     println("Stats: $stats")*/
 
-    val testClass = DataInputStream(File("TestClass.class").inputStream())
+    val testClass = File("TestClass.class")
 
-    val c = testClass.readClassFile().validate()
+    val c = testClass.readClassFile()
     println(c)
 }
 
