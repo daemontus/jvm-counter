@@ -1,11 +1,7 @@
 package com.github.daemontus.klassy.classfile.attribute
 
-import com.github.daemontus.klassy.classfile.io.ERR_UnknownTypeAnnotationTargetType
-import com.github.daemontus.klassy.classfile.io.parserError
 import com.github.daemontus.klassy.classfile.u1
 import com.github.daemontus.klassy.classfile.u2
-import java.io.DataInputStream
-import java.io.DataOutputStream
 
 class TypeAnnotation(                                   //<1.25.4>
         val targetInfo: Target,                         //<1.25.5>
@@ -14,46 +10,6 @@ class TypeAnnotation(                                   //<1.25.4>
         @u2 val numElementValuePairs: Int,              //<1.25.8>
         val elementValuePairs: Array<Annotation.Pair>   //<1.25.51>
 ) {
-
-    companion object {
-        fun read(stream: DataInputStream): TypeAnnotation = stream.run {
-            val targetInfo = Target.read(stream)
-            val pathLength = readUnsignedByte()
-            val path = Array(pathLength) {
-                TypePath.Entry(
-                        typePathKind = readUnsignedByte(),
-                        typeArgumentIndex = readUnsignedByte()
-                )
-            }
-            val typeIndex = readUnsignedShort()
-            val numElementValuePairs = readUnsignedShort()
-            val elementValuePairs = Array(numElementValuePairs) {
-                Annotation.Pair(
-                        elementNameIndex = readUnsignedShort(),
-                        value = Annotation.ElementValue.read(stream)
-                )
-            }
-            TypeAnnotation(targetInfo = targetInfo, targetPath = TypePath(pathLength, path),
-                    typeIndex = typeIndex, numElementValuePairs = numElementValuePairs,
-                    elementValuePairs = elementValuePairs
-            )
-        }
-    }
-
-    fun write(stream: DataOutputStream) = stream.run {
-        targetInfo.write(stream)
-        writeByte(targetPath.pathLength)
-        targetPath.path.forEach {
-            writeByte(it.typePathKind)
-            writeByte(it.typeArgumentIndex)
-        }
-        writeShort(typeIndex)
-        writeShort(numElementValuePairs)
-        elementValuePairs.forEach {
-            writeShort(it.elementNameIndex)
-            it.value.write(stream)
-        }
-    }
 
     sealed class Target(                        //<1.25.52>
             @u1 val targetType: Int
@@ -116,70 +72,6 @@ class TypeAnnotation(                                   //<1.25.4>
                 @u2 val offset: Int,            //<1.25.49>
                 @u1 val typeArgumentIndex: Int  //<1.25.50>
         ) : Target(targetType)
-
-        companion object {
-            fun read(stream: DataInputStream): Target = stream.run {
-                val targetType = readUnsignedByte()
-                when (targetType) {
-                    0x00, 0x01 -> TypeParameterTarget(targetType, typeParameterIndex = readUnsignedByte())
-                    0x10 -> SupertypeTarget(targetType, supertypeIndex = readUnsignedShort())
-                    0x11, 0x12 -> TypeParameterBoundTarget(targetType,
-                            typeParameterIndex = readUnsignedByte(),
-                            boundIndex = readUnsignedByte()
-                    )
-                    0x13, 0x14, 0x15 -> EmptyTarget(targetType)
-                    0x16 -> FormalParameterTarget(targetType, formalParameterIndex = readUnsignedByte())
-                    0x17 -> ThrowsTarget(targetType, throwsTypeIndex = readUnsignedShort())
-                    0x40, 0x41 -> {
-                        val tableLength = readUnsignedShort()
-                        val table = Array(tableLength) {
-                            LocalVarTarget.Entry(
-                                    startPC = readUnsignedShort(),
-                                    length = readUnsignedShort(),
-                                    index = readUnsignedShort()
-                            )
-                        }
-                        LocalVarTarget(targetType, tableLength = tableLength, table = table)
-                    }
-                    0x42 -> CatchTarget(targetType, exceptionTableIndex = readUnsignedShort())
-                    0x43, 0x44, 0x45, 0x46 -> OffsetTarget(targetType, offset = readUnsignedShort())
-                    in 0x47..0x4B -> TypeArgumentTarget(targetType,
-                            offset = readUnsignedShort(),
-                            typeArgumentIndex = readUnsignedByte()
-                    )
-                    else -> parserError(ERR_UnknownTypeAnnotationTargetType(targetType))
-                }
-            }
-        }
-
-        fun write(stream: DataOutputStream) = stream.run {
-            writeByte(targetType)
-            when (this@Target) {
-                is TypeParameterTarget -> writeByte(typeParameterIndex)
-                is SupertypeTarget -> writeShort(supertypeIndex)
-                is TypeParameterBoundTarget -> {
-                    writeByte(typeParameterIndex)
-                    writeByte(boundIndex)
-                }
-                is EmptyTarget -> Unit
-                is FormalParameterTarget -> writeByte(formalParameterIndex)
-                is ThrowsTarget -> writeShort(throwsTypeIndex)
-                is LocalVarTarget -> {
-                    writeShort(tableLength)
-                    table.forEach {
-                        writeShort(it.startPC)
-                        writeShort(it.length)
-                        writeShort(it.index)
-                    }
-                }
-                is CatchTarget -> writeShort(exceptionTableIndex)
-                is OffsetTarget -> writeShort(offset)
-                is TypeArgumentTarget -> {
-                    writeShort(offset)
-                    writeByte(typeArgumentIndex)
-                }
-            }
-        }
 
     }
 

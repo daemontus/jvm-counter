@@ -14,7 +14,7 @@ interface AnnotationIO {
         val pairs = Array(numElementValuePairs) {
             Annotation.Pair(
                     elementNameIndex = readUnsignedShort(),
-                    value = readElementValue()
+                    value = readAnnotationElementValue()
             )
         }
         return Annotation(
@@ -24,7 +24,7 @@ interface AnnotationIO {
         )
     }
 
-    fun DataInputStream.readElementValue(): Annotation.ElementValue {
+    fun DataInputStream.readAnnotationElementValue(): Annotation.ElementValue {
         val tag = readUnsignedByte()
         return when (tag.toChar()) {
             in listOf('B', 'C', 'D', 'F', 'I', 'J', 'S', 'Z', 's') ->
@@ -37,7 +37,7 @@ interface AnnotationIO {
             '@' -> Annotation.ElementValue.AnnotationValue(tag, annotation = readAnnotation())
             '[' -> {
                 val numValues = readUnsignedShort()
-                val values = Array(numValues) { readElementValue() }
+                val values = Array(numValues) { readAnnotationElementValue() }
                 Annotation.ElementValue.ArrayValue(tag, numValues = numValues, values = values)
             }
             else -> parserError(ERR_UnknownElementValueTag(tag))
@@ -49,11 +49,11 @@ interface AnnotationIO {
         writeShort(numElementValuePairs)
         pairs.forEach {
             writeShort(it.elementNameIndex)
-            writeElementValue(it.value)
+            writeAnnotationElementValue(it.value)
         }
     }
 
-    fun DataOutputStream.writeElementValue(value: Annotation.ElementValue): Unit = value.run {
+    fun DataOutputStream.writeAnnotationElementValue(value: Annotation.ElementValue): Unit = value.run {
         writeByte(tag)
         when (this) {
             is Annotation.ElementValue.ConstValue -> writeShort(constValueIndex)
@@ -65,7 +65,7 @@ interface AnnotationIO {
             is Annotation.ElementValue.AnnotationValue -> writeAnnotation(annotation)
             is Annotation.ElementValue.ArrayValue -> {
                 writeShort(numValues)
-                values.forEach { writeElementValue(it) }
+                values.forEach { writeAnnotationElementValue(it) }
             }
         }
     }

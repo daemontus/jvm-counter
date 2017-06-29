@@ -9,14 +9,14 @@ class AnnotationDefaultIO : AnnotationIO {
 
     fun DataInputStream.readAnnotationDefault(info: AttributeInfo): AnnotationDefault {
         return AnnotationDefault(info.attributeNameIndex, info.attributeLength,
-                defaultValue = readElementValue()
+                defaultValue = readAnnotationElementValue()
         )
     }
 
     fun DataOutputStream.writeAnnotationDefault(default: AnnotationDefault) = default.run {
         writeShort(attributeNameIndex)
         writeInt(attributeLength)
-        writeElementValue(defaultValue)
+        writeAnnotationElementValue(defaultValue)
     }
 
 }
