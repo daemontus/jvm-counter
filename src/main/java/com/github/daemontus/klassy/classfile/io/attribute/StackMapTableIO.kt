@@ -10,7 +10,7 @@ import java.io.DataOutputStream
 
 interface StackMapTableIO {
 
-    fun DataInputStream.readStackMapTable(info: AttributeInfo): StackMapTable {
+    fun AttributeInfo.toStackMapTable(): StackMapTable = usingStream {
         val numberOfEntries = readUnsignedShort()
         val entries = Array(numberOfEntries) {
             val frameType = readUnsignedByte()
@@ -45,7 +45,7 @@ interface StackMapTableIO {
                 else -> parserError(ERR_UnknownFrameType(frameType))
             }
         }
-        return StackMapTable(info.attributeNameIndex, info.attributeLength,
+        StackMapTable(attributeNameIndex, attributeLength,
                 numberOfEntries = numberOfEntries, entries = entries
         )
     }

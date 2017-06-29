@@ -2,12 +2,11 @@ package com.github.daemontus.klassy.classfile.io.attribute
 
 import com.github.daemontus.klassy.classfile.AttributeInfo
 import com.github.daemontus.klassy.classfile.attribute.InnerClasses
-import java.io.DataInputStream
 import java.io.DataOutputStream
 
 interface InnerClassesIO {
 
-    fun DataInputStream.readInnerClasses(info: AttributeInfo): InnerClasses {
+    fun AttributeInfo.toInnerClasses(): InnerClasses = usingStream {
         val numberOfClasses = readUnsignedShort()
         val classes = Array(numberOfClasses) {
             InnerClasses.Entry(
@@ -17,7 +16,7 @@ interface InnerClassesIO {
                     innerClassAccessFlags = readUnsignedShort()
             )
         }
-        return InnerClasses(info.attributeNameIndex, info.attributeLength,
+        InnerClasses(attributeNameIndex, attributeLength,
                 numberOfClasses = numberOfClasses, classes = classes
         )
     }

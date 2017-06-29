@@ -2,12 +2,11 @@ package com.github.daemontus.klassy.classfile.io.attribute
 
 import com.github.daemontus.klassy.classfile.AttributeInfo
 import com.github.daemontus.klassy.classfile.attribute.BootstrapMethods
-import java.io.DataInputStream
 import java.io.DataOutputStream
 
 interface BootstrapMethodsIO {
 
-    fun DataInputStream.readBootstrapMethods(info: AttributeInfo): BootstrapMethods {
+    fun AttributeInfo.toBootstrapMethods(): BootstrapMethods = usingStream {
         val numBootstrapMethods = readUnsignedShort()
         val bootstrapMethods = Array(numBootstrapMethods) {
             val bootstrapMethodRef = readUnsignedShort()
@@ -19,7 +18,7 @@ interface BootstrapMethodsIO {
                     bootstrapArguments = bootstrapArguments
             )
         }
-        return BootstrapMethods(info.attributeNameIndex, info.attributeLength,
+        BootstrapMethods(attributeNameIndex, attributeLength,
                 numBootstrapMethods = numBootstrapMethods,
                 bootstrapMethods = bootstrapMethods
         )

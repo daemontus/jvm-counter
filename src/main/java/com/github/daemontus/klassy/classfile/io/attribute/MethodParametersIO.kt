@@ -2,12 +2,11 @@ package com.github.daemontus.klassy.classfile.io.attribute
 
 import com.github.daemontus.klassy.classfile.AttributeInfo
 import com.github.daemontus.klassy.classfile.attribute.MethodParameters
-import java.io.DataInputStream
 import java.io.DataOutputStream
 
 interface MethodParametersIO {
 
-    fun DataInputStream.readMethodParameters(info: AttributeInfo): MethodParameters {
+    fun AttributeInfo.toMethodParameters(): MethodParameters = usingStream {
         val parametersCount = readUnsignedByte()
         val parameters = Array(parametersCount) {
             MethodParameters.Param(
@@ -15,7 +14,7 @@ interface MethodParametersIO {
                     accessFlags = readUnsignedShort()
             )
         }
-        return MethodParameters(info.attributeNameIndex, info.attributeLength,
+        return MethodParameters(attributeNameIndex, attributeLength,
                 parametersCount = parametersCount,
                 parameters = parameters
         )

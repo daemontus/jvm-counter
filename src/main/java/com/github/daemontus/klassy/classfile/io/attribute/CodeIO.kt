@@ -7,12 +7,11 @@ import com.github.daemontus.klassy.classfile.io.AttributeIO
 import com.github.daemontus.klassy.classfile.io.AttributeInfoIO
 import com.github.daemontus.klassy.classfile.io.ERR_UnexpectedEndOfStream
 import com.github.daemontus.klassy.classfile.io.parserError
-import java.io.DataInputStream
 import java.io.DataOutputStream
 
 interface CodeIO : AttributeInfoIO, AttributeIO {
 
-    fun DataInputStream.readCode(info: AttributeInfo): Code {
+    fun AttributeInfo.toCode(): Code = usingStream {
         val maxStack = readUnsignedShort()
         val maxLocals = readUnsignedShort()
         val codeLength = readInt()
@@ -29,7 +28,7 @@ interface CodeIO : AttributeInfoIO, AttributeIO {
         }
         val attributesCount = readUnsignedShort()
         val attributes = Array<Attribute>(attributesCount) { readAttributeInfo() }
-        return Code(info.attributeNameIndex, info.attributeLength,
+        Code(attributeNameIndex, attributeLength,
                 maxStack = maxStack,
                 maxLocals = maxLocals,
                 codeLength = codeLength,

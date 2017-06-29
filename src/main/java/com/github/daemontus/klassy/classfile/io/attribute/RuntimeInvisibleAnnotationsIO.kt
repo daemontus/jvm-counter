@@ -2,15 +2,14 @@ package com.github.daemontus.klassy.classfile.io.attribute
 
 import com.github.daemontus.klassy.classfile.AttributeInfo
 import com.github.daemontus.klassy.classfile.attribute.RuntimeInvisibleAnnotations
-import java.io.DataInputStream
 import java.io.DataOutputStream
 
 interface RuntimeInvisibleAnnotationsIO : AnnotationIO {
 
-    fun DataInputStream.readRuntimeInvisibleAnnotations(info: AttributeInfo): RuntimeInvisibleAnnotations {
+    fun AttributeInfo.toRuntimeInvisibleAnnotations(): RuntimeInvisibleAnnotations = usingStream {
         val numAnnotations = readUnsignedShort()
         val annotations = Array(numAnnotations) { readAnnotation() }
-        return RuntimeInvisibleAnnotations(info.attributeNameIndex, info.attributeLength,
+        RuntimeInvisibleAnnotations(attributeNameIndex, attributeLength,
                 numAnnotations = numAnnotations,
                 annotations = annotations
         )

@@ -2,12 +2,11 @@ package com.github.daemontus.klassy.classfile.io.attribute
 
 import com.github.daemontus.klassy.classfile.AttributeInfo
 import com.github.daemontus.klassy.classfile.attribute.LocalVariableTypeTable
-import java.io.DataInputStream
 import java.io.DataOutputStream
 
 interface LocalVariableTypeTableIO {
 
-    fun DataInputStream.readLocalVariableTypeTable(info: AttributeInfo): LocalVariableTypeTable {
+    fun AttributeInfo.toLocalVariableTypeTable(): LocalVariableTypeTable = usingStream {
         val localVariableTypeTableLength = readUnsignedShort()
         val localVariableTypeTable = Array(localVariableTypeTableLength) {
             LocalVariableTypeTable.Entry(
@@ -19,7 +18,7 @@ interface LocalVariableTypeTableIO {
             )
         }
 
-        return LocalVariableTypeTable(info.attributeNameIndex, info.attributeLength,
+        return LocalVariableTypeTable(attributeNameIndex, attributeLength,
                 localVariableTypeTableLength = localVariableTypeTableLength,
                 localVariableTypeTable = localVariableTypeTable
         )
