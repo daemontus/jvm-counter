@@ -52,7 +52,6 @@ ClassFile {                                         <1.1.0>
  - [1.1.6] If `access_flags <1.1.6>` has `<!INTERFACE>` set, `<!SUPER>` must *not* be set.
  - [1.1.7] If `access_flags <1.1.6>` has `<!INTERFACE>` set, `<!ENUM>` must *not* be set.
  - [1.1.8] If `access_flags <1.1.6>` has `<!ANNOTATION>` set, `<!INTERFACE>` must be set.
- - [1.1.9] If `access_flags <1.1.6>` has `<!INTERFACE>` set, `<!ABSTRACT>` must be set.
  - [1.1.10] `access_flags <1.1.6>` must *not* have both `<!ABSTRACT>` and `<!FINAL>` set.
  - [1.1.11] `this_class <1.1.7>` must be a valid index [1.0.4] into `constant_pool <1.1.5>`.
  - [1.1.12] `constant_pool <1.1.5>` entry at index `this_class <1.1.7>` must by of type `Class_info <1.3.0>`.

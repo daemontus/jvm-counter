@@ -51,3 +51,16 @@ const val NULL = 0x5
 const val U_THIS = 0x6
 const val OBJECT = 0x7
 const val U_VAR = 0x8
+
+const val MAGIC = 0xCAFEBABE.toInt()
+
+object Mask {
+    const val PUBLIC = 0x0001
+    const val FINAL = 0x0010
+    const val SUPER = 0x0020
+    const val INTERFACE = 0x0200
+    const val ABSTRACT = 0x0400
+    const val SYNTHETIC = 0x1000
+    const val ANNOTATION = 0x2000
+    const val ENUM = 0x4000
+}
