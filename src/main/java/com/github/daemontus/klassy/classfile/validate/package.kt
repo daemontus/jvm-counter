@@ -36,3 +36,43 @@ fun Array<CpInfo>.isObjectClass(index: Int): Boolean {
         return false;
     }
 }
+
+fun Array<CpInfo>.hasDescriptorType(index: Int, predicate: (String) -> Boolean): Boolean {
+    try {
+        val nameAndType = getCp<CpInfo.NameAndTypeInfo>(index)
+        val descriptor = getCp<CpInfo.Utf8Info>(nameAndType.descriptorIndex)
+        return predicate(String(descriptor.bytes))
+    } catch (e: Exception) {
+        /* Ignore, if this fails, there are more serious problems */
+        return false;
+    }
+}
+
+fun Array<CpInfo>.checkReferenceName(index: Int, predicate: (String) -> Boolean): Boolean {
+    try {
+        val item = getCp<CpInfo>(index)
+        val nameAndTypeIndex = when (item) {
+            is CpInfo.MethodRefInfo -> item.nameAndTypeIndex
+            is CpInfo.InterfaceMethodRefInfo -> item.nameAndTypeIndex
+            else -> error("Cannot validate!")
+        }
+        val nameIndex = getCp<CpInfo.NameAndTypeInfo>(nameAndTypeIndex).nameIndex
+        val name = getCp<CpInfo.Utf8Info>(nameIndex)
+        return predicate(String(name.bytes))
+    } catch (e: Exception) {
+        /* Ignore, if this fails, there are more serious problems */
+        return false
+    }
+}
+
+// [1.0.5]
+fun String.isUnquantifiedName(): Boolean = this.isNotEmpty() && '.' !in this && ';' !in this && '[' !in this && '/' !in this
+
+// [1.0.6]
+fun String.isMethodName(): Boolean = this.isUnquantifiedName() && (('<' !in this && '>' !in this) || this == "<init>" || this == "<clinit>")
+
+// [1.0.7]
+fun String.isFullyQuantifiedName(): Boolean {
+    val names = this.split("/")
+    return names.isNotEmpty() && names.all { it.isUnquantifiedName() }
+}

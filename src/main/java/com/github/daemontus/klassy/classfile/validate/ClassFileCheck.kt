@@ -4,12 +4,11 @@ import com.github.daemontus.klassy.classfile.ClassFile
 import com.github.daemontus.klassy.classfile.CpInfo
 import com.github.daemontus.klassy.classfile.MAGIC
 import com.github.daemontus.klassy.classfile.Mask
-import org.codehaus.groovy.reflection.ClassInfo
 
 fun ClassFile.validate(): List<ValidationProblem> {
     val problems = ArrayList<ValidationProblem>()
     this.validate(problems)
-    return problems;
+    return problems
 }
 
 private fun ClassFile.validate(problems: MutableList<ValidationProblem>) {
@@ -85,4 +84,7 @@ private fun ClassFile.validate(problems: MutableList<ValidationProblem>) {
     if (attributes.size != attributesCount) {
         problems.onError("[1.1.23] `attributes <1.1.16>` has size `attributes_count <1.1.15>`.")
     }
+
+    constantPool.forEach { it.validate(this, problems) }
+    //TODO: remaining validation
 }
