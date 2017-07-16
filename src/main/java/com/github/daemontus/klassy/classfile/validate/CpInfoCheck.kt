@@ -33,8 +33,7 @@ internal fun CpInfo.validate(classFile: ClassFile, problems: MutableList<Validat
             if (!cp.checkType<CpInfo.Utf8Info>(nameIndex)) {
                 problems.onError("[1.3.16] `constant_pool <1.1.5>` entry at index `name_index <1.3.2>` must be of type `Utf8_info <1.3.34>` .")
             }
-            val name = String(cp.getCp<CpInfo.Utf8Info>(nameIndex).bytes)
-            if (!name.isFullyQuantifiedName() && !name.isArrayType()) {
+            if (!cp.checkString(nameIndex) { it.isFullyQuantifiedName() || it.isArrayType() }) {
                 problems.onError("[1.3.17] `constant_pool <1.1.5>` entry at index `name_index <1.3.2>` must represent a fully quantified binary name [1.0.7] or an `ArrayType <1.2.4>`.")
             }
         }
@@ -109,8 +108,7 @@ internal fun CpInfo.validate(classFile: ClassFile, problems: MutableList<Validat
             if (!cp.checkType<CpInfo.Utf8Info>(nameIndex)) {
                 problems.onError("[1.3.16] `constant_pool <1.1.5>` entry at index `name_index <1.3.32>` must be of type `Utf8_info <1.3.34>` .")
             }
-            val name = String(cp.getCp<CpInfo.Utf8Info>(nameIndex).bytes)
-            if (!name.isUnquantifiedName()) {
+            if (!cp.checkString(nameIndex) { it.isUnquantifiedName() }) {
                 problems.onError("[1.3.18] `constant_pool <1.1.5>` entry at index `name_index <1.3.32>` must represent a valid unqualified name [1.0.5].")
             }
             if (!cp.isCpIndex(descriptorIndex)) {
@@ -119,8 +117,7 @@ internal fun CpInfo.validate(classFile: ClassFile, problems: MutableList<Validat
             if (!cp.checkType<CpInfo.Utf8Info>(descriptorIndex)) {
                 problems.onError("[1.3.28] `constant_pool <1.1.5>` entry at index `descriptor_index <1.3.33><1.3.44>` must be of type `Utf8_info <1.3.34>`.")
             }
-            val descriptor = String(cp.getCp<CpInfo.Utf8Info>(descriptorIndex).bytes)
-            if (!descriptor.isFieldDescriptor() && !descriptor.isMethodDescriotor()) {
+            if (!cp.checkString(descriptorIndex) { it.isFieldDescriptor() || it.isMethodDescriotor() }) {
                 problems.onError("[1.3.29] `constant_pool <1.1.5>` entry at index `descriptor_index <1.3.33>` must represent a valid `FieldDescriptor <1.2.0>` or `MethodDescriptor <1.2.5>`.")
             }
         }
@@ -165,8 +162,7 @@ internal fun CpInfo.validate(classFile: ClassFile, problems: MutableList<Validat
             if (!cp.checkType<CpInfo.Utf8Info>(descriptorIndex)) {
                 problems.onError("[1.3.28] `constant_pool <1.1.5>` entry at index `descriptor_index <1.3.44>` must be of type `Utf8_info <1.3.34>`.")
             }
-            val descriptor = String(cp.getCp<CpInfo.Utf8Info>(descriptorIndex).bytes)
-            if (!descriptor.isMethodDescriotor()) {
+            if (!cp.checkString(descriptorIndex) { it.isMethodDescriotor() }) {
                 problems.onError("[1.3.30] `constant_pool <1.1.5>` entry at index `descriptor_index <1.3.44>` must represent a valid `MethodDescriptor <1.2.5>`.")
             }
         }

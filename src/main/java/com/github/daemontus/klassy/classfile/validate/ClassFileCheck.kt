@@ -86,5 +86,7 @@ private fun ClassFile.validate(problems: MutableList<ValidationProblem>) {
     }
 
     constantPool.forEach { it.validate(this, problems) }
-    //TODO: remaining validation
+    fields.forEach { it.validate(this, problems) }
+    methods.forEach { it.validate(this, problems) }
+    attributes.forEach { it.validate(this, problems) }
 }

@@ -26,6 +26,15 @@ inline fun <reified T> Array<CpInfo>.getCp(index: Int): T = this[index - 1] as T
 
 inline fun <reified T> Array<CpInfo>.checkType(index: Int) = this[index - 1] is T
 
+fun Array<CpInfo>.checkString(index: Int, predicate: (String) -> Boolean): Boolean {
+    try {
+        val name = getCp<CpInfo.Utf8Info>(index)
+        return predicate(String(name.bytes))
+    } catch (e: Exception) {
+        return false
+    }
+}
+
 fun Array<CpInfo>.isObjectClass(index: Int): Boolean {
     try {
         val classInfo = getCp<CpInfo.ClassInfo>(index)
@@ -33,7 +42,7 @@ fun Array<CpInfo>.isObjectClass(index: Int): Boolean {
         return String(nameInfo.bytes) == "java/lang/Object"
     } catch (e: Exception) {
         /* Ignore, if this fails, there are more serious problems */
-        return false;
+        return false
     }
 }
 
@@ -44,7 +53,7 @@ fun Array<CpInfo>.hasDescriptorType(index: Int, predicate: (String) -> Boolean):
         return predicate(String(descriptor.bytes))
     } catch (e: Exception) {
         /* Ignore, if this fails, there are more serious problems */
-        return false;
+        return false
     }
 }
 

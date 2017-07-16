@@ -258,10 +258,10 @@ field_info {                                        <1.4.0>
     - `0x1000 <!SYNTHETIC>`
     - `0x4000 <!ENUM>`
     
- - [1.4.2] If `access_flags <1.4.1>` has `<!VOLATILE>` and `<!FINAL>` *cannot* be set at the same time.
+ - [1.4.2] In `access_flags <1.4.1>`, `<!VOLATILE>` and `<!FINAL>` *cannot* be set at the same time.
  - [1.4.3] In `access_flags <1.4.1>`, at most one of `<!PUBLIC>`, `<!PRIVATE>`, `<!PROTECTED>` can be set.
- - [1.4.4] If `access_flags <1.1.6>` has `<!INTERFACE>` set, then in `access_flags <1.4.1>`, `<!PUBLIC>`, `<!STATIC>` and `<!FINAL>` *must* be set.
- - [1.4.5] If `access_flags <1.1.6>` has `<!INTERFACE>` set, then in `access_flags <1.4.1>`, only `<!PUBLIC>`, `<!STATIC>`, `<!FINAL>` and `<!SYNTHETIC>` *can* be set.
+ - [1.4.4] If `access_flags <1.1.6>` (class) has `<!INTERFACE>` set, then in `access_flags <1.4.1>`, `<!PUBLIC>`, `<!STATIC>` and `<!FINAL>` *must* be set.
+ - [1.4.5] If `access_flags <1.1.6>` (class) has `<!INTERFACE>` set, then in `access_flags <1.4.1>`, only `<!PUBLIC>`, `<!STATIC>`, `<!FINAL>` and `<!SYNTHETIC>` *can* be set.
  - [1.4.6] `name_index <1.4.2>` is a valid index [1.0.4] into the `constant_pool <1.1.5>`.
  - [1.4.7] `constant_pool <1.1.5>` entry at index `name_index <1.4.2>` must be of type `Utf8_info <1.3.34>`.
  - [1.4.8] `constant_pool <1.1.5>` entry at index `name_index <1.4.2>` must represent a valid unqualified name [1.0.5].
@@ -290,7 +290,7 @@ method_info {                                       <1.5.0>
     - `0x0010 <!FINAL>`
     - `0x0020 <!SYNCHRONIZED>`
     - `0x0040 <!BRIDGE>`  
-    - `0x0080 <!VOLATILE>`
+    - `0x0080 <!VARARGS>`
     - `0x0100 <!NATIVE>`
     - `0x0400 <!ABSTRACT>`
     - `0x0800 <!STRICT>`
@@ -298,7 +298,6 @@ method_info {                                       <1.5.0>
 
  - [1.5.2] In `access_flags <1.5.1>`, at most one of `<!PUBLIC>`, `<!PRIVATE>`, `<!PROTECTED>` can be set.
  - [1.5.3] If `access_flags <1.1.6>` has `<!INTERFACE>` set, then in `access_flags <1.5.1>`, `<!PROTECTED>`, `<!FINAL>`, `<!SYNCHRONIZED>`, `<!NATIVE>` must *not* be set.
- - [1.5.4] If `access_flags <1.1.6>` has `<!INTERFACE>` set, then in `access_flags <1.5.1>`, `<!ABSTRACT>` must be set.
  - [1.5.5] If `access_flags <1.1.6>` has `<!INTERFACE>` set and `major_version <1.1.3> < 52`, then in `access_flags <1.5.1>`, `<!PUBLIC>` and `<!ABSTRACT>` must be set. If `major_version <1.1.3> >= 52`, `<!PUBLIC>` or `<!PRIVATE>` must be set. 
  - [1.5.6] If `access_flags <1.5.1>` has `<!ABSTRACT>` set, `<!PRIVATE>`, `<!STATIC>`, `<!FINAL>`, `<!SYNCHRONIZED>`, `<!NATIVE>` and `<!STRICT>` must *not* be set.
  - [1.5.7] If `constant_pool <1.1.5>` entry at index `name_index <1.5.2>` represents the name `<init>`, only `<!PRIVATE>`, `<!PUBLIC>`, `<!PROTECTED>`, `<!VARARGS>`, `<!STRICT>` and `<!SYNTHETIC>` flags *can* be set.
