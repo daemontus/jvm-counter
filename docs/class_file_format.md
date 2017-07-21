@@ -517,12 +517,14 @@ Exceptions {                            <1.10.0>
 }
 ```
 
- - All rules from [1.6] apply.
- - Appears since `major_version.minor_version <1.1.3>.<1.1.2> >= 45.3`.
- - Appears in `attributes <1.5.5>`.
- - [1.9.4] `constant_pool <1.1.5>` entry at index `attribute_name_index <1.10.1>` must be `Exceptions <!EXCEPTIONS>`.
- - At most one exceptions attribute can be present for each method.
- - Size of the `exception_index_table <1.10.4>` is `number_of_exceptions <1.10.3>`.
+ - [1.10.1] All rules from [1.6] apply.
+ - [1.10.2] Appears since `major_version.minor_version <1.1.3>.<1.1.2> >= 45.3`.
+ - [1.10.3] Appears in `attributes <1.5.5>`.
+ - [1.10.4] `constant_pool <1.1.5>` entry at index `attribute_name_index <1.10.1>` must be `Exceptions <!EXCEPTIONS>`.
+ - [1.10.5] At most one exceptions attribute can be present for each method.
+ - [1.10.6] Size of the `exception_index_table <1.10.4>` is `number_of_exceptions <1.10.3>`.
+ - [1.10.7] Every `exception_index_table <1.10.4>` entry is a valid index [1.0.4] into the `constant_pool <1.1.5>`.
+ - [1.10.8] Every `exception_index_table <1.10.4>` entry corresponds to a `constant_pool <1.1.5>` entry of type `Class_info <1.3.0>`.
 
 #### [1.11] `InnerClasses` attribute
 

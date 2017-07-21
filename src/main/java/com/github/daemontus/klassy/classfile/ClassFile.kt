@@ -26,6 +26,9 @@ data class ClassFile(                           //<1.1.0>
         val attributes: Array<Attribute>        //<1.1.16>
 ) {
 
+    val version: String
+        get() = "$majorVersion.$minorVersion"
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other?.javaClass != javaClass) return false

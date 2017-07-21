@@ -22,9 +22,9 @@ fun Array<CpInfo>.isCpIndex(index: Int): Boolean {
     return (aI in this.indices) && ((aI == 0) || ((this[aI-1] !is CpInfo.DoubleInfo) && (this[aI-1] !is CpInfo.LongInfo)))
 }
 
-inline fun <reified T> Array<CpInfo>.getCp(index: Int): T = this[index - 1] as T
+inline fun <reified T : CpInfo> Array<CpInfo>.getCp(index: Int): T = this[index - 1] as T
 
-inline fun <reified T> Array<CpInfo>.checkType(index: Int) = this[index - 1] is T
+inline fun <reified T : CpInfo> Array<CpInfo>.checkType(index: Int) = this[index - 1] is T
 
 fun Array<CpInfo>.checkString(index: Int, predicate: (String) -> Boolean): Boolean {
     try {

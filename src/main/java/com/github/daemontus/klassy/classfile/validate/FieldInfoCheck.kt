@@ -43,5 +43,5 @@ fun FieldInfo.validate(classFile: ClassFile, problems: MutableList<ValidationPro
     if (attributes.size != attributesCount) {
         problems.onError("[1.4.9] `attributes <1.4.5>` has size `attributes_count <1.4.4>`.")
     }
-    this.attributes.forEach { it.validate(classFile, problems) }
+    this.attributes.forEach { it.validate(classFile, this, problems) }
 }

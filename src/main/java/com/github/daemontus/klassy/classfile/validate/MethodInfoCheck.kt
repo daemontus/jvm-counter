@@ -1,6 +1,7 @@
 package com.github.daemontus.klassy.classfile.validate
 
 import com.github.daemontus.klassy.classfile.*
+import com.github.daemontus.klassy.classfile.attribute.Code
 
 fun MethodInfo.validate(classFile: ClassFile, problems: MutableList<ValidationProblem>) {
     val isPublic = accessFlags.hasMask(Mask.PUBLIC)
@@ -53,5 +54,11 @@ fun MethodInfo.validate(classFile: ClassFile, problems: MutableList<ValidationPr
     if (attributes.size != attributesCount) {
         problems.onError("[1.5.14] `attributes <1.5.5>` has size `attributes_count <1.5.4>`.")
     }
-    attributes.forEach { it.validate(classFile, problems) }
+    attributes.forEach { it.validate(classFile, this, problems) }
+
+    val hasCodeAttribute = attributes.count { it is Code } > 0
+    val hasOneCodeAttribute = attributes.count { it is Code } == 1
+    if (((isNative || isAbstract) && hasCodeAttribute) || !hasOneCodeAttribute) {
+        problems.onError("[1.8.4] If this methods `access_flags <1.5.1>` have `0x0100 <!NATIVE>` or `<!ABSTRACT>` set, no code attribute is allowed. Otherwise exactly one code attribute must be present.")
+    }
 }

@@ -69,6 +69,8 @@ fun String.isFieldType(): Boolean = this.readFieldType()?.second?.isEmpty() ?: f
 
 fun String.isFieldDescriptor(): Boolean = this.isFieldType()
 
+fun String.readFieldDescriptor(): FieldType = this.readFieldType()!!.first
+
 fun String.readMethodDescriptor(): Pair<MethodDescriptor, String>? {
     if (this.isEmpty() || this[0] != '(') return null
     val parameters = ArrayList<FieldType>()
