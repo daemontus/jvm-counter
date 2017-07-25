@@ -85,6 +85,10 @@ sealed class CpInfo {                                       //<1.3.49>
             result = 31 * result + Arrays.hashCode(bytes)
             return result
         }
+
+        override fun toString(): String {
+            return "Utf8Info(${String(this.bytes)})"
+        }
     }
 
     data class MethodHandleInfo(                            //<1.3.38>

@@ -80,6 +80,26 @@ MethodDescriptor : ( Parameter<1.2.6>* ) Return<1.2.1>                  <1.2.5>
 Parameter : FieldType<1.2.1>                                            <1.2.6>
 Return : FieldType<1.2.1> | V                                           <1.2.7>
 
+Return {
+    Void
+    FieldType { // FieldDescriptor, Parameter
+        BaseType { B | C | D | F | I | J | S | Z }
+        ObjectType
+        ArrayType
+    }
+}
+
+MethodDescriptor
+
+JavaType {
+    BaseType { B | C | D | F | I | J | S | Z }
+    ReferenceType {
+        ClassType
+        TypeVariable
+        ArrayType
+    }
+}
+
 JavaType : ReferenceType<1.2.9> | BaseType<1.2.2>                               <1.2.8>
 ReferenceType : ClassType<1.2.10> | TypeVariable<1.2.20> | ArrayType<1.2.16>   <1.2.9>
 
@@ -585,7 +605,6 @@ EnclosingMethod {               <1.12.0>
  - [1.12.3] Appears in `attributes <1.1.16>`.
  - [1.12.4] At most one enclosing method attribute can be present for each class.
  - [1.12.5] `constant_pool <1.1.5>` entry at index `attribute_name_index <1.12.1>` must be `EnclosingMethod <!ENCLOSING_METHOD>`.
- - At most one enclosing method attribute is present for each class.
  - [1.12.6] `class_index <1.12.3>` is a valid index [1.0.4] into the `constant_pool <1.1.5>`.
  - [1.12.7] `constant_pool <1.1.5>` entry at index `class_index <1.12.3>` must be of type `Class_info <1.3.0>`.
  - [1.12.8] `method_index <1.12.4>` is a valid index [1.0.4] into the `constant_pool <1.1.5>`.

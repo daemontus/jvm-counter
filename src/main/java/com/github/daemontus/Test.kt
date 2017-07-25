@@ -24,7 +24,9 @@ fun main(args: Array<String>) {
 
     println("Stats: $stats")*/
 
-    val testClass = File("TestClass.class")
+    println("Split: ${"a::b".split(":")}")
+
+    val testClass = File("TestClass.generics.class")
 
     val c = testClass.readClassFile()
     println(c)

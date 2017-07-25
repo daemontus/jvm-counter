@@ -1,6 +1,6 @@
 package com.github.daemontus;
 
-public class TestClass {
+public class TestClass<T> {
 
     private int intField = 10;
 
