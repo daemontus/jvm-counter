@@ -18,7 +18,7 @@ fun Synthetic.validate(classFile: ClassFile, parent: Any, problems: MutableList<
     if (parent !is ClassFile && parent !is FieldInfo && parent !is MethodInfo && parent !is Code) {
         problems.onError("[1.13.3] Appears in `attributes <1.1.16><1.4.5><1.5.5><1.8.10>`.")
     }
-    if (classFile.constantPool.checkString(attributeNameIndex) { it != SYNTHETIC }) {
+    if (!classFile.constantPool.checkString(attributeNameIndex) { it == SYNTHETIC }) {
         problems.onError("[1.13.4] `constant_pool <1.1.5>` entry at index `attribute_name_index <1.13.1>` must be `Synthetic <!SYNTHETIC>`.")
     }
     if (attributeLength != 0) {

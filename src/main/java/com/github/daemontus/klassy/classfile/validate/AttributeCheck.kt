@@ -4,7 +4,7 @@ import com.github.daemontus.klassy.classfile.Attribute
 import com.github.daemontus.klassy.classfile.AttributeInfo
 import com.github.daemontus.klassy.classfile.ClassFile
 import com.github.daemontus.klassy.classfile.CpInfo
-import com.github.daemontus.klassy.classfile.attribute.ConstantValue
+import com.github.daemontus.klassy.classfile.attribute.*
 import com.github.daemontus.klassy.classfile.validate.attribute.validate
 
 fun Attribute.validate(classFile: ClassFile, parent: Any, problems: MutableList<ValidationProblem>) {
@@ -21,5 +21,17 @@ fun Attribute.validate(classFile: ClassFile, parent: Any, problems: MutableList<
             }
         }
         is ConstantValue -> this.validate(classFile, parent, problems)
+        is Code -> this.validate(classFile, parent, problems)
+        is EnclosingMethod -> this.validate(classFile, parent, problems)
+        is Exceptions -> this.validate(classFile, parent, problems)
+        is InnerClasses -> this.validate(classFile, parent, problems)
+        is LineNumberTable -> this.validate(classFile, parent, problems)
+        is Signature -> this.validate(classFile, parent, problems)
+        is SourceDebugExtensions -> this.validate(classFile, parent, problems)
+        is SourceFile -> this.validate(classFile, parent, problems)
+        is StackMapTable -> this.validate(classFile, parent, problems)
+        is Synthetic -> this.validate(classFile, parent, problems)
+        is LocalVariableTable -> this.validate(classFile, parent, problems)
+        is LocalVariableTypeTable -> this.validate(classFile, parent, problems)
     }
 }

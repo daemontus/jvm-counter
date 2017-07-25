@@ -15,7 +15,7 @@ fun EnclosingMethod.validate(classFile: ClassFile, parent: Any, problems: Mutabl
     if (parent !is ClassFile) {
         problems.onError("[1.12.3] Appears in `attributes <1.1.16>`.")
     }
-    if (classFile.constantPool.checkString(attributeNameIndex) { it != ENCLOSING_METHOD }) {
+    if (!classFile.constantPool.checkString(attributeNameIndex) { it == ENCLOSING_METHOD }) {
         problems.onError("[1.12.5] `constant_pool <1.1.5>` entry at index `attribute_name_index <1.12.1>` must be `EnclosingMethod <!ENCLOSING_METHOD>`.")
     }
     if (parent is ClassFile && parent.attributes.count { it is EnclosingMethod } > 1) {

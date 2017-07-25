@@ -16,7 +16,7 @@ fun SourceDebugExtensions.validate(classFile: ClassFile, parent: Any, problems: 
     if (parent !is ClassFile) {
         problems.onError("[1.16.3] Appears in `attributes <1.1.16>`.")
     }
-    if (classFile.constantPool.checkString(attributeNameIndex) { it != SOURCE_DEBUG_EXTENSIONS }) {
+    if (!classFile.constantPool.checkString(attributeNameIndex) { it == SOURCE_DEBUG_EXTENSIONS }) {
         problems.onError("[1.16.4] `constant_pool <1.1.5>` entry at index `attribute_name_index <1.16.1>` must be `SourceDebugExtensions <!SOURCE_DEBUG_EXTENSIONS>`.")
     }
     if (parent is ClassFile && parent.attributes.count { it is SourceDebugExtensions } > 1) {

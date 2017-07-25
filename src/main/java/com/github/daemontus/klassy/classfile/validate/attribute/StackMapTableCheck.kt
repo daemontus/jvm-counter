@@ -15,7 +15,7 @@ fun StackMapTable.validate(classFile: ClassFile, parent: Any, problems: MutableL
     if (parent !is Code) {
         problems.onError("[1.9.3] Appears in `attributes <1.8.10>`.")
     }
-    if (classFile.constantPool.checkString(attributeNameIndex) { it != STACK_MAP_TABLE }) {
+    if (!classFile.constantPool.checkString(attributeNameIndex) { it == STACK_MAP_TABLE }) {
         problems.onError("[1.9.4] `constant_pool <1.1.5>` entry at index `attribute_name_index <1.9.1>` must be `StackMapTable <!STACK_MAP_TABLE>`.")
     }
     if (parent is Code && parent.attributes.count { it is StackMapTable } > 1) {

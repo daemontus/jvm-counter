@@ -11,7 +11,7 @@ fun SourceFile.validate(classFile: ClassFile, parent: Any, problems: MutableList
     if (parent !is ClassFile) {
         problems.onError("[1.15.3] Appears in `attributes <1.1.16>`.")
     }
-    if (classFile.constantPool.checkString(attributeNameIndex) { it != SOURCE_FILE }) {
+    if (!classFile.constantPool.checkString(attributeNameIndex) { it == SOURCE_FILE }) {
         problems.onError("[1.15.4] `constant_pool <1.1.5>` entry at index `attribute_name_index <1.15.1>` must be `SourceFile <!SOURCE_FILE>`.")
     }
     if (!classFile.constantPool.isCpIndex(sourceFileIndex)) {

@@ -14,7 +14,7 @@ fun Exceptions.validate(classFile: ClassFile, parent: Any, problems: MutableList
     if (parent !is MethodInfo) {
         problems.onError("[1.10.3] Appears in `attributes <1.5.5>`.")
     }
-    if (classFile.constantPool.checkString(attributeNameIndex) { it != EXCEPTIONS }) {
+    if (!classFile.constantPool.checkString(attributeNameIndex) { it == EXCEPTIONS }) {
         problems.onError("[1.10.4] `constant_pool <1.1.5>` entry at index `attribute_name_index <1.10.1>` must be `Exceptions <!EXCEPTIONS>`.")
     }
     if (parent is MethodInfo && parent.attributes.count { it is Exceptions } > 1) {

@@ -15,7 +15,7 @@ fun Code.validate(classFile: ClassFile, parent: Any, problems: MutableList<Valid
     if (parent !is MethodInfo) {
         problems.onError("[1.8.2] Appears in `attributes <1.5.5>`.")
     }
-    if (classFile.constantPool.checkString(attributeNameIndex) { it != CODE }) {
+    if (!classFile.constantPool.checkString(attributeNameIndex) { it == CODE }) {
         problems.onError("[1.8.3] `constant_pool <1.1.5>` entry at index `attribute_name_index <1.8.1>` must be `Code <!CODE>`.")
     }
     //[1.8.4] is verified directly in MethodInfo

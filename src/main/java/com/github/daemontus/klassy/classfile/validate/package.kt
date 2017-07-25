@@ -31,6 +31,7 @@ fun Array<CpInfo>.checkString(index: Int, predicate: (String) -> Boolean): Boole
         val name = getCp<CpInfo.Utf8Info>(index)
         return predicate(String(name.bytes))
     } catch (e: Exception) {
+        e.printStackTrace()
         return false
     }
 }

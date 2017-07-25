@@ -254,7 +254,7 @@ fun readJavaTypeSignature(from: String, at: Int): ReadResult<JavaTypeSignature> 
 }
 
 fun readUnquantifiedName(from: String, at: Int): ReadResult<String> {
-    val continueAt = listOf('.', ';', '[', '/').map { from.indexOf(it, startIndex = at) }.min()
+    val continueAt = listOf('.', ';', '[', '/').map { from.indexOf(it, startIndex = at) }.filter { it >= 0 }.min()
             ?: return "Name empty".asError()
     return (from.substring(at, continueAt) to continueAt).asOk()
 }

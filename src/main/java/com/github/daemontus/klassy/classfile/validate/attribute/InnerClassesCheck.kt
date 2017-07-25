@@ -14,7 +14,7 @@ fun InnerClasses.validate(classFile: ClassFile, parent: Any, problems: MutableLi
     if (parent !is ClassFile) {
         problems.onError("[1.11.3] Appears in `attributes <1.1.16>`.")
     }
-    if (classFile.constantPool.checkString(attributeNameIndex) { it != INNER_CLASSES }) {
+    if (!classFile.constantPool.checkString(attributeNameIndex) { it == INNER_CLASSES }) {
         problems.onError("[1.11.4] `constant_pool <1.1.5>` entry at index `attribute_name_index <1.11.1>` must be `InnerClasses <!INNER_CLASSES>`.")
     }
     if (parent is ClassFile && parent.attributes.count { it is InnerClasses } > 1) {

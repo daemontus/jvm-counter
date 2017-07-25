@@ -696,7 +696,7 @@ entry {                                 <1.17.5>
  - [1.17.3] Appears in `attributes <1.8.10>`.
  - [1.17.4] `constant_pool <1.1.5>` entry at index `attribute_name_index <1.17.1>` must be `LineNumberTable <!LINE_NUMBER_TABLE>`.
  - [1.17.5] Size of the `line_number_table <1.17.4>` is `line_number_table_length <1.17.3>`.
- - [1.17.6] `start_pc <1.17.6>` is a valid instruction index in the corresponding `code <1.8.6>`
+ - [1.17.6] `start_pc <1.17.6>` is a valid instruction index in the corresponding `code <1.8.6>`.
 
 #### [1.18] `LocalVariableTable` attribute
 ```
@@ -761,7 +761,7 @@ entry {                                     <1.19.5>
  - [1.19.11] `constant_pool <1.1.5>` entry at index `name_index <1.19.8>` is a valid unqualified name [1.0.5].
  - [1.19.12] `siganture_index <1.19.9>` is a valid index [1.0.4] into the `constant_pool <1.1.5>`.
  - [1.19.13] `constant_pool <1.1.5>` entry at index `signature_index <1.19.9>` is of type `Utf8_info <1.3.34>`.
- - [1.19.14] `constant_pool <1.1.5>` entry at index `signature_index <1.19.9>` is a valid `FieldDescriptor<1.2.0>`.
+ - [1.19.14] `constant_pool <1.1.5>` entry at index `signature_index <1.19.9>` is a valid `FieldSignature<1.2.24>`.
  - [1.19.15] `index <1.19.10>` is a valid index into the local variable array, i.e. `index <1.19.10> + 1 < max_locals <1.8.4>` if the descriptor is of type long/double and without the `+1` otherwise.
 
 
@@ -772,11 +772,11 @@ Deprecated {                        <1.20.0>
     u4  attribute_length            <1.20.2>
 }
 ```
- - All rules from [1.6] apply.
- - appears since `major_version.minor_version <1.1.3>.<1.1.2> >= 45.3`.
- - appears in `attributes <1.1.16><1.4.5><1.5.5>`.
- - [1.9.4] `constant_pool <1.1.5>` entry at index `attribute_name_index <1.20.1>` must be `Deprecated <!DEPRECATED>`.
- - [1.13.5] `attribute_length <1.20.2>` must be `0`.
+ - [1.20.0] All rules from [1.6] apply.
+ - [1.20.1] Appears since `major_version.minor_version <1.1.3>.<1.1.2> >= 45.3`.
+ - [1.20.2] Appears in `attributes <1.1.16><1.4.5><1.5.5>`.
+ - [1.20.3] `constant_pool <1.1.5>` entry at index `attribute_name_index <1.20.1>` must be `Deprecated <!DEPRECATED>`.
+ - [1.20.4] `attribute_length <1.20.2>` must be `0`.
  - TODO: Check if the attribute can be present more than once in practice.
 
 #### [1.21] `RuntimeVisibleAnnotations` attribute

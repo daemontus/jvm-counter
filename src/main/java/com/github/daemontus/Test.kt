@@ -1,9 +1,10 @@
 package com.github.daemontus
 
 import com.android.dex.Dex
+import com.github.daemontus.klassy.classfile.*
 import com.github.daemontus.klassy.classfile.io.readClassFile
 import com.github.daemontus.klassy.classfile.validate.validate
-import com.sun.tools.classfile.ClassFile
+import com.sun.tools.classfile.Signature_attribute
 import java.io.DataInputStream
 import java.io.File
 import java.util.zip.ZipFile
@@ -24,16 +25,14 @@ fun main(args: Array<String>) {
 
     println("Stats: $stats")*/
 
-    println("Split: ${"a::b".split(":")}")
-
     val testClass = File("TestClass.generics.class")
 
     val c = testClass.readClassFile()
-    println(c)
     val problems = c.validate()
     println("Problems: $problems")
+    println(c)
 }
-
+/*
 fun ZipFile.process(stats: ProjectStatistics) {
     for (entry in this.entries()) {
         when {
@@ -69,4 +68,4 @@ fun Dex.process(stats: ProjectStatistics, fileSize: Long) {
     stats.methodCount += this.methodIds().count()
     stats.fieldCount += this.fieldIds().count()
     stats.bytecodeSize += fileSize
-}
+}*/

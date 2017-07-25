@@ -13,7 +13,7 @@ fun ConstantValue.validate(classFile: ClassFile, parent: Any, problems: MutableL
     if (parent !is FieldInfo) {
         problems.onError("[1.7.3] Appears in `attributes <1.4.5>`.")
     }
-    if (classFile.constantPool.checkString(attributeNameIndex) { it != CONSTANT_VALUE }) {
+    if (!classFile.constantPool.checkString(attributeNameIndex) { it == CONSTANT_VALUE }) {
         problems.onError("[1.7.4] `constant_pool <1.1.5>` entry at index `attribute_name_index <1.7.1>` must be `ConstantValue <!CONSTANT_VALUE>`.")
     }
     if (parent is FieldInfo && parent.attributes.count { it is ConstantValue } > 1) {
